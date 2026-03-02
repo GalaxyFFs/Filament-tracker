@@ -139,6 +139,8 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                   <input
                     type="number"
                     placeholder="0"
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
                     className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-12"
                   />
                   <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
@@ -148,12 +150,14 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Estimated Waste/Supports
+                  Estimated Waste/Supports <span className="text-gray-500 font-normal">(Optional)</span>
                 </label>
                 <div className="relative">
                   <input
                     type="number"
                     placeholder="0"
+                    value={waste}
+                    onChange={(e) => setWaste(e.target.value)}
                     className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-12"
                   />
                   <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
@@ -257,9 +261,9 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 <p className="font-bold text-accent">
                   {selectedFilament
                     ? Math.max(
-                        0,
-                        selectedFilament.weightRemaining - totalWeight,
-                      )
+                      0,
+                      selectedFilament.weightRemaining - totalWeight,
+                    )
                     : 0}
                   g
                 </p>
