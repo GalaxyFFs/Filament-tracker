@@ -11,9 +11,11 @@ export default function History({ onNavigate }: HistoryProps) {
   const { printJobs, filaments, deletePrintJob, settings } = useAppContext();
   const [search, setSearch] = useState("");
 
-  const filteredJobs = printJobs.filter((job) =>
-    job.modelName.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredJobs = [...printJobs]
+    .filter((job) =>
+      job.modelName.toLowerCase().includes(search.toLowerCase()),
+    )
+    .reverse();
 
   const totalSpent = printJobs.reduce((sum, job) => sum + job.cost, 0);
   const totalWeight = printJobs.reduce((sum, job) => sum + job.weightUsed, 0);
@@ -83,7 +85,7 @@ export default function History({ onNavigate }: HistoryProps) {
               {settings.weightUnit}
             </span>
           </h2>
-          <p className="text-gray-500 text-sm">~ 14 spools worth</p>
+          <p className="text-gray-500 text-sm">~ {(totalWeight / 1000).toFixed(1)} spools worth</p>
         </div>
       </div>
 
