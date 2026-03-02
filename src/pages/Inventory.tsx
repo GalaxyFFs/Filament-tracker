@@ -11,8 +11,14 @@ export default function Inventory({ onNavigate }: InventoryProps) {
   const { filaments, deleteFilament, settings } = useAppContext();
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState<"Active" | "Used">("Active");
 
-  const filteredFilaments = filaments.filter((f) => {
+  const displayFilaments = filaments.filter((f) => {
+    if (activeTab === "Active") return f.weightRemaining > 0;
+    return f.weightRemaining === 0;
+  });
+
+  const filteredFilaments = displayFilaments.filter((f) => {
     const matchesFilter = filter === "All" || f.material === filter;
     const matchesSearch =
       f.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -22,7 +28,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
 
   const materials = [
     "All",
-    ...Array.from(new Set(filaments.map((f) => f.material))),
+    ...Array.from(new Set(displayFilaments.map((f) => f.material))),
   ];
 
   return (
@@ -39,6 +45,38 @@ export default function Inventory({ onNavigate }: InventoryProps) {
           <Plus className="w-4 h-4" />
           Add Filament
         </button>
+      </div>
+
+      <div className="flex gap-4 mb-6 border-b border-border">
+        {(["Active", "Used"] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => {
+              setActiveTab(tab);
+              setFilter("All");
+            }}
+            className={`pb-3 px-2 text-sm font-medium transition-colors border-b-2 ${activeTab === tab
+                ? "border-accent text-accent"
+                : "border-transparent text-gray-400 hover:text-gray-200"
+              }`}
+          >
+            {tab} Filaments
+            <span
+              className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === tab
+                  ? "bg-accent/10 text-accent"
+                  : "bg-bg-card-hover text-gray-500"
+                }`}
+            >
+              {
+                filaments.filter((f) =>
+                  tab === "Active"
+                    ? f.weightRemaining > 0
+                    : f.weightRemaining === 0,
+                ).length
+              }
+            </span>
+          </button>
+        ))}
       </div>
 
       <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
@@ -148,7 +186,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
 
         <div className="p-4 border-t border-border flex items-center justify-between text-sm text-gray-400">
           <span>
-            Showing {filteredFilaments.length} of {filaments.length} filaments
+            Showing {filteredFilaments.length} of {displayFilaments.length} {activeTab.toLowerCase()} filaments
           </span>
         </div>
       </div>

@@ -10,11 +10,13 @@ interface DashboardProps {
 export default function Dashboard({ onNavigate }: DashboardProps) {
   const { filaments, settings } = useAppContext();
 
-  const totalSpools = filaments.length;
-  const lowStockCount = filaments.filter(
+  const activeFilaments = filaments.filter((f) => f.weightRemaining > 0);
+
+  const totalSpools = activeFilaments.length;
+  const lowStockCount = activeFilaments.filter(
     (f) => f.weightRemaining / f.weightTotal < 0.15,
   ).length;
-  const totalWeight = filaments.reduce((sum, f) => sum + f.weightRemaining, 0);
+  const totalWeight = activeFilaments.reduce((sum, f) => sum + f.weightRemaining, 0);
 
   const displayWeight =
     settings.weightUnit === "kg"
@@ -93,7 +95,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       <div className="grid grid-cols-4 gap-6">
-        {filaments.slice(0, 7).map((filament) => (
+        {activeFilaments.slice(0, 7).map((filament) => (
           <FilamentCard key={filament.id} filament={filament} />
         ))}
 
@@ -112,8 +114,8 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
 }
 
 function FilamentCard({ filament }: { filament: any; key?: string | number }) {
-  const percentage = (filament.weightRemaining / filament.weightTotal) * 100;
-  const isLow = percentage < 15;
+  const percentage = Math.max(0, (filament.weightRemaining / filament.weightTotal) * 100);
+  const isLow = percentage > 0 && percentage < 15;
 
   return (
     <div
