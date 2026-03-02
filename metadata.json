@@ -1,0 +1,5 @@
+{
+  "name": "My Filament",
+  "description": "Local 3D printer filament inventory tracker",
+  "requestFramePermissions": []
+}
