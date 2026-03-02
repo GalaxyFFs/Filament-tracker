@@ -23,7 +23,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
 
   const totalWeight = (Number(weight) || 0) + (Number(waste) || 0);
   const estimatedCost = selectedFilament
-    ? (totalWeight / selectedFilament.weightTotal) * selectedFilament.price
+    ? (totalWeight / Number(selectedFilament.weightTotal)) * selectedFilament.price
     : 0;
 
   const handleSave = () => {
@@ -33,6 +33,13 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
     }
 
     if (selectedFilament && totalWeight > Number(selectedFilament.weightRemaining)) {
+      console.log("Validation Failed Debug:", {
+        totalWeight,
+        totalWeightType: typeof totalWeight,
+        weightRemaining: selectedFilament.weightRemaining,
+        weightRemainingType: typeof selectedFilament.weightRemaining,
+        parsedWeightRemaining: Number(selectedFilament.weightRemaining)
+      });
       alert("Not enough filament remaining!");
       return;
     }
@@ -264,7 +271,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                   {selectedFilament
                     ? Math.max(
                       0,
-                      selectedFilament.weightRemaining - totalWeight,
+                      Number(selectedFilament.weightRemaining) - totalWeight,
                     )
                     : 0}
                   g
@@ -275,7 +282,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
               <div
                 className="bg-accent h-1.5 rounded-full transition-all duration-300"
                 style={{
-                  width: `${selectedFilament ? Math.max(0, ((selectedFilament.weightRemaining - totalWeight) / selectedFilament.weightTotal) * 100) : 0}%`,
+                  width: `${selectedFilament ? Math.max(0, ((Number(selectedFilament.weightRemaining) - totalWeight) / Number(selectedFilament.weightTotal)) * 100) : 0}%`,
                 }}
               ></div>
             </div>
