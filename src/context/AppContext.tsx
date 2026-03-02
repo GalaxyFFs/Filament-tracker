@@ -84,6 +84,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     } else {
       document.documentElement.classList.remove("light-theme");
     }
+
+    // Update Favicon dynamically
+    const svgIcon = encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${settings.accentColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="M3.27 6.96L12 12.01l8.73-5.05"></path><path d="M12 22.08V12"></path></svg>`
+    );
+    let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
+    }
+    link.href = `data:image/svg+xml,${svgIcon}`;
   }, [settings]);
 
   const addFilament = (filament: Omit<Filament, "id">) => {
