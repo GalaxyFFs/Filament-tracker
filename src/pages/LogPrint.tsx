@@ -33,13 +33,6 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
     }
 
     if (selectedFilament && totalWeight > Number(selectedFilament.weightRemaining)) {
-      console.log("Validation Failed Debug:", {
-        totalWeight,
-        totalWeightType: typeof totalWeight,
-        weightRemaining: selectedFilament.weightRemaining,
-        weightRemainingType: typeof selectedFilament.weightRemaining,
-        parsedWeightRemaining: Number(selectedFilament.weightRemaining)
-      });
       alert("Not enough filament remaining!");
       return;
     }
