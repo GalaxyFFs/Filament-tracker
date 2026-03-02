@@ -32,7 +32,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
       return;
     }
 
-    if (selectedFilament && totalWeight > selectedFilament.weightRemaining) {
+    if (selectedFilament && totalWeight > Number(selectedFilament.weightRemaining)) {
       alert("Not enough filament remaining!");
       return;
     }
