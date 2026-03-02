@@ -97,11 +97,13 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                   <option value="" disabled>
                     Select a filament...
                   </option>
-                  {filaments.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name} ({f.brand}) - {f.weightRemaining}g remaining
-                    </option>
-                  ))}
+                  {filaments
+                    .filter((f) => f.weightRemaining > 0)
+                    .map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.name} ({f.brand}) - {f.weightRemaining}g remaining
+                      </option>
+                    ))}
                 </select>
                 <div
                   className="absolute left-4 top-1/2 transform -translate-y-1/2 w-3 h-3 rounded-full border border-gray-600"
