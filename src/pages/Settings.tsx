@@ -9,7 +9,8 @@ import {
   Check,
   Download,
   Upload,
-  Database
+  Database,
+  Layers
 } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
@@ -22,6 +23,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
   const { settings, updateSettings, filaments, printJobs, restoreData } = useAppContext();
   const [newBrand, setNewBrand] = useState("");
   const [isAddingBrand, setIsAddingBrand] = useState(false);
+  const [newMaterial, setNewMaterial] = useState("");
+  const [isAddingMaterial, setIsAddingMaterial] = useState(false);
 
   const handleAddBrand = () => {
     if (newBrand.trim() && !settings.manufacturers.includes(newBrand.trim())) {
@@ -36,6 +39,22 @@ export default function Settings({ onNavigate }: SettingsProps) {
   const handleDeleteBrand = (brand: string) => {
     updateSettings({
       manufacturers: settings.manufacturers.filter((m) => m !== brand),
+    });
+  };
+
+  const handleAddMaterial = () => {
+    if (newMaterial.trim() && !settings.materials.includes(newMaterial.trim().toUpperCase())) {
+      updateSettings({
+        materials: [...settings.materials, newMaterial.trim().toUpperCase()],
+      });
+      setNewMaterial("");
+      setIsAddingMaterial(false);
+    }
+  };
+
+  const handleDeleteMaterial = (material: string) => {
+    updateSettings({
+      materials: settings.materials.filter((m) => m !== material),
     });
   };
 
@@ -301,6 +320,75 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   <div className="flex gap-2 text-gray-500">
                     <button
                       onClick={() => handleDeleteBrand(brand)}
+                      className="hover:text-red-400"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Material Management */}
+        <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
+          <div className="p-5 border-b border-border flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                <Layers className="w-4 h-4 text-accent" />
+              </div>
+              <h2 className="font-bold text-lg">Material Management</h2>
+            </div>
+            <button
+              onClick={() => setIsAddingMaterial(true)}
+              className="text-sm font-medium text-accent hover:text-accent-hover flex items-center gap-1"
+            >
+              <Plus className="w-4 h-4" /> Add Material
+            </button>
+          </div>
+
+          <div className="p-6">
+            <p className="text-sm text-gray-400 mb-4">
+              Manage the list of filament material types.
+            </p>
+
+            {isAddingMaterial && (
+              <div className="flex items-center gap-2 mb-4">
+                <input
+                  type="text"
+                  value={newMaterial}
+                  onChange={(e) => setNewMaterial(e.target.value)}
+                  placeholder="Material type e.g. PETG"
+                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-gray-200 uppercase"
+                  autoFocus
+                  onKeyDown={(e) => e.key === "Enter" && handleAddMaterial()}
+                />
+                <button
+                  onClick={handleAddMaterial}
+                  className="p-1.5 bg-accent text-white rounded-lg hover:bg-accent-hover"
+                >
+                  <Check className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setIsAddingMaterial(false)}
+                  className="p-1.5 bg-bg-main border border-border text-gray-400 rounded-lg hover:text-gray-200"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-4">
+              {settings.materials.map((material) => (
+                <div
+                  key={material}
+                  className="flex items-center justify-between p-4 bg-bg-main border border-border rounded-xl"
+                >
+                  <span className="font-medium">{material}</span>
+                  <div className="flex gap-2 text-gray-500">
+                    <button
+                      onClick={() => handleDeleteMaterial(material)}
                       className="hover:text-red-400"
                     >
                       <Trash2 className="w-4 h-4" />
