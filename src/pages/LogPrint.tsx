@@ -143,7 +143,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                     placeholder="0"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
-                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-12"
+                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-16"
                   />
                   <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
                     grams
@@ -160,7 +160,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                     placeholder="0"
                     value={waste}
                     onChange={(e) => setWaste(e.target.value)}
-                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-12"
+                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-16"
                   />
                   <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
                     grams

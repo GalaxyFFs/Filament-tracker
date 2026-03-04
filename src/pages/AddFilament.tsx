@@ -210,7 +210,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                   placeholder="0.00"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  className="w-full bg-bg-main border border-border rounded-lg pl-8 pr-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200"
+                  className="w-full bg-bg-main border border-border rounded-lg pl-12 pr-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200"
                 />
               </div>
             </div>
