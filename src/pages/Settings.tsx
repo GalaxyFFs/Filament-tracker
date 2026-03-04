@@ -78,24 +78,34 @@ export default function Settings({ onNavigate }: SettingsProps) {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = (event) => {
       try {
-        const content = e.target?.result as string;
+        const content = event.target?.result as string;
         const data = JSON.parse(content);
         if (data.filaments && data.printJobs && data.settings) {
           restoreData(data);
           alert("Data successfully restored!");
         } else {
-          alert("Invalid backup file format.");
+          alert("Invalid backup file format. Missing filaments, printJobs, or settings.");
         }
-      } catch (err) {
+      } catch (error) {
         alert("Error parsing backup file.");
+        console.error("Error parsing backup file:", error);
       }
     };
     reader.readAsText(file);
+    event.target.value = ''; // Reset input so the same file can be selected again
+  };
 
-    // Reset input so the same file can be selected again
-    event.target.value = '';
+  const handleClearData = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete ALL your data? This action cannot be undone."
+      )
+    ) {
+      localStorage.clear();
+      window.location.reload();
+    }
   };
 
   return (
@@ -414,7 +424,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
               Backup your data locally or restore from a previous backup.
               Restoring a backup will overwrite your current data.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               <button
                 onClick={handleBackup}
                 className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-white transition-colors"
@@ -433,6 +443,16 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   onChange={handleRestore}
                 />
               </label>
+
+              <div className="flex-1"></div>
+
+              <button
+                onClick={handleClearData}
+                className="flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg text-sm font-medium hover:bg-red-500 hover:text-white transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+                Clear All Data
+              </button>
             </div>
           </div>
         </div>
