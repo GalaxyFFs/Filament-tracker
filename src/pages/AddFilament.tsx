@@ -58,16 +58,16 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
         <span className="text-gray-200">Add Filament</span>
       </div>
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-1">Add New Filament</h1>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold mb-1">Add New Filament</h1>
         <p className="text-gray-400">
           Enter the details of your new filament spool to track it in your local
           inventory.
         </p>
       </div>
 
-      <div className="bg-bg-card border border-border rounded-2xl p-8 max-w-3xl">
-        <div className="grid grid-cols-2 gap-8">
+      <div className="bg-bg-card border border-border rounded-2xl p-6 md:p-8 max-w-3xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -162,7 +162,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Initial Weight
@@ -217,7 +217,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-border flex justify-end gap-3">
+        <div className="mt-6 md:mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-end gap-3">
           <button
             onClick={() => onNavigate("inventory")}
             className="px-6 py-2.5 border border-border rounded-lg text-sm font-medium hover:bg-bg-main transition-colors"
