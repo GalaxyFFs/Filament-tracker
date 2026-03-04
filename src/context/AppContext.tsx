@@ -1,6 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Filament, PrintJob, Settings } from "../types";
 
+const generateId = () => {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+  } catch (e) {
+    console.warn("crypto.randomUUID failed, falling back to basic ID generator", e);
+  }
+  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+};
+
 interface AppState {
   filaments: Filament[];
   printJobs: PrintJob[];
@@ -117,7 +128,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [settings]);
 
   const addFilament = (filament: Omit<Filament, "id">) => {
-    const newFilament = { ...filament, id: crypto.randomUUID() };
+    const newFilament = { ...filament, id: generateId() };
     setFilaments([...filaments, newFilament]);
   };
 
@@ -132,7 +143,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addPrintJob = (job: Omit<PrintJob, "id">) => {
-    const newJob = { ...job, id: crypto.randomUUID() };
+    const newJob = { ...job, id: generateId() };
     setPrintJobs([...printJobs, newJob]);
 
     const filament = filaments.find((f) => f.id === job.filamentId);
