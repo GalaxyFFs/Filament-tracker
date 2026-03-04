@@ -92,8 +92,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
         {/* Appearance */}
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <Palette className="w-4 h-4 text-blue-500" />
+            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+              <Palette className="w-4 h-4 text-accent" />
             </div>
             <h2 className="font-bold text-lg">Appearance</h2>
           </div>
@@ -180,8 +180,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
         {/* Unit Preferences */}
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-              <Sliders className="w-4 h-4 text-indigo-500" />
+            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+              <Sliders className="w-4 h-4 text-accent" />
             </div>
             <h2 className="font-bold text-lg">Unit Preferences</h2>
           </div>
@@ -247,14 +247,14 @@ export default function Settings({ onNavigate }: SettingsProps) {
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                <Factory className="w-4 h-4 text-emerald-500" />
+              <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                <Factory className="w-4 h-4 text-accent" />
               </div>
               <h2 className="font-bold text-lg">Manufacturer Management</h2>
             </div>
             <button
               onClick={() => setIsAddingBrand(true)}
-              className="text-sm font-medium text-emerald-500 hover:text-emerald-400 flex items-center gap-1"
+              className="text-sm font-medium text-accent hover:text-accent-hover flex items-center gap-1"
             >
               <Plus className="w-4 h-4" /> Add Brand
             </button>
@@ -315,8 +315,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
         {/* Data Management */}
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
-              <Database className="w-4 h-4 text-orange-500" />
+            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+              <Database className="w-4 h-4 text-accent" />
             </div>
             <h2 className="font-bold text-lg">Data Management</h2>
           </div>
