@@ -33,13 +33,9 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
           </p>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 bg-bg-card border border-border rounded-lg text-sm font-medium hover:bg-bg-card-hover transition-colors">
-            <Archive className="w-4 h-4" />
-            Backup Data
-          </button>
           <button
             onClick={() => onNavigate("add-filament")}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
           >
             <Plus className="w-4 h-4" />
             Add Filament

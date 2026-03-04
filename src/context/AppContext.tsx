@@ -12,6 +12,7 @@ interface AppState {
   updatePrintJob: (id: string, job: Partial<PrintJob>) => void;
   deletePrintJob: (id: string) => void;
   updateSettings: (settings: Partial<Settings>) => void;
+  restoreData: (data: { filaments: Filament[]; printJobs: PrintJob[]; settings: Settings }) => void;
 }
 
 const defaultSettings: Settings = {
@@ -139,6 +140,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setSettings({ ...settings, ...updates });
   };
 
+  const restoreData = (data: { filaments: Filament[]; printJobs: PrintJob[]; settings: Settings }) => {
+    if (data.filaments) setFilaments(data.filaments);
+    if (data.printJobs) setPrintJobs(data.printJobs);
+    if (data.settings) setSettings(data.settings);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -152,6 +159,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         updatePrintJob,
         deletePrintJob,
         updateSettings,
+        restoreData,
       }}
     >
       {children}

@@ -7,6 +7,9 @@ import {
   Trash2,
   Plus,
   Check,
+  Download,
+  Upload,
+  Database
 } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
@@ -16,7 +19,7 @@ interface SettingsProps {
 }
 
 export default function Settings({ onNavigate }: SettingsProps) {
-  const { settings, updateSettings } = useAppContext();
+  const { settings, updateSettings, filaments, printJobs, restoreData } = useAppContext();
   const [newBrand, setNewBrand] = useState("");
   const [isAddingBrand, setIsAddingBrand] = useState(false);
 
@@ -34,6 +37,46 @@ export default function Settings({ onNavigate }: SettingsProps) {
     updateSettings({
       manufacturers: settings.manufacturers.filter((m) => m !== brand),
     });
+  };
+
+  const handleBackup = () => {
+    const data = { filaments, printJobs, settings };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `my-filament-backup-${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleRestore = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const data = JSON.parse(content);
+        if (data.filaments && data.printJobs && data.settings) {
+          restoreData(data);
+          alert("Data successfully restored!");
+        } else {
+          alert("Invalid backup file format.");
+        }
+      } catch (err) {
+        alert("Error parsing backup file.");
+      }
+    };
+    reader.readAsText(file);
+
+    // Reset input so the same file can be selected again
+    event.target.value = '';
   };
 
   return (
@@ -265,6 +308,43 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Data Management */}
+        <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
+          <div className="p-5 border-b border-border flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
+              <Database className="w-4 h-4 text-orange-500" />
+            </div>
+            <h2 className="font-bold text-lg">Data Management</h2>
+          </div>
+
+          <div className="p-6 space-y-6">
+            <p className="text-sm text-gray-400">
+              Backup your data locally or restore from a previous backup.
+              Restoring a backup will overwrite your current data.
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={handleBackup}
+                className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-white transition-colors"
+              >
+                <Download className="w-4 h-4" />
+                Backup Data
+              </button>
+
+              <label className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-white transition-colors cursor-pointer">
+                <Upload className="w-4 h-4" />
+                Restore Data
+                <input
+                  type="file"
+                  accept=".json"
+                  className="hidden"
+                  onChange={handleRestore}
+                />
+              </label>
             </div>
           </div>
         </div>
