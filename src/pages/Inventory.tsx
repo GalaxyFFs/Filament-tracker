@@ -114,6 +114,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                 <th className="p-4">Brand</th>
                 <th className="p-4">Material</th>
                 <th className="p-4">Weight (g)</th>
+                <th className="p-4">Empty Spool (g)</th>
                 <th className="p-4">Price</th>
                 <th className="p-4 pr-6 text-right">Actions</th>
               </tr>
@@ -164,6 +165,11 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                       <span className="text-gray-500 text-sm">
                         {" "}
                         / {filament.weightTotal}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <span className="text-gray-400">
+                        {filament.emptySpoolWeight}
                       </span>
                     </td>
                     <td className="p-4 text-gray-400">
