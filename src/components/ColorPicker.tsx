@@ -6,9 +6,9 @@ interface ColorPickerProps {
 }
 
 const PRESET_COLORS = [
-  "000000", "FFFFFF", "9CA3AF", "EF4444", 
-  "3B82F6", "10B981", "F59E0B", "F97316",
-  "8B5CF6", "EC4899", "6366F1", "14B8A6"
+  "1A1A1A", "FFFFFF", "9CA3AF", "DC2626", 
+  "2563EB", "16A34A", "FBBF24", "EA580C",
+  "9333EA", "A16207", "FBCFE8", "F3F4F6"
 ];
 
 export default function ColorPicker({ colorHex, onChange }: ColorPickerProps) {
@@ -24,12 +24,6 @@ export default function ColorPicker({ colorHex, onChange }: ColorPickerProps) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Preserve letters and numbers, strip #
-    const val = e.target.value.replace(/[^0-9a-fA-F]/g, '').substring(0, 6);
-    onChange(val);
-  };
 
   const handleNativeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace("#", "");
@@ -69,20 +63,6 @@ export default function ColorPicker({ colorHex, onChange }: ColorPickerProps) {
           </div>
 
           <div className="mb-4">
-            <label className="block text-xs text-gray-400 mb-2 font-medium">Custom Hex</label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">#</span>
-              <input
-                type="text"
-                value={colorHex}
-                onChange={handleHexChange}
-                maxLength={6}
-                className="w-full bg-bg-main border border-border rounded-lg pl-8 pr-4 py-2 text-sm focus:outline-none focus:border-accent text-gray-200 uppercase font-mono"
-              />
-            </div>
-          </div>
-          
-          <div>
             <label className="block text-xs text-gray-400 mb-2 font-medium">More Colors</label>
             <div className="relative h-10 rounded-lg border border-border overflow-hidden hover:opacity-90 transition-opacity">
                 <input
