@@ -83,14 +83,9 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
             </div>
 
             <div>
-              <div className="flex justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-300">
-                  Brand
-                </label>
-                <button className="text-xs text-accent hover:text-accent-hover">
-                  Edit Brand Presets
-                </button>
-              </div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Brand
+              </label>
               <select
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
@@ -108,14 +103,9 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
             </div>
 
             <div>
-              <div className="flex justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-300">
-                  Material Type
-                </label>
-                <button className="text-xs text-accent hover:text-accent-hover">
-                  Edit Material Presets
-                </button>
-              </div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Material Type
+              </label>
               <select
                 value={material}
                 onChange={(e) => setMaterial(e.target.value)}
@@ -140,9 +130,16 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
               </label>
               <div className="flex gap-3">
                 <div
-                  className="w-10 h-10 rounded-lg border border-border shrink-0"
+                  className="relative w-10 h-10 rounded-lg border border-border shrink-0 overflow-hidden focus-within:ring-2 focus-within:ring-accent"
                   style={{ backgroundColor: `#${colorHex.replace("#", "")}` }}
-                ></div>
+                >
+                  <input
+                    type="color"
+                    value={`#${colorHex.replace("#", "")}`}
+                    onChange={(e) => setColorHex(e.target.value.replace("#", ""))}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                </div>
                 <div className="flex-1">
                   <label className="block text-xs text-gray-500 mb-1">
                     Hex Code
