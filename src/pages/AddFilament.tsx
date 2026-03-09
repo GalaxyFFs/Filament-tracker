@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
+import ColorPicker from "../components/ColorPicker";
 
 interface AddFilamentProps {
   onNavigate: (page: Page) => void;
@@ -129,17 +130,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                 Color
               </label>
               <div className="flex gap-3">
-                <div
-                  className="relative w-10 h-10 rounded-lg border border-border shrink-0 overflow-hidden focus-within:ring-2 focus-within:ring-accent"
-                  style={{ backgroundColor: `#${colorHex.replace("#", "")}` }}
-                >
-                  <input
-                    type="color"
-                    value={`#${colorHex.replace("#", "")}`}
-                    onChange={(e) => setColorHex(e.target.value.replace("#", ""))}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                </div>
+                <ColorPicker colorHex={colorHex} onChange={setColorHex} />
                 <div className="flex-1">
                   <label className="block text-xs text-gray-500 mb-1">
                     Hex Code
