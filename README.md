@@ -6,9 +6,9 @@
     <strong>A modern, local-first web application for managing your 3D printing filament inventory and tracking print jobs.</strong>
     <br />
     <br />
-    <a href="https://github.com/your_username/my-filament/issues">Report Bug</a>
+    <a href="https://github.com/GalaxyFFs/Filament-tracker/issues">Report Bug</a>
     ·
-    <a href="https://github.com/your_username/my-filament/issues">Request Feature</a>
+    <a href="https://github.com/GalaxyFFs/Filament-tracker/issues">Request Feature</a>
   </p>
 </div>
 
@@ -69,8 +69,8 @@ Ensure you have Node.js installed on your machine.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your_username/my-filament.git
-   cd my-filament
+   git clone https://github.com/GalaxyFFs/Filament-tracker.git
+   cd Filament-tracker
    ```
 
 2. **Install dependencies**
