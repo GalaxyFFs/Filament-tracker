@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/vite.svg" alt="Logo" width="80" height="80" />
+  <img src="public/favicon.svg" alt="Logo" width="80" height="80" />
   <h1 align="center">🧵 Filament Tracker</h1>
 
   <p align="center">
