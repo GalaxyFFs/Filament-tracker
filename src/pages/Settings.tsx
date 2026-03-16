@@ -117,7 +117,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-8 sm:space-y-6">
         {/* Appearance */}
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center gap-3">
@@ -128,14 +128,14 @@ export default function Settings({ onNavigate }: SettingsProps) {
           </div>
 
           <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="font-medium text-gray-200 mb-1">Theme</h3>
                 <p className="text-sm text-gray-400">
                   Select your preferred interface theme.
                 </p>
               </div>
-              <div className="flex bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ theme: "light" })}
                   className={`px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 ${settings.theme === "light" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
@@ -177,7 +177,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-6 border-t border-border">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-border">
               <div>
                 <h3 className="font-medium text-gray-200 mb-1">Accent Color</h3>
                 <p className="text-sm text-gray-400">
@@ -216,7 +216,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
           </div>
 
           <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="font-medium text-gray-200 mb-1">
                   Weight Display Unit
@@ -225,7 +225,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   Choose how filament weight is displayed across the app.
                 </p>
               </div>
-              <div className="flex bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ weightUnit: "g" })}
                   className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "g" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
@@ -241,14 +241,14 @@ export default function Settings({ onNavigate }: SettingsProps) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-6 border-t border-border">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-border">
               <div>
                 <h3 className="font-medium text-gray-200 mb-1">Currency</h3>
                 <p className="text-sm text-gray-400">
                   Define your preferred currency symbol or code.
                 </p>
               </div>
-              <div className="flex bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ currency: "USD" })}
                   className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "USD" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
@@ -320,7 +320,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {settings.manufacturers.map((brand) => (
                 <div
                   key={brand}
@@ -389,7 +389,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {settings.materials.map((material) => (
                 <div
                   key={material}
