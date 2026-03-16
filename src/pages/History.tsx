@@ -133,12 +133,12 @@ export default function History({ onNavigate }: HistoryProps) {
                       <td className="p-4 pl-6 font-medium text-gray-200">
                         {job.modelName}
                       </td>
-                      <td className="p-4 text-gray-400">{job.date}</td>
+                      <td className="p-4 text-gray-400">{new Date(job.date).toLocaleDateString('cs-CZ')}</td>
                       <td className="p-4">
                         {filament && (
                           <div className="flex items-center gap-2">
                             <div
-                              className="w-3 h-3 rounded-full ring-1 ring-white/20"
+                              className="w-3 h-3 rounded-full ring-1 ring-white/20 shrink-0"
                               style={{ backgroundColor: filament.colorHex }}
                             ></div>
                             <span className="text-gray-200">{filament.name}</span>
