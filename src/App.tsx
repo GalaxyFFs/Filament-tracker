@@ -40,7 +40,7 @@ export default function App() {
   return (
     <div className="flex flex-col-reverse md:flex-row h-screen bg-bg-main text-gray-100 font-sans">
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
-      <main className="flex-1 overflow-y-auto p-4 pb-24 md:p-8 md:pb-8">{renderPage()}</main>
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 md:pb-8">{renderPage()}</main>
     </div>
   );
 }

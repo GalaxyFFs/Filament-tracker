@@ -130,10 +130,7 @@ export default function History({ onNavigate }: HistoryProps) {
                       key={job.id}
                       className="hover:bg-bg-card-hover transition-colors group"
                     >
-                      <td className="p-4 pl-6 font-medium text-gray-200 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-bg-main flex items-center justify-center border border-border">
-                          <Box className="w-4 h-4 text-gray-400" />
-                        </div>
+                      <td className="p-4 pl-6 font-medium text-gray-200">
                         {job.modelName}
                       </td>
                       <td className="p-4 text-gray-400">{job.date}</td>
