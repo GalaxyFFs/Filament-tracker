@@ -7,13 +7,18 @@ interface LogPrintProps {
 }
 
 export default function LogPrint({ onNavigate }: LogPrintProps) {
-  const { filaments, addPrintJob, settings } = useAppContext();
+  const { filaments, printJobs, updateFilament, addPrintJob, updatePrintJob, settings, editingPrintJobId, setEditingPrintJobId } = useAppContext();
 
-  const [modelName, setModelName] = useState("");
-  const [filamentId, setFilamentId] = useState(
-    filaments.length > 0 ? filaments[0].id : "",
+  const editingJob = useMemo(
+    () => editingPrintJobId ? printJobs.find((j) => j.id === editingPrintJobId) : null,
+    [printJobs, editingPrintJobId]
   );
-  const [weight, setWeight] = useState("");
+
+  const [modelName, setModelName] = useState(editingJob?.modelName || "");
+  const [filamentId, setFilamentId] = useState(
+    editingJob ? editingJob.filamentId : (filaments.length > 0 ? filaments[0].id : "")
+  );
+  const [weight, setWeight] = useState(editingJob ? editingJob.weightUsed.toString() : "");
   const [waste, setWaste] = useState("");
 
   const selectedFilament = useMemo(
@@ -32,18 +37,41 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
       return;
     }
 
-    if (selectedFilament && totalWeight > Number(selectedFilament.weightRemaining)) {
+    const weightDiff = editingJob 
+      ? (editingJob.filamentId === filamentId ? totalWeight - editingJob.weightUsed : totalWeight) 
+      : totalWeight;
+      
+    if (selectedFilament && weightDiff > Number(selectedFilament.weightRemaining)) {
       alert("Not enough filament remaining!");
       return;
     }
 
-    addPrintJob({
-      modelName,
-      filamentId,
-      weightUsed: totalWeight,
-      cost: estimatedCost,
-      date: new Date().toISOString().split("T")[0],
-    });
+    if (editingJob) {
+      if (editingJob.filamentId === filamentId) {
+        updatePrintJob(editingJob.id, { modelName, filamentId, weightUsed: totalWeight, cost: estimatedCost });
+        if (selectedFilament) {
+          updateFilament(filamentId, { weightRemaining: Math.max(0, selectedFilament.weightRemaining - weightDiff) });
+        }
+      } else {
+        const oldFilament = filaments.find(f => f.id === editingJob.filamentId);
+        if (oldFilament) {
+           updateFilament(oldFilament.id, { weightRemaining: oldFilament.weightRemaining + editingJob.weightUsed });
+        }
+        if (selectedFilament) {
+           updateFilament(filamentId, { weightRemaining: Math.max(0, selectedFilament.weightRemaining - totalWeight) });
+        }
+        updatePrintJob(editingJob.id, { modelName, filamentId, weightUsed: totalWeight, cost: estimatedCost });
+      }
+      setEditingPrintJobId(null);
+    } else {
+      addPrintJob({
+        modelName,
+        filamentId,
+        weightUsed: totalWeight,
+        cost: estimatedCost,
+        date: new Date().toISOString().split("T")[0],
+      });
+    }
 
     onNavigate("history");
   };
@@ -62,7 +90,9 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
       </div>
 
       <div className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold mb-1">Log New Print Job</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-1">
+          {editingJob ? "Edit Print Job" : "Log New Print Job"}
+        </h1>
         <p className="text-gray-400">
           Record details of your print to update inventory automatically.
         </p>
@@ -190,7 +220,10 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 Confirm & Deduct Weight
               </button>
               <button
-                onClick={() => onNavigate("history")}
+                onClick={() => {
+                  setEditingPrintJobId(null);
+                  onNavigate("history");
+                }}
                 className="px-6 py-3 border border-border rounded-lg text-sm font-medium hover:bg-bg-main transition-colors"
               >
                 Cancel

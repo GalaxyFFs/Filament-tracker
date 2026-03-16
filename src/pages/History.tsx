@@ -8,7 +8,7 @@ interface HistoryProps {
 }
 
 export default function History({ onNavigate }: HistoryProps) {
-  const { printJobs, filaments, deletePrintJob, settings } = useAppContext();
+  const { printJobs, filaments, deletePrintJob, settings, setEditingPrintJobId } = useAppContext();
   const [search, setSearch] = useState("");
 
   const filteredJobs = [...printJobs]
@@ -31,7 +31,10 @@ export default function History({ onNavigate }: HistoryProps) {
         </div>
         <div className="flex gap-3">
           <button
-            onClick={() => onNavigate("log-print")}
+            onClick={() => {
+              setEditingPrintJobId(null);
+              onNavigate("log-print");
+            }}
             className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
           >
             <Plus className="w-4 h-4" />
@@ -159,12 +162,25 @@ export default function History({ onNavigate }: HistoryProps) {
                           : ""}
                       </td>
                       <td className="p-4 pr-6 text-right">
-                        <button
-                          onClick={() => deletePrintJob(job.id)}
-                          className="text-gray-500 hover:text-red-400"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingPrintJobId(job.id);
+                              onNavigate("log-print");
+                            }}
+                            className="text-gray-500 hover:text-blue-400 transition-colors"
+                            title="Edit"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => deletePrintJob(job.id)}
+                            className="text-gray-500 hover:text-red-400 transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

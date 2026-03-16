@@ -24,6 +24,10 @@ interface AppState {
   deletePrintJob: (id: string) => void;
   updateSettings: (settings: Partial<Settings>) => void;
   restoreData: (data: { filaments: Filament[]; printJobs: PrintJob[]; settings: Settings }) => void;
+  editingFilamentId: string | null;
+  setEditingFilamentId: (id: string | null) => void;
+  editingPrintJobId: string | null;
+  setEditingPrintJobId: (id: string | null) => void;
 }
 
 const defaultSettings: Settings = {
@@ -80,6 +84,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ? { ...defaultSettings, ...JSON.parse(saved) }
       : defaultSettings;
   });
+
+  const [editingFilamentId, setEditingFilamentId] = useState<string | null>(null);
+  const [editingPrintJobId, setEditingPrintJobId] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.setItem("filaments", JSON.stringify(filaments));
@@ -188,6 +195,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         deletePrintJob,
         updateSettings,
         restoreData,
+        editingFilamentId,
+        setEditingFilamentId,
+        editingPrintJobId,
+        setEditingPrintJobId,
       }}
     >
       {children}

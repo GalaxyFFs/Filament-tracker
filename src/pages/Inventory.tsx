@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, Plus, Trash2 } from "lucide-react";
+import { Search, Plus, Trash2, Edit2 } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 
@@ -8,7 +8,7 @@ interface InventoryProps {
 }
 
 export default function Inventory({ onNavigate }: InventoryProps) {
-  const { filaments, deleteFilament, settings } = useAppContext();
+  const { filaments, deleteFilament, settings, setEditingFilamentId } = useAppContext();
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"Active" | "Used">("Active");
@@ -39,7 +39,10 @@ export default function Inventory({ onNavigate }: InventoryProps) {
           <p className="text-gray-400 text-sm md:text-base">Manage your filament collection</p>
         </div>
         <button
-          onClick={() => onNavigate("add-filament")}
+          onClick={() => {
+            setEditingFilamentId(null);
+            onNavigate("add-filament");
+          }}
           className="flex items-center justify-center gap-2 px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
         >
           <Plus className="w-4 h-4" />
@@ -178,12 +181,25 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                       {settings.currency !== "USD" ? ` ${settings.currency}` : ""}
                     </td>
                     <td className="p-4 pr-6 text-right">
-                      <button
-                        onClick={() => deleteFilament(filament.id)}
-                        className="text-gray-500 hover:text-red-400 transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => {
+                            setEditingFilamentId(filament.id);
+                            onNavigate("add-filament");
+                          }}
+                          className="text-gray-500 hover:text-blue-400 transition-colors"
+                          title="Edit"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => deleteFilament(filament.id)}
+                          className="text-gray-500 hover:text-red-400 transition-colors"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

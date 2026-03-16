@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import ColorPicker from "../components/ColorPicker";
@@ -8,15 +8,20 @@ interface AddFilamentProps {
 }
 
 export default function AddFilament({ onNavigate }: AddFilamentProps) {
-  const { addFilament, settings } = useAppContext();
+  const { addFilament, updateFilament, settings, filaments, editingFilamentId, setEditingFilamentId } = useAppContext();
 
-  const [name, setName] = useState("");
-  const [brand, setBrand] = useState(settings.manufacturers[0] || "");
-  const [material, setMaterial] = useState(settings.materials[0] || "");
-  const [colorHex, setColorHex] = useState("8B5CF6");
-  const [weightTotal, setWeightTotal] = useState("1000");
-  const [emptySpoolWeight, setEmptySpoolWeight] = useState("200");
-  const [price, setPrice] = useState("");
+  const editingFilament = useMemo(
+    () => editingFilamentId ? filaments.find((f) => f.id === editingFilamentId) : null,
+    [filaments, editingFilamentId]
+  );
+
+  const [name, setName] = useState(editingFilament?.name || "");
+  const [brand, setBrand] = useState(editingFilament?.brand || settings.manufacturers[0] || "");
+  const [material, setMaterial] = useState(editingFilament?.material || settings.materials[0] || "");
+  const [colorHex, setColorHex] = useState(editingFilament?.colorHex?.replace("#", "") || "8B5CF6");
+  const [weightTotal, setWeightTotal] = useState(editingFilament?.weightTotal.toString() || "1000");
+  const [emptySpoolWeight, setEmptySpoolWeight] = useState(editingFilament?.emptySpoolWeight.toString() || "200");
+  const [price, setPrice] = useState(editingFilament?.price.toString() || "");
 
   const handleSave = () => {
     if (
@@ -32,16 +37,31 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
       return;
     }
 
-    addFilament({
-      name,
-      brand,
-      material,
-      colorHex: `#${colorHex.replace("#", "")}`,
-      weightTotal: Number(weightTotal),
-      weightRemaining: Number(weightTotal),
-      emptySpoolWeight: Number(emptySpoolWeight),
-      price: Number(price),
-    });
+    if (editingFilament) {
+      const diff = Number(weightTotal) - editingFilament.weightTotal;
+      updateFilament(editingFilament.id, {
+        name,
+        brand,
+        material,
+        colorHex: `#${colorHex.replace("#", "")}`,
+        weightTotal: Number(weightTotal),
+        weightRemaining: Math.max(0, editingFilament.weightRemaining + diff),
+        emptySpoolWeight: Number(emptySpoolWeight),
+        price: Number(price),
+      });
+      setEditingFilamentId(null);
+    } else {
+      addFilament({
+        name,
+        brand,
+        material,
+        colorHex: `#${colorHex.replace("#", "")}`,
+        weightTotal: Number(weightTotal),
+        weightRemaining: Number(weightTotal),
+        emptySpoolWeight: Number(emptySpoolWeight),
+        price: Number(price),
+      });
+    }
 
     onNavigate("inventory");
   };
@@ -60,9 +80,11 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
       </div>
 
       <div className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold mb-1">Add New Filament</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-1">
+          {editingFilament ? "Edit Filament" : "Add New Filament"}
+        </h1>
         <p className="text-gray-400">
-          Enter the details of your new filament spool to track it in your local
+          Enter the details of your filament spool to track it in your local
           inventory.
         </p>
       </div>
@@ -207,7 +229,10 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
 
         <div className="mt-6 md:mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-end gap-3">
           <button
-            onClick={() => onNavigate("inventory")}
+            onClick={() => {
+              setEditingFilamentId(null);
+              onNavigate("inventory");
+            }}
             className="px-6 py-2.5 border border-border rounded-lg text-sm font-medium hover:bg-bg-main transition-colors"
           >
             Cancel
@@ -229,7 +254,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                 d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
               />
             </svg>
-            Save Filament
+            {editingFilament ? "Save Changes" : "Save Filament"}
           </button>
         </div>
       </div>

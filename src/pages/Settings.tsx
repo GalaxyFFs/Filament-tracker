@@ -43,9 +43,9 @@ export default function Settings({ onNavigate }: SettingsProps) {
   };
 
   const handleAddMaterial = () => {
-    if (newMaterial.trim() && !settings.materials.includes(newMaterial.trim().toUpperCase())) {
+    if (newMaterial.trim() && !settings.materials.includes(newMaterial.trim())) {
       updateSettings({
-        materials: [...settings.materials, newMaterial.trim().toUpperCase()],
+        materials: [...settings.materials, newMaterial.trim()],
       });
       setNewMaterial("");
       setIsAddingMaterial(false);
@@ -370,7 +370,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   value={newMaterial}
                   onChange={(e) => setNewMaterial(e.target.value)}
                   placeholder="Material type e.g. PETG"
-                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-gray-200 uppercase"
+                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-gray-200"
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && handleAddMaterial()}
                 />
