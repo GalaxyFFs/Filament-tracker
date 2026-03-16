@@ -136,7 +136,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                     ))}
                 </select>
                 <div
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-3 h-3 rounded-full border border-gray-600"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-3 h-3 rounded-full ring-1 ring-white/20"
                   style={{
                     backgroundColor: selectedFilament?.colorHex || "#111827",
                   }}

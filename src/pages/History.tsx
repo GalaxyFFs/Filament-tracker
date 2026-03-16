@@ -138,7 +138,7 @@ export default function History({ onNavigate }: HistoryProps) {
                         {filament && (
                           <div className="flex items-center gap-2">
                             <div
-                              className="w-3 h-3 rounded-full"
+                              className="w-3 h-3 rounded-full ring-1 ring-white/20"
                               style={{ backgroundColor: filament.colorHex }}
                             ></div>
                             <span className="text-gray-200">{filament.name}</span>

@@ -141,6 +141,16 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
               cy="50"
               r="40"
               fill="transparent"
+              stroke="rgba(255,255,255,0.12)"
+              strokeWidth="13"
+              strokeDasharray={`${percentage * 2.51} 251`}
+              strokeLinecap="round"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              fill="transparent"
               stroke={filament.colorHex}
               strokeWidth="12"
               strokeDasharray={`${percentage * 2.51} 251`}
@@ -157,7 +167,7 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
         <div className="flex items-center justify-between mb-1">
           <h3 className="font-bold text-lg truncate">{filament.name}</h3>
           <div
-            className="w-3 h-3 rounded-full"
+            className="w-3 h-3 rounded-full ring-1 ring-white/20"
             style={{ backgroundColor: filament.colorHex }}
           ></div>
         </div>
@@ -172,9 +182,9 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
               : filament.weightTotal + "g"}
           </span>
         </div>
-        <div className="w-full bg-gray-800 rounded-full h-1.5">
+        <div className="w-full bg-gray-800 rounded-full h-1.5 ring-1 ring-white/5">
           <div
-            className="h-1.5 rounded-full"
+            className="h-1.5 rounded-full ring-1 ring-white/15"
             style={{
               width: `${percentage}%`,
               backgroundColor: filament.colorHex,

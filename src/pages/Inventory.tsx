@@ -137,7 +137,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                   >
                     <td className="p-4 pl-6">
                       <div
-                        className="w-6 h-6 rounded-full shadow-sm"
+                        className="w-6 h-6 rounded-full shadow-sm ring-1 ring-white/20"
                         style={{ backgroundColor: filament.colorHex }}
                       ></div>
                     </td>
