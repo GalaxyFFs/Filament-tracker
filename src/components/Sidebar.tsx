@@ -26,7 +26,9 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
   ];
 
   return (
-    <div className="w-full md:w-64 bg-bg-sidebar border-t md:border-t-0 md:border-r border-border flex flex-row md:flex-col shrink-0">
+    <div
+      className="w-full md:w-64 bg-bg-sidebar border-t md:border-t-0 md:border-r border-border flex flex-row md:flex-col shrink-0 pb-[env(safe-area-inset-bottom)] md:pb-0"
+    >
       <div className="hidden md:flex p-6 items-center gap-3">
         <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
           <Box className="w-5 h-5 text-white" />
