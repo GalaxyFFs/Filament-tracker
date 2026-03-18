@@ -28,7 +28,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold mb-1">My Stock</h1>
-          <p className="text-gray-400">
+          <p className="text-text-secondary">
             Local overview of materials and weights
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
         <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
-            <p className="text-gray-400 text-sm">Total Spools</p>
+            <p className="text-text-secondary text-sm">Total Spools</p>
             <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
               <Archive className="w-5 h-5 text-accent" />
             </div>
@@ -49,7 +49,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
 
         <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
-            <p className="text-gray-400 text-sm">Low Stock Alerts</p>
+            <p className="text-text-secondary text-sm">Low Stock Alerts</p>
             <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-amber-500" />
             </div>
@@ -62,18 +62,18 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
 
         <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
-            <p className="text-gray-400 text-sm">Total Net Weight</p>
-            <div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center">
-              <Scale className="w-5 h-5 text-gray-400" />
+            <p className="text-text-secondary text-sm">Total Net Weight</p>
+            <div className="w-10 h-10 rounded-lg bg-bg-main flex items-center justify-center">
+              <Scale className="w-5 h-5 text-text-secondary" />
             </div>
           </div>
           <h2 className="text-4xl font-bold mb-2">
             {displayWeight}{" "}
-            <span className="text-xl text-gray-500 font-normal">
+            <span className="text-xl text-text-secondary font-normal">
               {settings.weightUnit}
             </span>
           </h2>
-          <p className="text-gray-500 text-sm flex items-center gap-1">
+          <p className="text-text-secondary text-sm flex items-center gap-1">
             <History className="w-3 h-3" /> Last updated today
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
             setEditingFilamentId(null);
             onNavigate("add-filament");
           }}
-          className="bg-transparent border-2 border-dashed border-border rounded-2xl p-6 flex flex-col items-center justify-center text-gray-400 hover:text-gray-200 hover:border-gray-500 transition-colors min-h-[280px]"
+          className="bg-transparent border-2 border-dashed border-border rounded-2xl p-6 flex flex-col items-center justify-center text-text-secondary hover:text-text-primary hover:border-gray-500 transition-colors min-h-[280px]"
         >
           <div className="w-12 h-12 rounded-full bg-bg-card flex items-center justify-center mb-4">
             <Plus className="w-6 h-6" />
@@ -118,7 +118,7 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
           <AlertTriangle className="w-3 h-3" /> LOW
         </div>
       )}
-      <div className="absolute top-4 right-4 bg-gray-800 text-gray-300 text-xs font-bold px-2 py-1 rounded">
+      <div className="absolute top-4 right-4 bg-bg-main border border-border text-text-primary text-xs font-bold px-2 py-1 rounded">
         {filament.material}
       </div>
 
@@ -171,20 +171,20 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
             style={{ backgroundColor: filament.colorHex }}
           ></div>
         </div>
-        <p className="text-gray-400 text-sm mb-4">{filament.brand}</p>
+        <p className="text-text-secondary text-sm mb-4">{filament.brand}</p>
 
-        <div className="flex justify-between text-xs text-gray-400 mb-2">
+        <div className="flex justify-between text-xs text-text-secondary mb-2">
           <span>Remaining</span>
-          <span className="text-gray-200 font-medium">
+          <span className="text-text-primary font-medium">
             {filament.weightRemaining}g /{" "}
             {filament.weightTotal >= 1000
               ? filament.weightTotal / 1000 + "kg"
               : filament.weightTotal + "g"}
           </span>
         </div>
-        <div className="w-full bg-gray-800 rounded-full h-1.5 ring-1 ring-white/5">
+        <div className="w-full bg-bg-main rounded-full h-1.5 overflow-hidden">
           <div
-            className="h-1.5 rounded-full ring-1 ring-white/15"
+            className="h-1.5 rounded-full"
             style={{
               width: `${percentage}%`,
               backgroundColor: filament.colorHex,

@@ -78,22 +78,22 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="mb-8 text-sm text-gray-400 flex items-center gap-2">
+      <div className="mb-8 text-sm text-text-secondary flex items-center gap-2">
         <button
           onClick={() => onNavigate("history")}
-          className="hover:text-gray-200"
+          className="hover:text-text-primary"
         >
           History
         </button>
         <span>/</span>
-        <span className="text-gray-200">Log Print</span>
+        <span className="text-text-primary">Log Print</span>
       </div>
 
       <div className="mb-6 md:mb-8">
         <h1 className="text-2xl md:text-3xl font-bold mb-1">
           {editingJob ? "Edit Print Job" : "Log New Print Job"}
         </h1>
-        <p className="text-gray-400">
+        <p className="text-text-secondary">
           Record details of your print to update inventory automatically.
         </p>
       </div>
@@ -102,7 +102,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
         <div className="w-full flex-1 bg-bg-card border border-border rounded-2xl p-6 md:p-8">
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Model Name
               </label>
               <input
@@ -110,19 +110,19 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 placeholder="e.g. Benchy Boat v2"
                 value={modelName}
                 onChange={(e) => setModelName(e.target.value)}
-                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200"
+                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Filament Used
               </label>
               <div className="relative">
                 <select
                   value={filamentId}
                   onChange={(e) => setFilamentId(e.target.value)}
-                  className="w-full bg-bg-main border border-border rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 appearance-none"
+                  className="w-full bg-bg-main border border-border rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary appearance-none"
                 >
                   <option value="" disabled>
                     Select a filament...
@@ -143,7 +143,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 ></div>
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                   <svg
-                    className="w-4 h-4 text-gray-400"
+                    className="w-4 h-4 text-text-secondary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -157,14 +157,14 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                   </svg>
                 </div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-text-secondary mt-2">
                 Select the spool used for this print.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-text-primary mb-2">
                   Weight of Print
                 </label>
                 <div className="relative">
@@ -173,16 +173,16 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                     placeholder="0"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
-                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-16"
+                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary text-right pr-16"
                   />
-                  <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+                  <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-text-secondary text-sm">
                     grams
                   </span>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Estimated Waste/Supports <span className="text-gray-500 font-normal">(Optional)</span>
+                <label className="block text-sm font-medium text-text-primary mb-2">
+                  Estimated Waste/Supports <span className="text-text-secondary font-normal">(Optional)</span>
                 </label>
                 <div className="relative">
                   <input
@@ -190,9 +190,9 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                     placeholder="0"
                     value={waste}
                     onChange={(e) => setWaste(e.target.value)}
-                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-16"
+                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary text-right pr-16"
                   />
-                  <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+                  <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-text-secondary text-sm">
                     grams
                   </span>
                 </div>
@@ -254,11 +254,11 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
 
           <div className="space-y-4 mb-6">
             <div className="flex justify-between items-center pb-4 border-b border-border">
-              <span className="text-gray-400 text-sm">Total Weight</span>
+              <span className="text-text-secondary text-sm">Total Weight</span>
               <span className="font-bold">{totalWeight} g</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-400 text-sm">Estimated Cost</span>
+              <span className="text-text-secondary text-sm">Estimated Cost</span>
               <span className="font-bold text-emerald-400 text-xl">
                 {settings.currency === "USD" ? "$" : ""}
                 {estimatedCost.toFixed(2)}
@@ -268,18 +268,18 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
           </div>
 
           <div className="bg-bg-main rounded-xl p-4 border border-border">
-            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+            <h4 className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-3">
               Filament Update
             </h4>
             <div className="flex justify-between items-center mb-2">
               <div>
-                <p className="text-xs text-gray-500">Current Spool</p>
+                <p className="text-xs text-text-secondary">Current Spool</p>
                 <p className="font-bold">
                   {selectedFilament ? selectedFilament.weightRemaining : 0}g
                 </p>
               </div>
               <svg
-                className="w-4 h-4 text-gray-500"
+                className="w-4 h-4 text-text-secondary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -292,7 +292,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 />
               </svg>
               <div className="text-right">
-                <p className="text-xs text-gray-500">New Weight</p>
+                <p className="text-xs text-text-secondary">New Weight</p>
                 <p className="font-bold text-accent">
                   {selectedFilament
                     ? Math.max(
@@ -304,7 +304,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 </p>
               </div>
             </div>
-            <div className="w-full bg-gray-800 rounded-full h-1.5 mt-3">
+            <div className="w-full bg-border rounded-full h-1.5 mt-3">
               <div
                 className="bg-accent h-1.5 rounded-full transition-all duration-300"
                 style={{

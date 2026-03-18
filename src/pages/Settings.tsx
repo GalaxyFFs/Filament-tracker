@@ -112,7 +112,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
     <div className="max-w-4xl mx-auto pb-12">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-1">Settings</h1>
-        <p className="text-gray-400">
+        <p className="text-text-secondary">
           Configure your environment and manage local data
         </p>
       </div>
@@ -130,15 +130,15 @@ export default function Settings({ onNavigate }: SettingsProps) {
           <div className="p-6 space-y-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="font-medium text-gray-200 mb-1">Theme</h3>
-                <p className="text-sm text-gray-400">
+                <h3 className="font-medium text-text-primary mb-1">Theme</h3>
+                <p className="text-sm text-text-secondary">
                   Select your preferred interface theme.
                 </p>
               </div>
               <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ theme: "light" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 ${settings.theme === "light" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 ${settings.theme === "light" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   <svg
                     className="w-4 h-4"
@@ -157,7 +157,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                 </button>
                 <button
                   onClick={() => updateSettings({ theme: "dark" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 ${settings.theme === "dark" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 ${settings.theme === "dark" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   <svg
                     className="w-4 h-4"
@@ -179,8 +179,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-border">
               <div>
-                <h3 className="font-medium text-gray-200 mb-1">Accent Color</h3>
-                <p className="text-sm text-gray-400">
+                <h3 className="font-medium text-text-primary mb-1">Accent Color</h3>
+                <p className="text-sm text-text-secondary">
                   Customize the primary color of the application.
                 </p>
               </div>
@@ -218,23 +218,23 @@ export default function Settings({ onNavigate }: SettingsProps) {
           <div className="p-6 space-y-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="font-medium text-gray-200 mb-1">
+                <h3 className="font-medium text-text-primary mb-1">
                   Weight Display Unit
                 </h3>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-text-secondary">
                   Choose how filament weight is displayed across the app.
                 </p>
               </div>
               <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ weightUnit: "g" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "g" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "g" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   Grams (g)
                 </button>
                 <button
                   onClick={() => updateSettings({ weightUnit: "kg" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "kg" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "kg" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   Kilograms (kg)
                 </button>
@@ -243,27 +243,27 @@ export default function Settings({ onNavigate }: SettingsProps) {
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-border">
               <div>
-                <h3 className="font-medium text-gray-200 mb-1">Currency</h3>
-                <p className="text-sm text-gray-400">
+                <h3 className="font-medium text-text-primary mb-1">Currency</h3>
+                <p className="text-sm text-text-secondary">
                   Define your preferred currency symbol or code.
                 </p>
               </div>
               <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ currency: "USD" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "USD" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "USD" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   USD
                 </button>
                 <button
                   onClick={() => updateSettings({ currency: "EUR" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "EUR" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "EUR" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   EUR
                 </button>
                 <button
                   onClick={() => updateSettings({ currency: "CZK" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "CZK" ? "bg-bg-card text-white shadow" : "text-gray-400 hover:text-gray-200"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "CZK" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   CZK
                 </button>
@@ -290,7 +290,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
           </div>
 
           <div className="p-6">
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-text-secondary mb-4">
               Manage the list of filament manufacturers.
             </p>
 
@@ -301,7 +301,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   value={newBrand}
                   onChange={(e) => setNewBrand(e.target.value)}
                   placeholder="Brand name..."
-                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-gray-200"
+                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-text-primary"
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && handleAddBrand()}
                 />
@@ -313,7 +313,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                 </button>
                 <button
                   onClick={() => setIsAddingBrand(false)}
-                  className="p-1.5 bg-bg-main border border-border text-gray-400 rounded-lg hover:text-gray-200"
+                  className="p-1.5 bg-bg-main border border-border text-text-secondary rounded-lg hover:text-text-primary"
                 >
                   Cancel
                 </button>
@@ -327,7 +327,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   className="flex items-center justify-between p-4 bg-bg-main border border-border rounded-xl"
                 >
                   <span className="font-medium">{brand}</span>
-                  <div className="flex gap-2 text-gray-500">
+                  <div className="flex gap-2 text-text-secondary">
                     <button
                       onClick={() => handleDeleteBrand(brand)}
                       className="hover:text-red-400"
@@ -359,7 +359,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
           </div>
 
           <div className="p-6">
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-text-secondary mb-4">
               Manage the list of filament material types.
             </p>
 
@@ -370,7 +370,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   value={newMaterial}
                   onChange={(e) => setNewMaterial(e.target.value)}
                   placeholder="Material type e.g. PETG"
-                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-gray-200"
+                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-text-primary"
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && handleAddMaterial()}
                 />
@@ -382,7 +382,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                 </button>
                 <button
                   onClick={() => setIsAddingMaterial(false)}
-                  className="p-1.5 bg-bg-main border border-border text-gray-400 rounded-lg hover:text-gray-200"
+                  className="p-1.5 bg-bg-main border border-border text-text-secondary rounded-lg hover:text-text-primary"
                 >
                   Cancel
                 </button>
@@ -396,7 +396,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   className="flex items-center justify-between p-4 bg-bg-main border border-border rounded-xl"
                 >
                   <span className="font-medium">{material}</span>
-                  <div className="flex gap-2 text-gray-500">
+                  <div className="flex gap-2 text-text-secondary">
                     <button
                       onClick={() => handleDeleteMaterial(material)}
                       className="hover:text-red-400"
@@ -420,20 +420,20 @@ export default function Settings({ onNavigate }: SettingsProps) {
           </div>
 
           <div className="p-6 space-y-6">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-text-secondary">
               Backup your data locally or restore from a previous backup.
               Restoring a backup will overwrite your current data.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <button
                 onClick={handleBackup}
-                className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-white transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-text-primary transition-colors"
               >
                 <Download className="w-4 h-4" />
                 Backup Data
               </button>
 
-              <label className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-white transition-colors cursor-pointer">
+              <label className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-text-primary transition-colors cursor-pointer">
                 <Upload className="w-4 h-4" />
                 Restore Data
                 <input

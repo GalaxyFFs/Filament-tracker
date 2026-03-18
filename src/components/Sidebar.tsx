@@ -35,7 +35,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
         </div>
         <div>
           <h1 className="font-bold text-lg leading-tight">Filament Tracker</h1>
-          <p className="text-xs text-gray-400">Local Inventory</p>
+          <p className="text-xs text-text-secondary">Local Inventory</p>
         </div>
       </div>
 
@@ -55,7 +55,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
               }}
               className={`flex-1 md:flex-none md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 py-2 md:px-4 md:py-3 rounded-xl transition-colors ${isActive
                 ? "text-accent md:bg-accent/10"
-                : "text-gray-400 hover:text-gray-200 md:hover:bg-bg-card"
+                : "text-text-secondary hover:text-text-primary md:hover:bg-bg-card"
                 }`}
             >
               <Icon className="w-6 h-6 md:w-5 md:h-5" />

@@ -48,7 +48,7 @@ export default function ColorPicker({ colorHex, onChange }: ColorPickerProps) {
         <div className="absolute top-12 left-0 z-50 p-4 bg-bg-card border border-border rounded-xl shadow-xl w-[260px]">
           
           <div className="mb-4">
-            <label className="block text-xs text-gray-400 mb-2 font-medium">Preset Colors</label>
+            <label className="block text-xs text-text-secondary mb-2 font-medium">Preset Colors</label>
             <div className="grid grid-cols-6 gap-2">
               {PRESET_COLORS.map(preset => (
                 <button
@@ -63,7 +63,7 @@ export default function ColorPicker({ colorHex, onChange }: ColorPickerProps) {
           </div>
 
           <div className="mb-4">
-            <label className="block text-xs text-gray-400 mb-2 font-medium">More Colors</label>
+            <label className="block text-xs text-text-secondary mb-2 font-medium">More Colors</label>
             <div className="relative h-10 rounded-lg border border-border overflow-hidden hover:opacity-90 transition-opacity">
                 <input
                   type="color"

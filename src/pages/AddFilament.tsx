@@ -68,22 +68,22 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="mb-8 text-sm text-gray-400 flex items-center gap-2">
+      <div className="mb-8 text-sm text-text-secondary flex items-center gap-2">
         <button
           onClick={() => onNavigate("inventory")}
-          className="hover:text-gray-200"
+          className="hover:text-text-primary"
         >
           Inventory
         </button>
         <span>/</span>
-        <span className="text-gray-200">Add Filament</span>
+        <span className="text-text-primary">Add Filament</span>
       </div>
 
       <div className="mb-6 md:mb-8">
         <h1 className="text-2xl md:text-3xl font-bold mb-1">
           {editingFilament ? "Edit Filament" : "Add New Filament"}
         </h1>
-        <p className="text-gray-400">
+        <p className="text-text-secondary">
           Enter the details of your filament spool to track it in your local
           inventory.
         </p>
@@ -93,7 +93,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Filament Name
               </label>
               <input
@@ -101,18 +101,18 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                 placeholder="e.g. Matte Navy Blue"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200"
+                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Brand
               </label>
               <select
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 appearance-none"
+                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary appearance-none"
               >
                 <option value="" disabled>
                   Select from your brands...
@@ -126,13 +126,13 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Material Type
               </label>
               <select
                 value={material}
                 onChange={(e) => setMaterial(e.target.value)}
-                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 appearance-none"
+                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary appearance-none"
               >
                 <option value="" disabled>
                   Select from your materials...
@@ -148,24 +148,24 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
 
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Color
               </label>
               <div className="flex gap-3">
                 <ColorPicker colorHex={colorHex} onChange={setColorHex} />
                 <div className="flex-1">
-                  <label className="block text-xs text-gray-500 mb-1">
+                  <label className="block text-xs text-text-secondary mb-1">
                     Hex Code
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">
                       #
                     </span>
                     <input
                       type="text"
                       value={colorHex}
                       onChange={(e) => setColorHex(e.target.value)}
-                      className="w-full bg-bg-main border border-border rounded-lg pl-8 pr-4 py-2 text-sm focus:outline-none focus:border-accent text-gray-200 uppercase"
+                      className="w-full bg-bg-main border border-border rounded-lg pl-8 pr-4 py-2 text-sm focus:outline-none focus:border-accent text-text-primary uppercase"
                     />
                   </div>
                 </div>
@@ -174,7 +174,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-text-primary mb-2">
                   Initial Weight
                 </label>
                 <div className="relative">
@@ -182,15 +182,15 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                     type="number"
                     value={weightTotal}
                     onChange={(e) => setWeightTotal(e.target.value)}
-                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-8"
+                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary text-right pr-8"
                   />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary text-sm">
                     g
                   </span>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-text-primary mb-2">
                   Empty Spool
                 </label>
                 <div className="relative">
@@ -198,9 +198,9 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                     type="number"
                     value={emptySpoolWeight}
                     onChange={(e) => setEmptySpoolWeight(e.target.value)}
-                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200 text-right pr-8"
+                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary text-right pr-8"
                   />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary text-sm">
                     g
                   </span>
                 </div>
@@ -208,11 +208,11 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-text-primary mb-2">
                 Price per Spool
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">
                   {settings.currency === "USD" ? "$" : settings.currency}
                 </span>
                 <input
@@ -220,7 +220,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                   placeholder="0.00"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  className="w-full bg-bg-main border border-border rounded-lg pl-12 pr-4 py-2.5 text-sm focus:outline-none focus:border-accent text-gray-200"
+                  className="w-full bg-bg-main border border-border rounded-lg pl-12 pr-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary"
                 />
               </div>
             </div>

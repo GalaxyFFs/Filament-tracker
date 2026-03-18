@@ -25,7 +25,7 @@ export default function History({ onNavigate }: HistoryProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 md:mb-8">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold mb-1">Print History</h1>
-          <p className="text-gray-400">
+          <p className="text-text-secondary">
             Review your past prints and calculate costs
           </p>
         </div>
@@ -46,7 +46,7 @@ export default function History({ onNavigate }: HistoryProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
-            <p className="text-gray-400 text-sm">Total Spent on Prints</p>
+            <p className="text-text-secondary text-sm">Total Spent on Prints</p>
             <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
               <span className="text-accent font-bold">$</span>
             </div>
@@ -56,12 +56,12 @@ export default function History({ onNavigate }: HistoryProps) {
             {totalSpent.toFixed(2)}
             {settings.currency !== "USD" ? ` ${settings.currency}` : ""}
           </h2>
-          <p className="text-gray-500 text-sm">Lifetime total</p>
+          <p className="text-text-secondary text-sm">Lifetime total</p>
         </div>
 
         <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
-            <p className="text-gray-400 text-sm">Total Weight Printed</p>
+            <p className="text-text-secondary text-sm">Total Weight Printed</p>
             <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
               <svg
                 className="w-5 h-5 text-accent"
@@ -80,11 +80,11 @@ export default function History({ onNavigate }: HistoryProps) {
             {settings.weightUnit === "kg"
               ? (totalWeight / 1000).toFixed(2)
               : totalWeight}{" "}
-            <span className="text-xl text-gray-500 font-normal">
+            <span className="text-xl text-text-secondary font-normal">
               {settings.weightUnit}
             </span>
           </h2>
-          <p className="text-gray-500 text-sm">~ {(totalWeight / 1000).toFixed(1)} spools worth</p>
+          <p className="text-text-secondary text-sm">~ {(totalWeight / 1000).toFixed(1)} spools worth</p>
         </div>
       </div>
 
@@ -92,13 +92,13 @@ export default function History({ onNavigate }: HistoryProps) {
         <div className="p-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="text-lg font-bold">Recent Logs</h2>
           <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary w-4 h-4" />
             <input
               type="text"
               placeholder="Search logs..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-bg-main border border-border rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-accent text-gray-200"
+              className="w-full bg-bg-main border border-border rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-accent text-text-primary"
             />
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function History({ onNavigate }: HistoryProps) {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
-              <tr className="border-b border-border text-xs font-bold text-gray-400 uppercase tracking-wider">
+              <tr className="border-b border-border text-xs font-bold text-text-secondary uppercase tracking-wider">
                 <th className="p-4 pl-6">Model Name</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Filament Used</th>
@@ -118,7 +118,7 @@ export default function History({ onNavigate }: HistoryProps) {
             <tbody className="divide-y divide-border">
               {filteredJobs.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-gray-500">
+                  <td colSpan={6} className="p-8 text-center text-text-secondary">
                     No print jobs found.
                   </td>
                 </tr>
@@ -130,10 +130,10 @@ export default function History({ onNavigate }: HistoryProps) {
                       key={job.id}
                       className="hover:bg-bg-card-hover transition-colors group"
                     >
-                      <td className="p-4 pl-6 font-medium text-gray-200">
+                      <td className="p-4 pl-6 font-medium text-text-primary">
                         {job.modelName}
                       </td>
-                      <td className="p-4 text-gray-400">{new Date(job.date).toLocaleDateString('cs-CZ')}</td>
+                      <td className="p-4 text-text-secondary">{new Date(job.date).toLocaleDateString('cs-CZ')}</td>
                       <td className="p-4">
                         {filament && (
                           <div className="flex items-center gap-2">
@@ -141,17 +141,17 @@ export default function History({ onNavigate }: HistoryProps) {
                               className="w-3 h-3 rounded-full ring-1 ring-white/20 shrink-0"
                               style={{ backgroundColor: filament.colorHex }}
                             ></div>
-                            <span className="text-gray-200">{filament.name}</span>
-                            <span className="text-gray-500 text-sm">
+                            <span className="text-text-primary">{filament.name}</span>
+                            <span className="text-text-secondary text-sm">
                               ({filament.brand})
                             </span>
                           </div>
                         )}
                       </td>
-                      <td className="p-4 text-gray-200 font-medium">
+                      <td className="p-4 text-text-primary font-medium">
                         {job.weightUsed}g
                       </td>
-                      <td className="p-4 text-gray-200 font-medium">
+                      <td className="p-4 text-text-primary font-medium">
                         {settings.currency === "USD" ? "$" : ""}
                         {job.cost.toFixed(2)}
                         {settings.currency !== "USD"
@@ -165,14 +165,14 @@ export default function History({ onNavigate }: HistoryProps) {
                               setEditingPrintJobId(job.id);
                               onNavigate("log-print");
                             }}
-                            className="text-gray-500 hover:text-blue-400 transition-colors"
+                            className="text-text-secondary hover:text-blue-400 transition-colors"
                             title="Edit"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => deletePrintJob(job.id)}
-                            className="text-gray-500 hover:text-red-400 transition-colors"
+                            className="text-text-secondary hover:text-red-400 transition-colors"
                             title="Delete"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -187,7 +187,7 @@ export default function History({ onNavigate }: HistoryProps) {
           </table>
         </div>
 
-        <div className="p-4 border-t border-border flex items-center justify-between text-sm text-gray-400">
+        <div className="p-4 border-t border-border flex items-center justify-between text-sm text-text-secondary">
           <span>
             Showing {filteredJobs.length} of {printJobs.length} results
           </span>
