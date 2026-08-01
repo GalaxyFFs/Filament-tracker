@@ -118,9 +118,9 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                 <th className="p-4">Name</th>
                 <th className="p-4">Brand</th>
                 <th className="p-4">Material</th>
-                <th className="p-4">Weight (g)</th>
-                <th className="p-4">Empty Spool (g)</th>
-                <th className="p-4">Price</th>
+                <th className="p-4">Weight ({settings.weightUnit})</th>
+                <th className="p-4">Empty Spool ({settings.weightUnit})</th>
+                <th className="p-4">Price ({settings.currency})</th>
                 <th className="p-4 pr-6 text-right">Actions</th>
               </tr>
             </thead>
@@ -165,22 +165,20 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                             : "text-text-primary font-medium"
                         }
                       >
-                        {formatNumber(filament.weightRemaining)}
+                        {formatNumber(settings.weightUnit === "kg" ? filament.weightRemaining / 1000 : filament.weightRemaining)}
                       </span>
                       <span className="text-text-secondary text-sm">
                         {" "}
-                        / {formatNumber(filament.weightTotal)}
+                        / {formatNumber(settings.weightUnit === "kg" ? filament.weightTotal / 1000 : filament.weightTotal)}
                       </span>
                     </td>
                     <td className="p-4">
                       <span className="text-text-secondary">
-                        {formatNumber(filament.emptySpoolWeight)}
+                        {formatNumber(settings.weightUnit === "kg" ? filament.emptySpoolWeight / 1000 : filament.emptySpoolWeight)}
                       </span>
                     </td>
                     <td className="p-4 text-text-secondary">
-                      {settings.currency === "USD" ? "$" : ""}
                       {formatMoney(filament.price)}
-                      {settings.currency !== "USD" ? ` ${settings.currency}` : ""}
                     </td>
                     <td className="p-4 pr-6 text-right">
                       <div className="flex items-center justify-end gap-2">

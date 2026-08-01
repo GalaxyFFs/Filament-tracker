@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Download, Plus, Search, Box, Edit2, Trash2 } from "lucide-react";
+import { Download, Plus, Search, Box, Edit2, Trash2, Scale } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import { formatNumber, formatMoney } from "../utils/format";
@@ -67,17 +67,7 @@ export default function History({ onNavigate }: HistoryProps) {
           <div className="flex justify-between items-start mb-4">
             <p className="text-text-secondary text-sm">Total Weight Printed</p>
             <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-              <svg
-                className="w-5 h-5 text-accent"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-              </svg>
+              <Scale className="w-5 h-5 text-accent" />
             </div>
           </div>
           <h2 className="text-4xl font-bold text-accent mb-2">
@@ -114,8 +104,8 @@ export default function History({ onNavigate }: HistoryProps) {
                 <th className="p-4 pl-6">Model Name</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Filament Used</th>
-                <th className="p-4">Weight</th>
-                <th className="p-4">Cost</th>
+                <th className="p-4">Weight ({settings.weightUnit})</th>
+                <th className="p-4">Cost ({settings.currency})</th>
                 <th className="p-4 pr-6 text-right">Actions</th>
               </tr>
             </thead>
@@ -157,14 +147,10 @@ export default function History({ onNavigate }: HistoryProps) {
                         )}
                       </td>
                       <td className="p-4 text-text-primary font-medium">
-                        {formatNumber(job.weightUsed)}g
+                        {formatNumber(settings.weightUnit === "kg" ? job.weightUsed / 1000 : job.weightUsed)}
                       </td>
                       <td className="p-4 text-text-primary font-medium">
-                        {settings.currency === "USD" ? "$" : ""}
                         {formatMoney(job.cost)}
-                        {settings.currency !== "USD"
-                          ? ` ${settings.currency}`
-                          : ""}
                       </td>
                       <td className="p-4 pr-6 text-right">
                         <div className="flex items-center justify-end gap-2">
