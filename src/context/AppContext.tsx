@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Filament, PrintJob, Settings } from "../types";
+import { roundTo2 } from "../utils/format";
 
 const generateId = () => {
   try {
@@ -11,6 +12,7 @@ const generateId = () => {
   }
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 };
+
 
 interface AppState {
   filaments: Filament[];
@@ -135,13 +137,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [settings]);
 
   const addFilament = (filament: Omit<Filament, "id">) => {
-    const newFilament = { ...filament, id: generateId() };
+    const newFilament = {
+      ...filament,
+      id: generateId(),
+      weightTotal: roundTo2(filament.weightTotal),
+      weightRemaining: roundTo2(filament.weightRemaining),
+      emptySpoolWeight: roundTo2(filament.emptySpoolWeight),
+      price: roundTo2(filament.price),
+    };
     setFilaments([...filaments, newFilament]);
   };
 
   const updateFilament = (id: string, updates: Partial<Filament>) => {
+    const sanitizedUpdates = { ...updates };
+    if (sanitizedUpdates.weightTotal !== undefined) sanitizedUpdates.weightTotal = roundTo2(sanitizedUpdates.weightTotal);
+    if (sanitizedUpdates.weightRemaining !== undefined) sanitizedUpdates.weightRemaining = roundTo2(sanitizedUpdates.weightRemaining);
+    if (sanitizedUpdates.emptySpoolWeight !== undefined) sanitizedUpdates.emptySpoolWeight = roundTo2(sanitizedUpdates.emptySpoolWeight);
+    if (sanitizedUpdates.price !== undefined) sanitizedUpdates.price = roundTo2(sanitizedUpdates.price);
+
     setFilaments(
-      filaments.map((f) => (f.id === id ? { ...f, ...updates } : f)),
+      filaments.map((f) => (f.id === id ? { ...f, ...sanitizedUpdates } : f)),
     );
   };
 
@@ -150,20 +165,28 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addPrintJob = (job: Omit<PrintJob, "id">) => {
-    const newJob = { ...job, id: generateId() };
+    const newJob = {
+      ...job,
+      id: generateId(),
+      weightUsed: roundTo2(job.weightUsed),
+      cost: roundTo2(job.cost),
+    };
     setPrintJobs([...printJobs, newJob]);
 
     const filament = filaments.find((f) => f.id === job.filamentId);
     if (filament) {
       updateFilament(filament.id, {
-        weightRemaining: Math.max(0, filament.weightRemaining - job.weightUsed),
+        weightRemaining: Math.max(0, roundTo2(filament.weightRemaining - job.weightUsed)),
       });
     }
   };
 
   const updatePrintJob = (id: string, updates: Partial<PrintJob>) => {
+    const sanitizedUpdates = { ...updates };
+    if (sanitizedUpdates.weightUsed !== undefined) sanitizedUpdates.weightUsed = roundTo2(sanitizedUpdates.weightUsed);
+    if (sanitizedUpdates.cost !== undefined) sanitizedUpdates.cost = roundTo2(sanitizedUpdates.cost);
     setPrintJobs(
-      printJobs.map((j) => (j.id === id ? { ...j, ...updates } : j)),
+      printJobs.map((j) => (j.id === id ? { ...j, ...sanitizedUpdates } : j)),
     );
   };
 

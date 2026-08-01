@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Download, Plus, Search, Box, Edit2, Trash2 } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
+import { formatNumber, formatMoney } from "../utils/format";
+
 
 interface HistoryProps {
   onNavigate: (page: Page) => void;
@@ -53,7 +55,7 @@ export default function History({ onNavigate }: HistoryProps) {
           </div>
           <h2 className="text-4xl font-bold text-accent mb-2">
             {settings.currency === "USD" ? "$" : ""}
-            {totalSpent.toFixed(2)}
+            {formatMoney(totalSpent)}
             {settings.currency !== "USD" ? ` ${settings.currency}` : ""}
           </h2>
           <p className="text-text-secondary text-sm">Lifetime total</p>
@@ -78,13 +80,13 @@ export default function History({ onNavigate }: HistoryProps) {
           </div>
           <h2 className="text-4xl font-bold text-accent mb-2">
             {settings.weightUnit === "kg"
-              ? (totalWeight / 1000).toFixed(2)
-              : totalWeight}{" "}
+              ? formatNumber(totalWeight / 1000)
+              : formatNumber(totalWeight)}{" "}
             <span className="text-xl text-text-secondary font-normal">
               {settings.weightUnit}
             </span>
           </h2>
-          <p className="text-text-secondary text-sm">~ {(totalWeight / 1000).toFixed(1)} spools worth</p>
+          <p className="text-text-secondary text-sm">~ {formatNumber(totalWeight / 1000)} spools worth</p>
         </div>
       </div>
 
@@ -149,11 +151,11 @@ export default function History({ onNavigate }: HistoryProps) {
                         )}
                       </td>
                       <td className="p-4 text-text-primary font-medium">
-                        {job.weightUsed}g
+                        {formatNumber(job.weightUsed)}g
                       </td>
                       <td className="p-4 text-text-primary font-medium">
                         {settings.currency === "USD" ? "$" : ""}
-                        {job.cost.toFixed(2)}
+                        {formatMoney(job.cost)}
                         {settings.currency !== "USD"
                           ? ` ${settings.currency}`
                           : ""}

@@ -2,6 +2,7 @@ import React from "react";
 import { Archive, AlertTriangle, Scale, Plus, History } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
+import { formatNumber } from "../utils/format";
 
 interface DashboardProps {
   onNavigate: (page: Page) => void;
@@ -20,8 +21,9 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
 
   const displayWeight =
     settings.weightUnit === "kg"
-      ? (totalWeight / 1000).toFixed(2)
-      : totalWeight.toString();
+      ? formatNumber(totalWeight / 1000)
+      : formatNumber(totalWeight);
+
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -176,10 +178,10 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
         <div className="flex justify-between text-xs text-text-secondary mb-2">
           <span>Remaining</span>
           <span className="text-text-primary font-medium">
-            {filament.weightRemaining}g /{" "}
+            {formatNumber(filament.weightRemaining)}g /{" "}
             {filament.weightTotal >= 1000
-              ? filament.weightTotal / 1000 + "kg"
-              : filament.weightTotal + "g"}
+              ? formatNumber(filament.weightTotal / 1000) + "kg"
+              : formatNumber(filament.weightTotal) + "g"}
           </span>
         </div>
         <div className="w-full bg-bg-main rounded-full h-1.5 overflow-hidden">

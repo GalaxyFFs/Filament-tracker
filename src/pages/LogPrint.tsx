@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
+import { roundTo2, formatNumber, formatMoney } from "../utils/format";
+
 
 interface LogPrintProps {
   onNavigate: (page: Page) => void;
@@ -26,10 +28,10 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
     [filaments, filamentId],
   );
 
-  const totalWeight = (Number(weight) || 0) + (Number(waste) || 0);
-  const estimatedCost = selectedFilament
+  const totalWeight = roundTo2((Number(weight) || 0) + (Number(waste) || 0));
+  const estimatedCost = roundTo2(selectedFilament
     ? (totalWeight / Number(selectedFilament.weightTotal)) * selectedFilament.price
-    : 0;
+    : 0);
 
   const handleSave = () => {
     if (!modelName || !filamentId || totalWeight <= 0) {
@@ -131,7 +133,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                     .filter((f) => f.weightRemaining > 0)
                     .map((f) => (
                       <option key={f.id} value={f.id}>
-                        {f.name} ({f.brand}) - {f.weightRemaining}g remaining
+                        {f.name} ({f.brand}) - {formatNumber(f.weightRemaining)}g remaining
                       </option>
                     ))}
                 </select>
@@ -170,6 +172,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 <div className="relative">
                   <input
                     type="number"
+                    step="any"
                     placeholder="0"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
@@ -187,6 +190,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 <div className="relative">
                   <input
                     type="number"
+                    step="any"
                     placeholder="0"
                     value={waste}
                     onChange={(e) => setWaste(e.target.value)}
@@ -255,13 +259,13 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
           <div className="space-y-4 mb-6">
             <div className="flex justify-between items-center pb-4 border-b border-border">
               <span className="text-text-secondary text-sm">Total Weight</span>
-              <span className="font-bold">{totalWeight} g</span>
+              <span className="font-bold">{formatNumber(totalWeight)} g</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-text-secondary text-sm">Estimated Cost</span>
               <span className="font-bold text-emerald-400 text-xl">
                 {settings.currency === "USD" ? "$" : ""}
-                {estimatedCost.toFixed(2)}
+                {formatMoney(estimatedCost)}
                 {settings.currency !== "USD" ? ` ${settings.currency}` : ""}
               </span>
             </div>
@@ -275,7 +279,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
               <div>
                 <p className="text-xs text-text-secondary">Current Spool</p>
                 <p className="font-bold">
-                  {selectedFilament ? selectedFilament.weightRemaining : 0}g
+                  {selectedFilament ? formatNumber(selectedFilament.weightRemaining) : 0}g
                 </p>
               </div>
               <svg
@@ -295,10 +299,10 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 <p className="text-xs text-text-secondary">New Weight</p>
                 <p className="font-bold text-accent">
                   {selectedFilament
-                    ? Math.max(
+                    ? formatNumber(Math.max(
                       0,
                       Number(selectedFilament.weightRemaining) - totalWeight,
-                    )
+                    ))
                     : 0}
                   g
                 </p>

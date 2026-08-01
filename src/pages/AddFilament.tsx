@@ -180,6 +180,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                 <div className="relative">
                   <input
                     type="number"
+                    step="any"
                     value={weightTotal}
                     onChange={(e) => setWeightTotal(e.target.value)}
                     className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary text-right pr-8"
@@ -196,6 +197,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                 <div className="relative">
                   <input
                     type="number"
+                    step="any"
                     value={emptySpoolWeight}
                     onChange={(e) => setEmptySpoolWeight(e.target.value)}
                     className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary text-right pr-8"
@@ -217,6 +219,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                 </span>
                 <input
                   type="number"
+                  step="any"
                   placeholder="0.00"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}

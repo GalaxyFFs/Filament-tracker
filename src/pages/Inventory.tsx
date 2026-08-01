@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Search, Plus, Trash2, Edit2 } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
+import { formatNumber, formatMoney } from "../utils/format";
+
 
 interface InventoryProps {
   onNavigate: (page: Page) => void;
@@ -163,21 +165,21 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                             : "text-text-primary font-medium"
                         }
                       >
-                        {filament.weightRemaining}
+                        {formatNumber(filament.weightRemaining)}
                       </span>
                       <span className="text-text-secondary text-sm">
                         {" "}
-                        / {filament.weightTotal}
+                        / {formatNumber(filament.weightTotal)}
                       </span>
                     </td>
                     <td className="p-4">
                       <span className="text-text-secondary">
-                        {filament.emptySpoolWeight}
+                        {formatNumber(filament.emptySpoolWeight)}
                       </span>
                     </td>
                     <td className="p-4 text-text-secondary">
                       {settings.currency === "USD" ? "$" : ""}
-                      {filament.price.toFixed(2)}
+                      {formatMoney(filament.price)}
                       {settings.currency !== "USD" ? ` ${settings.currency}` : ""}
                     </td>
                     <td className="p-4 pr-6 text-right">
