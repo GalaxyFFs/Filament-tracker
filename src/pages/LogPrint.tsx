@@ -39,31 +39,22 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
       return;
     }
 
-    const weightDiff = editingJob 
-      ? (editingJob.filamentId === filamentId ? totalWeight - editingJob.weightUsed : totalWeight) 
-      : totalWeight;
-      
-    if (selectedFilament && weightDiff > Number(selectedFilament.weightRemaining)) {
+    const availableWeight = selectedFilament
+      ? selectedFilament.weightRemaining + (editingJob && editingJob.filamentId === filamentId ? editingJob.weightUsed : 0)
+      : 0;
+
+    if (totalWeight > availableWeight) {
       alert("Not enough filament remaining!");
       return;
     }
 
     if (editingJob) {
-      if (editingJob.filamentId === filamentId) {
-        updatePrintJob(editingJob.id, { modelName, filamentId, weightUsed: totalWeight, cost: estimatedCost });
-        if (selectedFilament) {
-          updateFilament(filamentId, { weightRemaining: Math.max(0, selectedFilament.weightRemaining - weightDiff) });
-        }
-      } else {
-        const oldFilament = filaments.find(f => f.id === editingJob.filamentId);
-        if (oldFilament) {
-           updateFilament(oldFilament.id, { weightRemaining: oldFilament.weightRemaining + editingJob.weightUsed });
-        }
-        if (selectedFilament) {
-           updateFilament(filamentId, { weightRemaining: Math.max(0, selectedFilament.weightRemaining - totalWeight) });
-        }
-        updatePrintJob(editingJob.id, { modelName, filamentId, weightUsed: totalWeight, cost: estimatedCost });
-      }
+      updatePrintJob(editingJob.id, {
+        modelName,
+        filamentId,
+        weightUsed: totalWeight,
+        cost: estimatedCost,
+      });
       setEditingPrintJobId(null);
     } else {
       addPrintJob({

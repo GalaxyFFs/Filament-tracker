@@ -38,14 +38,12 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
     }
 
     if (editingFilament) {
-      const diff = Number(weightTotal) - editingFilament.weightTotal;
       updateFilament(editingFilament.id, {
         name,
         brand,
         material,
         colorHex: `#${colorHex.replace("#", "")}`,
         weightTotal: Number(weightTotal),
-        weightRemaining: Math.max(0, editingFilament.weightRemaining + diff),
         emptySpoolWeight: Number(emptySpoolWeight),
         price: Number(price),
       });

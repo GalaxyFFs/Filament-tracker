@@ -67,17 +67,33 @@ const defaultSettings: Settings = {
   ],
 };
 
+export const recalculateFilamentWeights = (
+  filamentsList: Filament[],
+  jobsList: PrintJob[]
+): Filament[] => {
+  return filamentsList.map((f) => {
+    const used = jobsList
+      .filter((j) => j.filamentId === f.id)
+      .reduce((sum, j) => sum + (Number(j.weightUsed) || 0), 0);
+    const weightRemaining = Math.max(0, roundTo2(f.weightTotal - used));
+    return { ...f, weightRemaining };
+  });
+};
+
 const AppContext = createContext<AppState | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [filaments, setFilaments] = useState<Filament[]>(() => {
-    const saved = localStorage.getItem("filaments");
-    return saved ? JSON.parse(saved) : [];
-  });
-
   const [printJobs, setPrintJobs] = useState<PrintJob[]>(() => {
     const saved = localStorage.getItem("printJobs");
     return saved ? JSON.parse(saved) : [];
+  });
+
+  const [filaments, setFilaments] = useState<Filament[]>(() => {
+    const savedFilaments = localStorage.getItem("filaments");
+    const savedJobs = localStorage.getItem("printJobs");
+    const parsedFilaments: Filament[] = savedFilaments ? JSON.parse(savedFilaments) : [];
+    const parsedJobs: PrintJob[] = savedJobs ? JSON.parse(savedJobs) : [];
+    return recalculateFilamentWeights(parsedFilaments, parsedJobs);
   });
 
   const [settings, setSettings] = useState<Settings>(() => {
@@ -96,6 +112,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     localStorage.setItem("printJobs", JSON.stringify(printJobs));
+  }, [printJobs]);
+
+  useEffect(() => {
+    setFilaments((prevFilaments) => {
+      const recalculated = recalculateFilamentWeights(prevFilaments, printJobs);
+      const isChanged = recalculated.some(
+        (f, idx) => f.weightRemaining !== prevFilaments[idx]?.weightRemaining
+      );
+      return isChanged ? recalculated : prevFilaments;
+    });
   }, [printJobs]);
 
   useEffect(() => {
@@ -141,27 +167,32 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ...filament,
       id: generateId(),
       weightTotal: roundTo2(filament.weightTotal),
-      weightRemaining: roundTo2(filament.weightRemaining),
+      weightRemaining: roundTo2(filament.weightTotal),
       emptySpoolWeight: roundTo2(filament.emptySpoolWeight),
       price: roundTo2(filament.price),
     };
-    setFilaments([...filaments, newFilament]);
+    setFilaments((prev) => recalculateFilamentWeights([...prev, newFilament], printJobs));
   };
 
   const updateFilament = (id: string, updates: Partial<Filament>) => {
     const sanitizedUpdates = { ...updates };
-    if (sanitizedUpdates.weightTotal !== undefined) sanitizedUpdates.weightTotal = roundTo2(sanitizedUpdates.weightTotal);
-    if (sanitizedUpdates.weightRemaining !== undefined) sanitizedUpdates.weightRemaining = roundTo2(sanitizedUpdates.weightRemaining);
-    if (sanitizedUpdates.emptySpoolWeight !== undefined) sanitizedUpdates.emptySpoolWeight = roundTo2(sanitizedUpdates.emptySpoolWeight);
-    if (sanitizedUpdates.price !== undefined) sanitizedUpdates.price = roundTo2(sanitizedUpdates.price);
+    if (sanitizedUpdates.weightTotal !== undefined)
+      sanitizedUpdates.weightTotal = roundTo2(sanitizedUpdates.weightTotal);
+    if (sanitizedUpdates.emptySpoolWeight !== undefined)
+      sanitizedUpdates.emptySpoolWeight = roundTo2(sanitizedUpdates.emptySpoolWeight);
+    if (sanitizedUpdates.price !== undefined)
+      sanitizedUpdates.price = roundTo2(sanitizedUpdates.price);
 
-    setFilaments(
-      filaments.map((f) => (f.id === id ? { ...f, ...sanitizedUpdates } : f)),
+    setFilaments((prev) =>
+      recalculateFilamentWeights(
+        prev.map((f) => (f.id === id ? { ...f, ...sanitizedUpdates } : f)),
+        printJobs
+      )
     );
   };
 
   const deleteFilament = (id: string) => {
-    setFilaments(filaments.filter((f) => f.id !== id));
+    setFilaments((prev) => prev.filter((f) => f.id !== id));
   };
 
   const addPrintJob = (job: Omit<PrintJob, "id">) => {
@@ -171,27 +202,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       weightUsed: roundTo2(job.weightUsed),
       cost: roundTo2(job.cost),
     };
-    setPrintJobs([...printJobs, newJob]);
-
-    const filament = filaments.find((f) => f.id === job.filamentId);
-    if (filament) {
-      updateFilament(filament.id, {
-        weightRemaining: Math.max(0, roundTo2(filament.weightRemaining - job.weightUsed)),
-      });
-    }
+    setPrintJobs((prev) => [...prev, newJob]);
   };
 
   const updatePrintJob = (id: string, updates: Partial<PrintJob>) => {
     const sanitizedUpdates = { ...updates };
-    if (sanitizedUpdates.weightUsed !== undefined) sanitizedUpdates.weightUsed = roundTo2(sanitizedUpdates.weightUsed);
-    if (sanitizedUpdates.cost !== undefined) sanitizedUpdates.cost = roundTo2(sanitizedUpdates.cost);
-    setPrintJobs(
-      printJobs.map((j) => (j.id === id ? { ...j, ...sanitizedUpdates } : j)),
+    if (sanitizedUpdates.weightUsed !== undefined)
+      sanitizedUpdates.weightUsed = roundTo2(sanitizedUpdates.weightUsed);
+    if (sanitizedUpdates.cost !== undefined)
+      sanitizedUpdates.cost = roundTo2(sanitizedUpdates.cost);
+
+    setPrintJobs((prev) =>
+      prev.map((j) => (j.id === id ? { ...j, ...sanitizedUpdates } : j))
     );
   };
 
   const deletePrintJob = (id: string) => {
-    setPrintJobs(printJobs.filter((j) => j.id !== id));
+    setPrintJobs((prev) => prev.filter((j) => j.id !== id));
   };
 
   const updateSettings = (updates: Partial<Settings>) => {
@@ -199,9 +226,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const restoreData = (data: { filaments: Filament[]; printJobs: PrintJob[]; settings: Settings }) => {
-    if (data.filaments) setFilaments(data.filaments);
-    if (data.printJobs) setPrintJobs(data.printJobs);
+    const newJobs = data.printJobs || [];
+    const newFilaments = data.filaments || [];
     if (data.settings) setSettings(data.settings);
+    setPrintJobs(newJobs);
+    setFilaments(recalculateFilamentWeights(newFilaments, newJobs));
   };
 
   return (
