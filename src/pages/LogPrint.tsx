@@ -121,7 +121,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                     Select a filament...
                   </option>
                   {filaments
-                    .filter((f) => f.weightRemaining > 0)
+                    .filter((f) => f.weightRemaining > 0 || f.id === editingJob?.filamentId)
                     .map((f) => (
                       <option key={f.id} value={f.id}>
                         {f.name} ({f.brand}) - {formatNumber(f.weightRemaining)}g remaining
@@ -290,10 +290,14 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
                 <p className="text-xs text-text-secondary">New Weight</p>
                 <p className="font-bold text-accent">
                   {selectedFilament
-                    ? formatNumber(Math.max(
-                      0,
-                      Number(selectedFilament.weightRemaining) - totalWeight,
-                    ))
+                    ? formatNumber(
+                        Math.max(
+                          0,
+                          selectedFilament.weightRemaining +
+                            (editingJob && editingJob.filamentId === filamentId ? editingJob.weightUsed : 0) -
+                            totalWeight
+                        )
+                      )
                     : 0}
                   g
                 </p>
@@ -303,7 +307,18 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
               <div
                 className="bg-accent h-1.5 rounded-full transition-all duration-300"
                 style={{
-                  width: `${selectedFilament ? Math.max(0, ((Number(selectedFilament.weightRemaining) - totalWeight) / Number(selectedFilament.weightTotal)) * 100) : 0}%`,
+                  width: `${
+                    selectedFilament && selectedFilament.weightTotal > 0
+                      ? Math.max(
+                          0,
+                          ((selectedFilament.weightRemaining +
+                            (editingJob && editingJob.filamentId === filamentId ? editingJob.weightUsed : 0) -
+                            totalWeight) /
+                            Number(selectedFilament.weightTotal)) *
+                            100
+                        )
+                      : 0
+                  }%`,
                 }}
               ></div>
             </div>

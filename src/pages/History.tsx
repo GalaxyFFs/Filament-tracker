@@ -50,7 +50,9 @@ export default function History({ onNavigate }: HistoryProps) {
           <div className="flex justify-between items-start mb-4">
             <p className="text-text-secondary text-sm">Total Spent on Prints</p>
             <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-              <span className="text-accent font-bold">$</span>
+              <span className="text-accent font-bold">
+                {settings.currency === "USD" ? "$" : settings.currency}
+              </span>
             </div>
           </div>
           <h2 className="text-4xl font-bold text-accent mb-2">
@@ -137,7 +139,7 @@ export default function History({ onNavigate }: HistoryProps) {
                       </td>
                       <td className="p-4 text-text-secondary">{new Date(job.date).toLocaleDateString('cs-CZ')}</td>
                       <td className="p-4">
-                        {filament && (
+                        {filament ? (
                           <div className="flex items-center gap-2">
                             <div
                               className="w-3 h-3 rounded-full ring-1 ring-white/20 shrink-0"
@@ -148,6 +150,10 @@ export default function History({ onNavigate }: HistoryProps) {
                               ({filament.brand})
                             </span>
                           </div>
+                        ) : (
+                          <span className="text-text-secondary text-sm italic">
+                            (Deleted Filament)
+                          </span>
                         )}
                       </td>
                       <td className="p-4 text-text-primary font-medium">

@@ -127,7 +127,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
             <tbody className="divide-y divide-border">
               {filteredFilaments.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-text-secondary">
+                  <td colSpan={8} className="p-8 text-center text-text-secondary">
                     No filaments found.
                   </td>
                 </tr>
