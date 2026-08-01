@@ -3,7 +3,7 @@
   <h1 align="center">🧵 Filament Tracker</h1>
 
   <p align="center">
-    <strong>A modern, local-first web application for managing your 3D printing filament inventory and tracking print jobs.</strong>
+    <strong>A modern, local-first PWA for managing 3D printing filament inventory and tracking print jobs.</strong>
     <br />
     <br />
     <a href="https://github.com/GalaxyFFs/Filament-tracker/issues">Report Bug</a>
@@ -17,53 +17,43 @@
   <img src="https://img.shields.io/badge/TypeScript-5-blue.svg?style=flat-square&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Vite-6-purple.svg?style=flat-square&logo=vite" alt="Vite" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-38B2AC.svg?style=flat-square&logo=tailwind-css" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/PWA-Ready-orange.svg?style=flat-square" alt="PWA Ready" />
   <img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License" />
 </div>
 
 <br />
 
-<!-- 
-> [!TIP]
-> **Screenshot Placeholder**
-> Replace the image below with an actual screenshot of your application.
-
-![App Screenshot](https://via.placeholder.com/1200x600.png?text=Application+Screenshot) 
--->
-
 ## 🌟 About The Project
 
-Filament Tracker is an intuitive, fast, and completely local application designed for 3D printing enthusiasts. Keep a detailed overview of your spools, track material consumption, and automatically calculate the cost of each print based on your filament's purchase price.
+**Filament Tracker** is an intuitive, fast, and completely local web application designed for 3D printing enthusiasts. Keep a detailed overview of your spools, track material consumption, and automatically calculate the cost of each print based on your filament's purchase price.
 
-With a beautiful, responsive interface powered by React 19, Tailwind CSS v4, and smooth Framer Motion animations, managing your inventory has never been easier.
+With a beautiful, responsive interface powered by React 19, Tailwind CSS v4, and modern dark/light themes, managing your inventory has never been easier.
 
 ### ✨ Key Features
 
-- 📊 **Comprehensive Dashboard:** Get an instant overview of your stock levels, recent print jobs, and total material costs.
-- 🧵 **Inventory Management:** Manage all your spools. Track brand, material, color, remaining weight, purchase price, and empty spool weight.
-- ➕ **Add New Filament:** Quickly catalog new spools into your system with an intuitive interface.
-- 🖨️ **Log Prints:** Record completed prints. The app automatically deducts the used material from the selected spool and calculates the exact cost of the print.
-- 📜 **Print History:** Keep a detailed log of all historical prints for easy reference and cost analysis.
-- ⚙️ **Customizable Settings:** Personalize your experience by setting your preferred currency, weight units (g/kg), managing custom brands and materials, and toggling between light and dark modes.
-- 💾 **Local First:** All your data safely stays on your device utilizing local storage for privacy and speed.
+- 📊 **Comprehensive Dashboard:** Instant overview of your stock levels, low-stock warnings, and total net material weight.
+- 🧵 **Inventory Management:** Track brand, material, color, remaining weight, total weight, price, and empty spool weight for every spool.
+- 🖨️ **Log Prints & Cost Calculation:** Record completed prints with estimated waste/supports. The app automatically calculates exact cost and deducts material.
+- 🔄 **Automatic & Retrospective Sync:** Modifying or deleting print jobs automatically recalculates and synchronizes spool weights across your entire history.
+- 📜 **Print History:** Keep a detailed log of all historical prints with model names, dates, filaments used, weight consumed, and total cost.
+- ⚙️ **Customizable Preferences:** Configure currency (`USD`, `EUR`, `CZK`), weight units (`g` / `kg`), theme mode (`dark` / `light`), primary accent color, and custom manufacturer/material lists.
+-📱 **PWA & Offline First:** Install as a Progressive Web App on desktop or mobile for offline access.
+- 💾 **Local First & Backup:** All data stays privately on your device. Easily export and restore full JSON backups anytime.
 
 ## 🛠️ Built With
 
-This project is built using a modern, powerful tech stack:
-
-- [React 19](https://react.dev/) - UI library
-- [TypeScript](https://www.typescriptlang.org/) - Static typing
-- [Vite](https://vitejs.dev/) - Frontend tooling
-- [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first styling
-- [Framer Motion](https://motion.dev/) - Animations
+- [React 19](https://react.dev/) - UI Library
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Vite](https://vitejs.dev/) - Build tool & dev server
+- [Tailwind CSS v4](https://tailwindcss.com/) - Modern utility-first styling
 - [Lucide React](https://lucide.dev/) - Icons
+- [Vite PWA Plugin](https://vite-pwa-org.netlify.app/) - Offline & PWA capabilities
 
 ## 🚀 Getting Started
 
-To get a local copy up and running, follow these simple steps.
-
 ### Prerequisites
 
-Ensure you have Node.js installed on your machine.
+Ensure you have Node.js (v18+) installed on your system.
 
 ### Installation
 
@@ -83,22 +73,31 @@ Ensure you have Node.js installed on your machine.
    npm run dev
    ```
 
-The application will be accessible at `http://localhost:3000/`.
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
 
 ## 🗄️ Project Structure
 
-- `src/`
-  - `components/` - Reusable UI components (Sidebar, Modals, Forms).
-  - `pages/` - Main page views (Dashboard, Inventory, Settings, etc.).
-  - `types.ts` - Shared TypeScript interfaces.
+```text
+src/
+├── components/      # Reusable UI components (Sidebar, ColorPicker)
+├── context/         # Central AppContext (State management & auto-sync logic)
+├── pages/           # Main page views (Dashboard, Inventory, LogPrint, History, AddFilament, Settings)
+├── utils/           # Helper utilities (format.ts for number & currency formatting)
+├── types.ts         # TypeScript interfaces (Filament, PrintJob, Settings)
+├── App.tsx          # Main routing & layout structure
+└── main.tsx         # Application entrypoint & PWA registration
+```
 
 ## 🤝 Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are welcome! Feel free to fork the repository, make improvements, and open a pull request.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+3. Commit your Changes (`git commit -m 'Add AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
