@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import ColorPicker from "../components/ColorPicker";
+import { sanitizeHexColor, isValidHexColor } from "../utils/validation";
 
 interface AddFilamentProps {
   onNavigate: (page: Page) => void;
@@ -37,12 +38,17 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
       return;
     }
 
+    if (!isValidHexColor(colorHex)) {
+      alert("Invalid color format. Please use a valid hex color (e.g., 8B5CF6)");
+      return;
+    }
+
     if (editingFilament) {
       updateFilament(editingFilament.id, {
         name,
         brand,
         material,
-        colorHex: `#${colorHex.replace("#", "")}`,
+        colorHex: sanitizeHexColor(colorHex),
         weightTotal: Number(weightTotal),
         emptySpoolWeight: Number(emptySpoolWeight),
         price: Number(price),
@@ -53,7 +59,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
         name,
         brand,
         material,
-        colorHex: `#${colorHex.replace("#", "")}`,
+        colorHex: sanitizeHexColor(colorHex),
         weightTotal: Number(weightTotal),
         weightRemaining: Number(weightTotal),
         emptySpoolWeight: Number(emptySpoolWeight),

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Filament, PrintJob, Settings } from "../types";
 import { roundTo2 } from "../utils/format";
+import { validateLocalStorageFilaments, validateLocalStoragePrintJobs, validateLocalStorageSettings } from "../utils/validation";
 
 const generateId = () => {
   try {
@@ -91,16 +92,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [filaments, setFilaments] = useState<Filament[]>(() => {
     const savedFilaments = localStorage.getItem("filaments");
     const savedJobs = localStorage.getItem("printJobs");
-    const parsedFilaments: Filament[] = savedFilaments ? JSON.parse(savedFilaments) : [];
-    const parsedJobs: PrintJob[] = savedJobs ? JSON.parse(savedJobs) : [];
+    const parsedFilaments: Filament[] = savedFilaments ? validateLocalStorageFilaments(JSON.parse(savedFilaments)) : [];
+    const parsedJobs: PrintJob[] = savedJobs ? validateLocalStoragePrintJobs(JSON.parse(savedJobs)) : [];
     return recalculateFilamentWeights(parsedFilaments, parsedJobs);
   });
 
   const [settings, setSettings] = useState<Settings>(() => {
     const saved = localStorage.getItem("settings");
-    return saved
-      ? { ...defaultSettings, ...JSON.parse(saved) }
-      : defaultSettings;
+    const validated = saved ? validateLocalStorageSettings(JSON.parse(saved)) : null;
+    return validated ? { ...defaultSettings, ...validated } : defaultSettings;
   });
 
   const [editingFilamentId, setEditingFilamentId] = useState<string | null>(null);

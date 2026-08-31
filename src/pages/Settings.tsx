@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
+import { sanitizeBackupData } from "../utils/validation";
 
 interface SettingsProps {
   onNavigate: (page: Page) => void;
@@ -82,11 +83,12 @@ export default function Settings({ onNavigate }: SettingsProps) {
       try {
         const content = event.target?.result as string;
         const data = JSON.parse(content);
-        if (data.filaments && data.printJobs && data.settings) {
-          restoreData(data);
+        const sanitized = sanitizeBackupData(data);
+        if (sanitized) {
+          restoreData(sanitized);
           alert("Data successfully restored!");
         } else {
-          alert("Invalid backup file format. Missing filaments, printJobs, or settings.");
+          alert("Invalid backup file format or data validation failed.");
         }
       } catch (error) {
         alert("Error parsing backup file.");

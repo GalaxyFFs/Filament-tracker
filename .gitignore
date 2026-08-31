@@ -126,3 +126,8 @@ dist/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+#Agents
+AGENTS.md
+.agents/
+skills-lock.json
