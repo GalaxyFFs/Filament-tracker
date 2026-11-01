@@ -14,8 +14,8 @@
 
 <div align="center">
   <img src="https://img.shields.io/badge/React-19-blue.svg?style=flat-square&logo=react" alt="React" />
-  <img src="https://img.shields.io/badge/TypeScript-5-blue.svg?style=flat-square&logo=typescript" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Vite-6-purple.svg?style=flat-square&logo=vite" alt="Vite" />
+  <img src="https://img.shields.io/badge/TypeScript-7-blue.svg?style=flat-square&logo=typescript" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-8-purple.svg?style=flat-square&logo=vite" alt="Vite" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-38B2AC.svg?style=flat-square&logo=tailwind-css" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/PWA-Ready-orange.svg?style=flat-square" alt="PWA Ready" />
   <img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License" />
@@ -36,18 +36,21 @@ With a beautiful, responsive interface powered by React 19, Tailwind CSS v4, and
 - 🖨️ **Log Prints & Cost Calculation:** Record completed prints with estimated waste/supports. The app automatically calculates exact cost and deducts material.
 - 🔄 **Automatic & Retrospective Sync:** Modifying or deleting print jobs automatically recalculates and synchronizes spool weights across your entire history.
 - 📜 **Print History:** Keep a detailed log of all historical prints with model names, dates, filaments used, weight consumed, and total cost.
-- ⚙️ **Customizable Preferences:** Configure currency (`USD`, `EUR`, `CZK`), weight units (`g` / `kg`), theme mode (`dark` / `light`), primary accent color, and custom manufacturer/material lists.
--📱 **PWA & Offline First:** Install as a Progressive Web App on desktop or mobile for offline access.
+- ⚙️ **Customizable Preferences:** Configure currency (`USD`, `EUR`, `CZK`), weight units (`g` / `kg`), date format (`US`, `UK`, `DE`, `FR`, `CZ`, `JP`, `CN`), theme mode (`dark` / `light`), primary accent color, and custom manufacturer/material lists.
+- 📱 **PWA & Offline First:** Install as a Progressive Web App on desktop or mobile for offline access.
 - 💾 **Local First & Backup:** All data stays privately on your device. Easily export and restore full JSON backups anytime.
+- ⌨️ **Keyboard Shortcuts:** `Cmd/Ctrl+S` to save forms, `Escape` to cancel.
+- 🔔 **Toast Notifications:** Non-blocking success/error feedback for all actions.
+- 🛡️ **Security:** Content Security Policy (CSP), input sanitization, validated backups, and protected against XSS.
 
 ## 🛠️ Built With
 
 - [React 19](https://react.dev/) - UI Library
-- [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [Vite](https://vitejs.dev/) - Build tool & dev server
+- [TypeScript 7](https://www.typescriptlang.org/) - Type safety (strict mode)
+- [Vite 8](https://vitejs.dev/) - Build tool & dev server
 - [Tailwind CSS v4](https://tailwindcss.com/) - Modern utility-first styling
 - [Lucide React](https://lucide.dev/) - Icons
-- [Vite PWA Plugin](https://vite-pwa-org.netlify.app/) - Offline & PWA capabilities
+- [Vite PWA Plugin v2](https://vite-pwa-org.netlify.app/) - Offline & PWA capabilities
 
 ## 🚀 Getting Started
 
@@ -83,9 +86,9 @@ Ensure you have Node.js (v18+) installed on your system.
 ```text
 src/
 ├── components/      # Reusable UI components (Sidebar, ColorPicker)
-├── context/         # Central AppContext (State management & auto-sync logic)
+├── context/         # Central AppContext (State management & auto-sync logic) + Toast notifications
 ├── pages/           # Main page views (Dashboard, Inventory, LogPrint, History, AddFilament, Settings)
-├── utils/           # Helper utilities (format.ts for number & currency formatting)
+├── utils/           # Helper utilities (format.ts, validation.ts)
 ├── types.ts         # TypeScript interfaces (Filament, PrintJob, Settings)
 ├── App.tsx          # Main routing & layout structure
 └── main.tsx         # Application entrypoint & PWA registration
