@@ -150,7 +150,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   Select your preferred interface theme.
                 </p>
               </div>
-              <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex flex-wrap bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ theme: "light" })}
                   className={`px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 ${settings.theme === "light" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
@@ -240,7 +240,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   Choose how filament weight is displayed across the app.
                 </p>
               </div>
-              <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex flex-wrap bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ weightUnit: "g" })}
                   className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "g" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
@@ -263,7 +263,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   Define your preferred currency symbol or code.
                 </p>
               </div>
-              <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex flex-wrap bg-bg-main border border-border rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ currency: "USD" })}
                   className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "USD" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
@@ -295,7 +295,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   Choose your preferred date display format.
                 </p>
               </div>
-              <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex flex-wrap gap-1 bg-bg-main border border-border rounded-lg p-1">
                 {([
                   ["en-US", "US (MM/DD/YYYY)"],
                   ["en-GB", "UK (DD/MM/YYYY)"],
@@ -308,7 +308,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   <button
                     key={locale}
                     onClick={() => updateSettings({ dateLocale: locale })}
-                    className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.dateLocale === locale ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                    className={`flex-1 min-w-0 px-4 py-1.5 text-sm font-medium rounded-md ${settings.dateLocale === locale ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                   >
                     {label}
                   </button>
