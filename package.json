@@ -32,5 +32,6 @@
     "minimatch": "^10.0.1",
     "ejs": "^3.1.10",
     "deepmerge": "^4.3.1"
-  }
+  },
+  "overrides_comment": "These overrides patch security vulnerabilities in dev dependencies. Run 'npm audit fix --force' to update, but verify vite-plugin-pwa still works after major updates."
 }

@@ -3,6 +3,7 @@ import { Search, Plus, Trash2, Edit2 } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import { formatNumber, formatMoney } from "../utils/format";
+import { useToast } from "../context/ToastContext";
 
 
 interface InventoryProps {
@@ -11,6 +12,7 @@ interface InventoryProps {
 
 export default function Inventory({ onNavigate }: InventoryProps) {
   const { filaments, deleteFilament, settings, setEditingFilamentId } = useAppContext();
+  const { showToast } = useToast();
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"Active" | "Used">("Active");
@@ -193,7 +195,12 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => deleteFilament(filament.id)}
+                          onClick={() => {
+                            if (window.confirm(`Delete "${filament.name}"? This cannot be undone.`)) {
+                              deleteFilament(filament.id);
+                              showToast("Filament deleted", "success");
+                            }
+                          }}
                           className="text-text-secondary hover:text-red-400 transition-colors"
                           title="Delete"
                         >

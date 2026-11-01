@@ -10,11 +10,13 @@ import {
   Download,
   Upload,
   Database,
-  Layers
+  Layers,
+  Calendar
 } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import { sanitizeBackupData } from "../utils/validation";
+import { useToast } from "../context/ToastContext";
 
 interface SettingsProps {
   onNavigate: (page: Page) => void;
@@ -22,6 +24,7 @@ interface SettingsProps {
 
 export default function Settings({ onNavigate }: SettingsProps) {
   const { settings, updateSettings, filaments, printJobs, restoreData } = useAppContext();
+  const { showToast } = useToast();
   const [newBrand, setNewBrand] = useState("");
   const [isAddingBrand, setIsAddingBrand] = useState(false);
   const [newMaterial, setNewMaterial] = useState("");
@@ -34,13 +37,17 @@ export default function Settings({ onNavigate }: SettingsProps) {
       });
       setNewBrand("");
       setIsAddingBrand(false);
+      showToast("Brand added", "success");
     }
   };
 
   const handleDeleteBrand = (brand: string) => {
-    updateSettings({
-      manufacturers: settings.manufacturers.filter((m) => m !== brand),
-    });
+    if (window.confirm(`Delete "${brand}"? This cannot be undone.`)) {
+      updateSettings({
+        manufacturers: settings.manufacturers.filter((m) => m !== brand),
+      });
+      showToast("Brand deleted", "success");
+    }
   };
 
   const handleAddMaterial = () => {
@@ -50,13 +57,17 @@ export default function Settings({ onNavigate }: SettingsProps) {
       });
       setNewMaterial("");
       setIsAddingMaterial(false);
+      showToast("Material added", "success");
     }
   };
 
   const handleDeleteMaterial = (material: string) => {
-    updateSettings({
-      materials: settings.materials.filter((m) => m !== material),
-    });
+    if (window.confirm(`Delete "${material}"? This cannot be undone.`)) {
+      updateSettings({
+        materials: settings.materials.filter((m) => m !== material),
+      });
+      showToast("Material deleted", "success");
+    }
   };
 
   const handleBackup = () => {
@@ -72,6 +83,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    showToast("Backup downloaded", "success");
   };
 
   const handleRestore = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,12 +98,12 @@ export default function Settings({ onNavigate }: SettingsProps) {
         const sanitized = sanitizeBackupData(data);
         if (sanitized) {
           restoreData(sanitized);
-          alert("Data successfully restored!");
+          showToast("Data successfully restored!", "success");
         } else {
-          alert("Invalid backup file format or data validation failed.");
+          showToast("Invalid backup file format or data validation failed.", "error");
         }
       } catch (error) {
-        alert("Error parsing backup file.");
+        showToast("Error parsing backup file.", "error");
         console.error("Error parsing backup file:", error);
       }
     };
@@ -106,7 +118,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
       )
     ) {
       localStorage.clear();
-      window.location.reload();
+      showToast("All data cleared", "warning");
+      setTimeout(() => window.location.reload(), 500);
     }
   };
 
@@ -269,6 +282,37 @@ export default function Settings({ onNavigate }: SettingsProps) {
                 >
                   CZK
                 </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-border">
+              <div>
+                <h3 className="font-medium text-text-primary mb-1 flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Date Format
+                </h3>
+                <p className="text-sm text-text-secondary">
+                  Choose your preferred date display format.
+                </p>
+              </div>
+              <div className="flex w-fit bg-bg-main border border-border rounded-lg p-1">
+                {([
+                  ["en-US", "US (MM/DD/YYYY)"],
+                  ["en-GB", "UK (DD/MM/YYYY)"],
+                  ["de-DE", "DE (DD.MM.YYYY)"],
+                  ["fr-FR", "FR (DD/MM/YYYY)"],
+                  ["cs-CZ", "CZ (DD.MM.YYYY)"],
+                  ["ja-JP", "JP (YYYY/MM/DD)"],
+                  ["zh-CN", "CN (YYYY/MM/DD)"],
+                ] as const).map(([locale, label]) => (
+                  <button
+                    key={locale}
+                    onClick={() => updateSettings({ dateLocale: locale })}
+                    className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.dateLocale === locale ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
             </div>
           </div>

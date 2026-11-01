@@ -4,6 +4,11 @@ const HEX_COLOR_REGEX = /^[0-9a-fA-F]{6}$/;
 const VALID_THEMES = ["light", "dark"] as const;
 const VALID_WEIGHT_UNITS = ["g", "kg"] as const;
 const VALID_CURRENCIES = ["USD", "EUR", "CZK"] as const;
+const COMMON_LOCALES = [
+  "en-US", "en-GB", "de-DE", "fr-FR", "es-ES", "it-IT", "pt-PT", "pt-BR",
+  "cs-CZ", "sk-SK", "pl-PL", "ru-RU", "ja-JP", "ko-KR", "zh-CN", "zh-TW",
+  "nl-NL", "sv-SE", "da-DK", "fi-FI", "nb-NO", "hu-HU", "ro-RO", "tr-TR",
+] as const;
 
 export function isValidHexColor(color: string): boolean {
   return HEX_COLOR_REGEX.test(color.replace("#", ""));
@@ -39,16 +44,16 @@ export function validateFilament(f: unknown): f is Filament {
   const filament = f as Record<string, unknown>;
 
   return (
-    isValidString(filament.id) &&
-    isValidString(filament.name) &&
-    isValidString(filament.brand) &&
-    isValidString(filament.material) &&
-    typeof filament.colorHex === "string" &&
-    isValidHexColor(filament.colorHex.replace("#", "")) &&
-    isValidNumber(filament.weightRemaining) &&
-    isValidNumber(filament.weightTotal) &&
-    isValidNumber(filament.price) &&
-    isValidNumber(filament.emptySpoolWeight)
+    isValidString(filament["id"]) &&
+    isValidString(filament["name"]) &&
+    isValidString(filament["brand"]) &&
+    isValidString(filament["material"]) &&
+    typeof filament["colorHex"] === "string" &&
+    isValidHexColor(String(filament["colorHex"]).replace("#", "")) &&
+    isValidNumber(filament["weightRemaining"]) &&
+    isValidNumber(filament["weightTotal"]) &&
+    isValidNumber(filament["price"]) &&
+    isValidNumber(filament["emptySpoolWeight"])
   );
 }
 
@@ -73,12 +78,12 @@ export function validatePrintJob(j: unknown): j is PrintJob {
   const job = j as Record<string, unknown>;
 
   return (
-    isValidString(job.id) &&
-    isValidString(job.modelName) &&
-    isValidString(job.date) &&
-    isValidString(job.filamentId) &&
-    isValidNumber(job.weightUsed) &&
-    isValidNumber(job.cost)
+    isValidString(job["id"]) &&
+    isValidString(job["modelName"]) &&
+    isValidString(job["date"]) &&
+    isValidString(job["filamentId"]) &&
+    isValidNumber(job["weightUsed"]) &&
+    isValidNumber(job["cost"])
   );
 }
 
@@ -100,15 +105,17 @@ export function validateSettings(s: unknown): s is Settings {
   const settings = s as Record<string, unknown>;
 
   return (
-    VALID_THEMES.includes(settings.theme as "light" | "dark") &&
-    typeof settings.accentColor === "string" &&
-    isValidHexColor(settings.accentColor.replace("#", "")) &&
-    VALID_WEIGHT_UNITS.includes(settings.weightUnit as "g" | "kg") &&
-    VALID_CURRENCIES.includes(settings.currency as "USD" | "EUR" | "CZK") &&
-    Array.isArray(settings.manufacturers) &&
-    settings.manufacturers.every((m) => isValidString(m)) &&
-    Array.isArray(settings.materials) &&
-    settings.materials.every((m) => isValidString(m))
+    VALID_THEMES.includes(settings["theme"] as "light" | "dark") &&
+    typeof settings["accentColor"] === "string" &&
+    isValidHexColor(String(settings["accentColor"]).replace("#", "")) &&
+    VALID_WEIGHT_UNITS.includes(settings["weightUnit"] as "g" | "kg") &&
+    VALID_CURRENCIES.includes(settings["currency"] as "USD" | "EUR" | "CZK") &&
+    typeof settings["dateLocale"] === "string" &&
+    COMMON_LOCALES.includes(settings["dateLocale"] as typeof COMMON_LOCALES[number]) &&
+    Array.isArray(settings["manufacturers"]) &&
+    settings["manufacturers"].every((m) => isValidString(m)) &&
+    Array.isArray(settings["materials"]) &&
+    settings["materials"].every((m) => isValidString(m))
   );
 }
 
@@ -120,6 +127,7 @@ export function sanitizeSettings(s: unknown): Settings | null {
     accentColor: sanitizeHexColor(settings.accentColor),
     weightUnit: settings.weightUnit,
     currency: settings.currency,
+    dateLocale: settings.dateLocale,
     manufacturers: settings.manufacturers.map(sanitizeString).filter(Boolean),
     materials: settings.materials.map(sanitizeString).filter(Boolean),
   };
@@ -130,11 +138,11 @@ export function validateBackupData(data: unknown): data is { filaments: Filament
   const d = data as Record<string, unknown>;
 
   return (
-    Array.isArray(d.filaments) &&
-    d.filaments.every(validateFilament) &&
-    Array.isArray(d.printJobs) &&
-    d.printJobs.every(validatePrintJob) &&
-    validateSettings(d.settings)
+    Array.isArray(d["filaments"]) &&
+    d["filaments"].every(validateFilament) &&
+    Array.isArray(d["printJobs"]) &&
+    d["printJobs"].every(validatePrintJob) &&
+    validateSettings(d["settings"])
   );
 }
 

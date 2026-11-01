@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import { roundTo2, formatNumber, formatMoney } from "../utils/format";
+import { useToast } from "../context/ToastContext";
 
 
 interface LogPrintProps {
@@ -10,15 +11,16 @@ interface LogPrintProps {
 
 export default function LogPrint({ onNavigate }: LogPrintProps) {
   const { filaments, printJobs, updateFilament, addPrintJob, updatePrintJob, settings, editingPrintJobId, setEditingPrintJobId } = useAppContext();
+  const { showToast } = useToast();
 
   const editingJob = useMemo(
-    () => editingPrintJobId ? printJobs.find((j) => j.id === editingPrintJobId) : null,
+    () => editingPrintJobId ? printJobs.find((j) => j.id === editingPrintJobId) ?? null : null,
     [printJobs, editingPrintJobId]
   );
 
-  const [modelName, setModelName] = useState(editingJob?.modelName || "");
+  const [modelName, setModelName] = useState(editingJob?.modelName ?? "");
   const [filamentId, setFilamentId] = useState(
-    editingJob ? editingJob.filamentId : (filaments.length > 0 ? filaments[0].id : "")
+    editingJob ? editingJob.filamentId : (filaments.length > 0 ? filaments[0]?.id ?? "" : "")
   );
   const [weight, setWeight] = useState(editingJob ? editingJob.weightUsed.toString() : "");
   const [waste, setWaste] = useState("");
@@ -35,7 +37,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
 
   const handleSave = () => {
     if (!modelName || !filamentId || totalWeight <= 0) {
-      alert("Please fill in all required fields");
+      showToast("Please fill in all required fields", "error");
       return;
     }
 
@@ -44,7 +46,12 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
       : 0;
 
     if (totalWeight > availableWeight) {
-      alert("Not enough filament remaining!");
+      showToast("Not enough filament remaining!", "error");
+      return;
+    }
+
+    if (totalWeight > 100000) {
+      showToast("Total weight cannot exceed 100kg", "error");
       return;
     }
 
@@ -56,18 +63,36 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
         cost: estimatedCost,
       });
       setEditingPrintJobId(null);
+      showToast("Print job updated successfully", "success");
     } else {
       addPrintJob({
         modelName,
         filamentId,
         weightUsed: totalWeight,
         cost: estimatedCost,
-        date: new Date().toISOString().split("T")[0],
+        date: new Date().toISOString().split("T")[0] ?? new Date().toDateString(),
       });
+      showToast("Print job logged successfully", "success");
     }
 
     onNavigate("history");
   };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+        e.preventDefault();
+        handleSave();
+      }
+      if (e.key === "Escape") {
+        setEditingPrintJobId(null);
+        onNavigate("history");
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [editingPrintJobId, onNavigate, showToast]);
 
   return (
     <div className="max-w-5xl mx-auto">

@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import ColorPicker from "../components/ColorPicker";
 import { sanitizeHexColor, isValidHexColor } from "../utils/validation";
+import { useToast } from "../context/ToastContext";
 
 interface AddFilamentProps {
   onNavigate: (page: Page) => void;
@@ -10,6 +11,7 @@ interface AddFilamentProps {
 
 export default function AddFilament({ onNavigate }: AddFilamentProps) {
   const { addFilament, updateFilament, settings, filaments, editingFilamentId, setEditingFilamentId } = useAppContext();
+  const { showToast } = useToast();
 
   const editingFilament = useMemo(
     () => editingFilamentId ? filaments.find((f) => f.id === editingFilamentId) : null,
@@ -34,12 +36,29 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
       !emptySpoolWeight ||
       !price
     ) {
-      alert("Please fill in all fields");
+      showToast("Please fill in all fields", "error");
       return;
     }
 
     if (!isValidHexColor(colorHex)) {
-      alert("Invalid color format. Please use a valid hex color (e.g., 8B5CF6)");
+      showToast("Invalid color format. Please use a valid hex color (e.g., 8B5CF6)", "error");
+      return;
+    }
+
+    const weightTotalNum = Number(weightTotal);
+    const emptySpoolWeightNum = Number(emptySpoolWeight);
+    const priceNum = Number(price);
+
+    if (weightTotalNum <= 0 || weightTotalNum > 100000) {
+      showToast("Weight must be between 1g and 100kg", "error");
+      return;
+    }
+    if (emptySpoolWeightNum < 0 || emptySpoolWeightNum > weightTotalNum) {
+      showToast("Empty spool weight must be between 0 and total weight", "error");
+      return;
+    }
+    if (priceNum < 0 || priceNum > 10000) {
+      showToast("Price must be between 0 and 10000", "error");
       return;
     }
 
@@ -49,26 +68,44 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
         brand,
         material,
         colorHex: sanitizeHexColor(colorHex),
-        weightTotal: Number(weightTotal),
-        emptySpoolWeight: Number(emptySpoolWeight),
-        price: Number(price),
+        weightTotal: weightTotalNum,
+        emptySpoolWeight: emptySpoolWeightNum,
+        price: priceNum,
       });
       setEditingFilamentId(null);
+      showToast("Filament updated successfully", "success");
     } else {
       addFilament({
         name,
         brand,
         material,
         colorHex: sanitizeHexColor(colorHex),
-        weightTotal: Number(weightTotal),
-        weightRemaining: Number(weightTotal),
-        emptySpoolWeight: Number(emptySpoolWeight),
-        price: Number(price),
+        weightTotal: weightTotalNum,
+        weightRemaining: weightTotalNum,
+        emptySpoolWeight: emptySpoolWeightNum,
+        price: priceNum,
       });
+      showToast("Filament added successfully", "success");
     }
 
     onNavigate("inventory");
   };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+        e.preventDefault();
+        handleSave();
+      }
+      if (e.key === "Escape") {
+        setEditingFilamentId(null);
+        onNavigate("inventory");
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [editingFilamentId, onNavigate, showToast]);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -97,10 +134,11 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label htmlFor="filament-name" className="block text-sm font-medium text-text-primary mb-2">
                 Filament Name
               </label>
               <input
+                id="filament-name"
                 type="text"
                 placeholder="e.g. Matte Navy Blue"
                 value={name}
@@ -110,10 +148,11 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
+              <label htmlFor="filament-brand" className="block text-sm font-medium text-text-primary mb-2">
                 Brand
               </label>
               <select
+                id="filament-brand"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
                 className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary appearance-none"

@@ -3,6 +3,7 @@ import { Download, Plus, Search, Box, Edit2, Trash2, Scale } from "lucide-react"
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import { formatNumber, formatMoney } from "../utils/format";
+import { useToast } from "../context/ToastContext";
 
 
 interface HistoryProps {
@@ -11,6 +12,7 @@ interface HistoryProps {
 
 export default function History({ onNavigate }: HistoryProps) {
   const { printJobs, filaments, deletePrintJob, settings, setEditingPrintJobId } = useAppContext();
+  const { showToast } = useToast();
   const [search, setSearch] = useState("");
 
   const filteredJobs = [...printJobs]
@@ -127,7 +129,7 @@ export default function History({ onNavigate }: HistoryProps) {
                       <td className="p-4 pl-6 font-medium text-text-primary">
                         {job.modelName}
                       </td>
-                      <td className="p-4 text-text-secondary">{new Date(job.date).toLocaleDateString('cs-CZ')}</td>
+                      <td className="p-4 text-text-secondary">{new Date(job.date).toLocaleDateString(settings.dateLocale)}</td>
                       <td className="p-4">
                         {filament ? (
                           <div className="flex items-center gap-2">
@@ -165,7 +167,12 @@ export default function History({ onNavigate }: HistoryProps) {
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => deletePrintJob(job.id)}
+                            onClick={() => {
+                              if (window.confirm(`Delete "${job.modelName}"? This cannot be undone.`)) {
+                                deletePrintJob(job.id);
+                                showToast("Print job deleted", "success");
+                              }
+                            }}
                             className="text-text-secondary hover:text-red-400 transition-colors"
                             title="Delete"
                           >

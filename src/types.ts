@@ -26,4 +26,5 @@ export interface Settings {
   currency: string;
   manufacturers: string[];
   materials: string[];
+  dateLocale: string;
 }
