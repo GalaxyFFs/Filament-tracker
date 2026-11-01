@@ -308,7 +308,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   <button
                     key={locale}
                     onClick={() => updateSettings({ dateLocale: locale })}
-                    className={`flex-1 min-w-0 px-4 py-1.5 text-sm font-medium rounded-md ${settings.dateLocale === locale ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                    className={`shrink-0 px-4 py-1.5 text-sm font-medium rounded-md ${settings.dateLocale === locale ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                   >
                     {label}
                   </button>
