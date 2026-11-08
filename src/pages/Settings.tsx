@@ -153,7 +153,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
               <div className="flex gap-3">
                 <button
                   onClick={() => updateSettings({ accentColor: "#4FB536" })}
-                  className={`w-8 h-8 rounded-full bg-primary-green ${settings.accentColor === "#4FB536" ? "ring-2 ring-offset-2 ring-offset-surface ring-primary-green" : ""}`}
+                  className={`w-8 h-8 rounded-full bg-[#4FB536] ${settings.accentColor === "#4FB536" ? "ring-2 ring-offset-2 ring-offset-surface ring-primary-green" : ""}`}
                 ></button>
                 <button
                   onClick={() => updateSettings({ accentColor: "#3E7BF5" })}

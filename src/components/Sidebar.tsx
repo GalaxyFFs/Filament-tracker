@@ -27,10 +27,10 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
 
   return (
     <div
-      className="w-full md:w-64 bg-surface border-t md:border-t-0 md:border-r border-surface-divider flex flex-row md:flex-col shrink-0 pb-[env(safe-area-inset-bottom)] md:pb-0"
+      className="w-full md:w-64 bg-surface border-t md:border-t-0 md:border-r border-surface-divider flex flex-col shrink-0"
     >
       <div className="hidden md:flex p-6 items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-primary-green flex items-center justify-center shadow-[0_0_12px_rgba(79,181,54,0.3)]">
+        <div className="w-8 h-8 rounded-lg bg-[#4FB536] flex items-center justify-center shadow-[0_0_12px_rgba(79,181,54,0.3)]">
           <Box className="w-5 h-5 text-white" />
         </div>
         <div>
@@ -39,7 +39,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
         </div>
       </div>
 
-      <nav className="flex-1 px-2 py-2 md:px-4 md:py-4 flex flex-row md:flex-col justify-around md:justify-start gap-1 md:space-y-1 overflow-x-auto">
+      <nav className="hidden md:flex md:flex-1 md:px-4 md:py-4 md:space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -53,13 +53,13 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
                 setEditingPrintJobId(null);
                 onNavigate(item.id as Page);
               }}
-              className={`flex-1 md:flex-none md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 py-2 md:px-4 md:py-3 rounded-xl transition-colors ${isActive
-                ? "text-white md:bg-primary-green"
-                : "text-text-secondary hover:text-text-primary md:hover:bg-surface-divider"
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
+                ? "bg-primary-green text-white"
+                : "text-text-secondary hover:text-text-primary hover:bg-surface-divider"
                 }`}
             >
-              <Icon className="w-6 h-6 md:w-5 md:h-5" />
-              <span className="text-[10px] md:text-sm font-medium">{item.label}</span>
+              <Icon className="w-5 h-5" />
+              <span className="text-sm font-medium">{item.label}</span>
             </button>
           );
         })}
@@ -75,6 +75,43 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
         >
           <PlusSquare className="w-5 h-5" />
           Log Print Job
+        </button>
+      </div>
+
+      {/* Mobile bottom navbar — stationary at the bottom of the screen */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-end justify-between gap-1 px-2 pb-[env(safe-area-inset-bottom)] pt-2 bg-surface/95 backdrop-blur border-t border-surface-divider">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive =
+            currentPage === item.id ||
+            (currentPage === "add-filament" && item.id === "inventory");
+          return (
+            <button
+              key={item.id}
+              onClick={() => {
+                setEditingFilamentId(null);
+                setEditingPrintJobId(null);
+                onNavigate(item.id as Page);
+              }}
+              className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-xl transition-colors ${isActive
+                ? "text-primary-green"
+                : "text-text-secondary hover:text-text-primary"
+                }`}
+            >
+              <Icon className="w-6 h-6" />
+              <span className="text-[10px] font-medium">{item.label}</span>
+            </button>
+          );
+        })}
+        <button
+          onClick={() => {
+            setEditingPrintJobId(null);
+            onNavigate("log-print");
+          }}
+          className="flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-xl transition-colors text-white bg-primary-green"
+        >
+          <PlusSquare className="w-6 h-6" />
+          <span className="text-[10px] font-medium">Log Print</span>
         </button>
       </div>
     </div>

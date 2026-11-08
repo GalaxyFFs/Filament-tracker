@@ -41,13 +41,13 @@ export default function App() {
     <div className="flex flex-col-reverse md:flex-row h-screen bg-bg text-text-primary font-sans overflow-hidden">
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       <main className="flex-1 flex flex-col relative overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-4 pt-[calc(0.75rem+env(safe-area-inset-top))] md:p-8 md:pt-8 md:pb-8">
+        <div className="flex-1 overflow-y-auto p-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-[calc(4rem+env(safe-area-inset-bottom))] md:p-8 md:pt-8 md:pb-8">
           {renderPage()}
         </div>
 
         <div className="hidden md:flex h-10 shrink-0 items-center justify-between px-6 border-t border-surface-divider bg-surface">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-primary-green" />
+            <span className="w-2 h-2 rounded-full bg-[#4FB536]" />
             <span className="text-xs font-medium text-text-secondary">
               Filament Tracker
             </span>
