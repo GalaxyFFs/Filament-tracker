@@ -35,7 +35,7 @@ interface AppState {
 
 const defaultSettings: Settings = {
   theme: "dark",
-  accentColor: "#8b5cf6",
+  accentColor: "#00b800",
   weightUnit: "g",
   currency: "USD",
   manufacturers: [

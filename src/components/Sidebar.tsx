@@ -30,7 +30,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
       className="w-full md:w-64 bg-bg-sidebar border-t md:border-t-0 md:border-r border-border flex flex-row md:flex-col shrink-0 pb-[env(safe-area-inset-bottom)] md:pb-0"
     >
       <div className="hidden md:flex p-6 items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center shadow-[0_0_12px_var(--theme-accent-soft)]">
           <Box className="w-5 h-5 text-white" />
         </div>
         <div>
@@ -54,7 +54,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
                 onNavigate(item.id as Page);
               }}
               className={`flex-1 md:flex-none md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 py-2 md:px-4 md:py-3 rounded-xl transition-colors ${isActive
-                ? "text-accent md:bg-accent/10"
+                ? "text-bg-main md:bg-accent"
                 : "text-text-secondary hover:text-text-primary md:hover:bg-bg-card"
                 }`}
             >
@@ -71,7 +71,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
             setEditingPrintJobId(null);
             onNavigate("log-print");
           }}
-          className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white px-4 py-3 rounded-xl text-sm font-medium transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-bg-main px-4 py-3 rounded-xl text-sm font-medium transition-colors shadow-[0_0_14px_var(--theme-accent-soft)]"
         >
           <PlusSquare className="w-5 h-5" />
           Log Print Job

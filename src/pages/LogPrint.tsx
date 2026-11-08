@@ -222,7 +222,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
             <div className="pt-6 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleSave}
-                className="flex-1 px-6 py-3 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors flex items-center justify-center gap-2"
+                className="flex-1 px-6 py-3 bg-accent text-bg-main rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors flex items-center justify-center gap-2"
               >
                 <svg
                   className="w-4 h-4"
@@ -254,7 +254,7 @@ export default function LogPrint({ onNavigate }: LogPrintProps) {
 
         <div className="w-full lg:w-80 bg-bg-card border border-border rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-6">
-            <div className="w-6 h-6 rounded bg-accent/20 flex items-center justify-center">
+            <div className="w-6 h-6 rounded bg-accent-soft flex items-center justify-center">
               <svg
                 className="w-3.5 h-3.5 text-accent"
                 fill="none"

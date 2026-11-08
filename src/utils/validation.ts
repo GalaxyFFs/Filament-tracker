@@ -16,7 +16,7 @@ export function isValidHexColor(color: string): boolean {
 
 export function sanitizeHexColor(color: string): string {
   const cleaned = color.replace("#", "").toUpperCase();
-  return isValidHexColor(cleaned) ? `#${cleaned}` : "#8B5CF6";
+  return isValidHexColor(cleaned) ? `#${cleaned}` : "#00B800";
 }
 
 export function isValidNumber(value: unknown, min = 0, max = Number.MAX_SAFE_INTEGER): boolean {

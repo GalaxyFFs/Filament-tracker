@@ -136,7 +136,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
         {/* Appearance */}
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
               <Palette className="w-4 h-4 text-accent" />
             </div>
             <h2 className="font-bold text-lg">Appearance</h2>
@@ -205,8 +205,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   className={`w-8 h-8 rounded-full bg-blue-500 ${settings.accentColor === "#3b82f6" ? "ring-2 ring-offset-2 ring-offset-bg-card ring-blue-500" : ""}`}
                 ></button>
                 <button
-                  onClick={() => updateSettings({ accentColor: "#8b5cf6" })}
-                  className={`w-8 h-8 rounded-full bg-purple-500 ${settings.accentColor === "#8b5cf6" ? "ring-2 ring-offset-2 ring-offset-bg-card ring-purple-500" : ""}`}
+                  onClick={() => updateSettings({ accentColor: "#00b800" })}
+                  className={`w-8 h-8 rounded-full bg-green-500 ${settings.accentColor === "#00b800" ? "ring-2 ring-offset-2 ring-offset-bg-card ring-green-500" : ""}`}
                 ></button>
                 <button
                   onClick={() => updateSettings({ accentColor: "#10b981" })}
@@ -224,7 +224,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
         {/* Unit Preferences */}
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
               <Sliders className="w-4 h-4 text-accent" />
             </div>
             <h2 className="font-bold text-lg">Unit Preferences</h2>
@@ -322,7 +322,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
                 <Factory className="w-4 h-4 text-accent" />
               </div>
               <h2 className="font-bold text-lg">Manufacturer Management</h2>
@@ -353,7 +353,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                 />
                 <button
                   onClick={handleAddBrand}
-                  className="p-1.5 bg-accent text-white rounded-lg hover:bg-accent-hover"
+                  className="p-1.5 bg-accent text-bg-main rounded-lg hover:bg-accent-hover"
                 >
                   <Check className="w-4 h-4" />
                 </button>
@@ -391,7 +391,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
                 <Layers className="w-4 h-4 text-accent" />
               </div>
               <h2 className="font-bold text-lg">Material Management</h2>
@@ -422,7 +422,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                 />
                 <button
                   onClick={handleAddMaterial}
-                  className="p-1.5 bg-accent text-white rounded-lg hover:bg-accent-hover"
+                  className="p-1.5 bg-accent text-bg-main rounded-lg hover:bg-accent-hover"
                 >
                   <Check className="w-4 h-4" />
                 </button>
@@ -459,7 +459,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
         {/* Data Management */}
         <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
               <Database className="w-4 h-4 text-accent" />
             </div>
             <h2 className="font-bold text-lg">Data Management</h2>

@@ -39,37 +39,37 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
-        <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
+        <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden group hover:border-accent/30 transition-colors shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
           <div className="flex justify-between items-start mb-4">
-            <p className="text-text-secondary text-sm">Total Spools</p>
-            <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+            <p className="text-text-secondary text-sm font-medium">Total Spools</p>
+            <div className="w-10 h-10 rounded-lg bg-accent-soft flex items-center justify-center">
               <Archive className="w-5 h-5 text-accent" />
             </div>
           </div>
-          <h2 className="text-4xl font-bold mb-2">{totalSpools}</h2>
+          <h2 className="text-4xl font-bold mb-2 tracking-tight">{totalSpools}</h2>
         </div>
 
-        <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
+        <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden group hover:border-amber-500/30 transition-colors shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
           <div className="flex justify-between items-start mb-4">
-            <p className="text-text-secondary text-sm">Low Stock Alerts</p>
+            <p className="text-text-secondary text-sm font-medium">Low Stock Alerts</p>
             <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-amber-500" />
             </div>
           </div>
-          <h2 className="text-4xl font-bold mb-2">{lowStockCount}</h2>
+          <h2 className="text-4xl font-bold mb-2 tracking-tight">{lowStockCount}</h2>
           {lowStockCount > 0 && (
-            <p className="text-amber-500 text-sm">Restock needed</p>
+            <p className="text-amber-500 text-sm font-medium">Restock needed</p>
           )}
         </div>
 
-        <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
+        <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden group hover:border-accent/30 transition-colors shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
           <div className="flex justify-between items-start mb-4">
-            <p className="text-text-secondary text-sm">Total Net Weight</p>
-            <div className="w-10 h-10 rounded-lg bg-bg-main flex items-center justify-center">
-              <Scale className="w-5 h-5 text-text-secondary" />
+            <p className="text-text-secondary text-sm font-medium">Total Net Weight</p>
+            <div className="w-10 h-10 rounded-lg bg-accent-soft flex items-center justify-center">
+              <Scale className="w-5 h-5 text-accent" />
             </div>
           </div>
-          <h2 className="text-4xl font-bold mb-2">
+          <h2 className="text-4xl font-bold mb-2 tracking-tight">
             {displayWeight}{" "}
             <span className="text-xl text-text-secondary font-normal">
               {settings.weightUnit}
@@ -95,7 +95,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
             setEditingFilamentId(null);
             onNavigate("add-filament");
           }}
-          className="bg-transparent border-2 border-dashed border-border rounded-2xl p-6 flex flex-col items-center justify-center text-text-secondary hover:text-text-primary hover:border-gray-500 transition-colors min-h-[280px]"
+          className="bg-transparent border-2 border-dashed border-border rounded-2xl p-6 flex flex-col items-center justify-center text-text-secondary hover:text-accent hover:border-accent transition-colors min-h-[280px]"
         >
           <div className="w-12 h-12 rounded-full bg-bg-card flex items-center justify-center mb-4">
             <Plus className="w-6 h-6" />
@@ -110,17 +110,18 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
 function FilamentCard({ filament }: { filament: any; key?: string | number }) {
   const percentage = Math.max(0, (filament.weightRemaining / filament.weightTotal) * 100);
   const isLow = percentage > 0 && percentage < 15;
+  const circumference = 2 * Math.PI * 38;
 
   return (
     <div
-      className={`bg-bg-card border rounded-2xl p-5 relative ${isLow ? "border-amber-500/50" : "border-border"}`}
+      className={`bg-bg-card border rounded-2xl p-5 relative transition-all duration-200 hover:border-accent/40 ${isLow ? "border-amber-500/50" : "border-border"}`}
     >
       {isLow && (
-        <div className="absolute top-4 left-4 bg-amber-500/20 text-amber-500 text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+        <div className="absolute top-4 left-4 bg-amber-500/20 text-amber-500 text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
           <AlertTriangle className="w-3 h-3" /> LOW
         </div>
       )}
-      <div className="absolute top-4 right-4 bg-bg-main border border-border text-text-primary text-xs font-bold px-2 py-1 rounded">
+      <div className="absolute top-4 right-4 bg-bg-card border border-border text-text-primary text-xs font-bold px-2.5 py-1 rounded-md">
         {filament.material}
       </div>
 
@@ -133,34 +134,31 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
             <circle
               cx="50"
               cy="50"
-              r="40"
+              r="38"
               fill="transparent"
-              stroke="#2a2f3a"
-              strokeWidth="12"
+              stroke="var(--theme-border)"
+              strokeWidth="6"
             />
             <circle
               cx="50"
               cy="50"
-              r="40"
-              fill="transparent"
-              stroke="rgba(255,255,255,0.12)"
-              strokeWidth="13"
-              strokeDasharray={`${percentage * 2.51} 251`}
-              strokeLinecap="round"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
+              r="38"
               fill="transparent"
               stroke={filament.colorHex}
-              strokeWidth="12"
-              strokeDasharray={`${percentage * 2.51} 251`}
+              strokeWidth="6"
+              strokeDasharray={`${(percentage * circumference) / 100} ${circumference}`}
               strokeLinecap="round"
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 rounded-full bg-bg-main shadow-inner"></div>
+            <div className="w-14 h-14 rounded-full bg-bg-card flex items-center justify-center border border-border/50">
+              <span
+                className="text-sm font-bold"
+                style={{ color: filament.colorHex }}
+              >
+                {Math.round(percentage)}%
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -169,7 +167,7 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
         <div className="flex items-center justify-between mb-1">
           <h3 className="font-bold text-lg truncate">{filament.name}</h3>
           <div
-            className="w-3 h-3 rounded-full ring-1 ring-white/20"
+            className="w-3.5 h-3.5 rounded-full ring-2 ring-white/20 shrink-0"
             style={{ backgroundColor: filament.colorHex }}
           ></div>
         </div>
@@ -186,7 +184,7 @@ function FilamentCard({ filament }: { filament: any; key?: string | number }) {
         </div>
         <div className="w-full bg-bg-main rounded-full h-1.5 overflow-hidden">
           <div
-            className="h-1.5 rounded-full"
+            className="h-1.5 rounded-full transition-all duration-300"
             style={{
               width: `${percentage}%`,
               backgroundColor: filament.colorHex,

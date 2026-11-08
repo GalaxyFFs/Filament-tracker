@@ -39,7 +39,7 @@ export default function History({ onNavigate }: HistoryProps) {
               setEditingPrintJobId(null);
               onNavigate("log-print");
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-accent text-bg-main rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
           >
             <Plus className="w-4 h-4" />
             Log Print
@@ -51,7 +51,7 @@ export default function History({ onNavigate }: HistoryProps) {
         <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
             <p className="text-text-secondary text-sm">Total Spent on Prints</p>
-            <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-accent-soft flex items-center justify-center">
               <span className="text-accent font-bold">
                 {settings.currency === "USD" ? "$" : settings.currency}
               </span>
@@ -68,7 +68,7 @@ export default function History({ onNavigate }: HistoryProps) {
         <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
             <p className="text-text-secondary text-sm">Total Weight Printed</p>
-            <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-accent-soft flex items-center justify-center">
               <Scale className="w-5 h-5 text-accent" />
             </div>
           </div>

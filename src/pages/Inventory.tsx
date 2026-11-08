@@ -47,14 +47,14 @@ export default function Inventory({ onNavigate }: InventoryProps) {
             setEditingFilamentId(null);
             onNavigate("add-filament");
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-accent text-bg-main rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
         >
           <Plus className="w-4 h-4" />
           Add Filament
         </button>
       </div>
 
-      <div className="flex gap-4 mb-6 border-b border-border">
+      <div className="flex gap-6 mb-6 border-b border-border">
         {(["Active", "Used"] as const).map((tab) => (
           <button
             key={tab}
@@ -70,7 +70,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
             {tab} Filaments
             <span
               className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === tab
-                ? "bg-accent/10 text-accent"
+                ? "bg-accent text-bg-main"
                 : "bg-bg-card-hover text-text-secondary"
                 }`}
             >
@@ -104,7 +104,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
               <button
                 key={mat}
                 onClick={() => setFilter(mat)}
-                className={`px-3 py-1.5 rounded-md font-medium ${filter === mat ? "bg-accent text-white" : "bg-transparent border border-border text-text-primary hover:bg-bg-main"}`}
+                className={`px-3 py-1.5 rounded-md font-medium ${filter === mat ? "bg-accent text-bg-main" : "bg-transparent border border-border text-text-primary hover:bg-bg-main"}`}
               >
                 {mat}
               </button>
@@ -155,7 +155,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
                     </td>
                     <td className="p-4 text-text-secondary">{filament.brand}</td>
                     <td className="p-4">
-                      <span className="bg-accent/10 text-accent text-xs font-bold px-2 py-1 rounded">
+                      <span className="bg-accent/15 text-accent text-xs font-bold px-2.5 py-1 rounded-md">
                         {filament.material}
                       </span>
                     </td>
