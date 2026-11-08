@@ -14,9 +14,10 @@ interface ColorSwatchGridProps {
   value: string; // hex without #
   onChange: (hex: string) => void;
   disabled?: boolean;
+  className?: string;
 }
 
-export default function ColorSwatchGrid({ value, onChange, disabled = false }: ColorSwatchGridProps) {
+export default function ColorSwatchGrid({ value, onChange, disabled = false, className = "" }: ColorSwatchGridProps) {
   const [expanded, setExpanded] = React.useState(false);
 
   const colors = expanded
@@ -24,7 +25,7 @@ export default function ColorSwatchGrid({ value, onChange, disabled = false }: C
     : SWATCH_COLORS;
 
   return (
-    <div className="swatch-grid">
+    <div className={`swatch-grid ${className}`}>
       {colors.map((hex, idx) => {
         if (!hex) {
           return (

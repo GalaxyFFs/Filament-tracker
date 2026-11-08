@@ -97,13 +97,7 @@ export default function FilamentCard({ filament, onDelete, onDeplete, onEdit, se
     >
       {/* Main card content */}
       <div className="p-4">
-        {/* Manufacturer tag (optional) */}
-        {filament.brand && filament.brand !== "Generic" && (
-          <div className="absolute -top-3 left-4 manufacturer-tag z-10 shadow-md">
-            {filament.brand}
-          </div>
-        )}
-
+        
         <div className="flex gap-4">
           {/* Color dot */}
           <div
