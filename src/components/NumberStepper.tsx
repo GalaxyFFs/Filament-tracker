@@ -7,9 +7,10 @@ interface NumberStepperProps {
   min?: number;
   max?: number;
   disabled?: boolean;
+  className?: string;
 }
 
-export default function NumberStepper({ value, onChange, min = 1, max = 99, disabled = false }: NumberStepperProps) {
+export default function NumberStepper({ value, onChange, min = 1, max = 99, disabled = false, className = "" }: NumberStepperProps) {
   const handleDecrease = () => {
     if (value > min) onChange(value - 1);
   };
@@ -18,7 +19,7 @@ export default function NumberStepper({ value, onChange, min = 1, max = 99, disa
   };
 
   return (
-    <div className="flex items-center justify-end gap-2">
+    <div className={`flex items-center justify-end gap-2 ${className}`}>
       <button
         type="button"
         onClick={handleDecrease}

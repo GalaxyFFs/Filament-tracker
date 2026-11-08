@@ -3,9 +3,7 @@ import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import { Plus } from "lucide-react";
 import { useToast } from "../context/ToastContext";
-import AppHeader from "../components/AppHeader";
 import FilterChip from "../components/FilterChip";
-import TextButton from "../components/TextButton";
 import SectionHeader from "../components/SectionHeader";
 import FilamentCard from "../components/FilamentCard";
 import PrimaryButton from "../components/PrimaryButton";
@@ -21,7 +19,6 @@ export default function Inventory({ onNavigate }: InventoryProps) {
   const [inPrinterFilter, setInPrinterFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [showEditMode, setShowEditMode] = useState(false);
 
   // Materials for filter
   const materials = useMemo(() => Array.from(new Set(filaments.map((f) => f.material))).sort(), [filaments]);
@@ -61,52 +58,75 @@ export default function Inventory({ onNavigate }: InventoryProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-bg max-w-full relative">
-      {/* Header bar */}
-      <AppHeader title="Filament Library" onBack={() => onNavigate("dashboard")} />
+    <div className="max-w-6xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold mb-1">Filament Library</h1>
+          <p className="text-text-secondary">
+            Manage your filament inventory
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <PrimaryButton
+            onClick={() => {
+              setEditingFilamentId(null);
+              onNavigate("add-filament");
+            }}
+            fullWidth={false}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Filament
+          </PrimaryButton>
+        </div>
+      </div>
 
       {/* Filter row */}
-      <div className="bg-surface border-b border-surface-divider px-4 py-3 shrink-0">
-        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar">
-          <FilterChip
-            label="In Printer"
-            options={materials}
-            value={inPrinterFilter}
-            onChange={setInPrinterFilter}
-            placeholder="All"
-          />
-          <FilterChip
-            label="Type"
-            options={materials}
-            value={typeFilter}
-            onChange={setTypeFilter}
-            placeholder="All"
-          />
-          <FilterChip
-            label="Status"
-            options={["active", "depleted"]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-            placeholder="All"
-          />
+      <div className="bg-surface border border-surface-divider rounded-[24px] p-4 mb-6 md:mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar w-full sm:w-auto">
+            <FilterChip
+              label="In Printer"
+              options={materials}
+              value={inPrinterFilter}
+              onChange={setInPrinterFilter}
+              placeholder="All"
+            />
+            <FilterChip
+              label="Type"
+              options={materials}
+              value={typeFilter}
+              onChange={setTypeFilter}
+              placeholder="All"
+            />
+            <FilterChip
+              label="Status"
+              options={["active", "depleted"]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+              placeholder="All"
+            />
+          </div>
+          <div className="text-sm text-text-secondary">
+            {Object.keys(groupedFilaments).reduce((sum, k) => sum + groupedFilaments[k].length, 0)} of {filaments.length} filaments
+          </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4 pb-36">
+      <div className="space-y-6">
         {Object.keys(groupedFilaments).length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-text-secondary">
+          <div className="bg-surface border border-surface-divider rounded-[24px] p-12 flex flex-col items-center justify-center text-text-secondary">
             <span className="text-lg mb-2">No filaments found</span>
             <p className="text-sm">Add your first spool to get started</p>
           </div>
         ) : (
-          <div className="space-y-6 max-w-full">
+          <div>
             {Object.entries(groupedFilaments)
               .sort(([a], [b]) => a.localeCompare(b))
               .map(([material, items]) => (
-                <div key={material} className="space-y-4 max-w-full">
+                <div key={material} className="space-y-4">
                   <SectionHeader>{material}</SectionHeader>
-                  <div className="grid grid-cols-1 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                     {items.map((filament) => (
                       <FilamentCard
                         key={filament.id}
@@ -127,20 +147,6 @@ export default function Inventory({ onNavigate }: InventoryProps) {
               ))}
           </div>
         )}
-      </div>
-
-      {/* Bottom bar - Add Filament button */}
-      <div className="fixed bottom-[calc(72px+env(safe-area-inset-bottom))] md:bottom-0 left-0 right-0 md:left-64 bg-bg/80 backdrop-blur-md border-t border-surface-divider px-4 py-4 z-20">
-        <PrimaryButton
-          onClick={() => {
-            setEditingFilamentId(null);
-            onNavigate("add-filament");
-          }}
-          className="max-w-md mx-auto block shadow-lg"
-        >
-          <Plus className="w-5 h-5 mr-2 inline" />
-          Add Filament
-        </PrimaryButton>
       </div>
     </div>
   );

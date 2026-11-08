@@ -1,15 +1,13 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import { formatNumber } from "../utils/format";
 import { useToast } from "../context/ToastContext";
-import { ChevronLeft, ChevronRight, Minus, Plus, ChevronDown, ChevronUp, X } from "lucide-react";
-import AppHeader from "../components/AppHeader";
+import { ChevronDown, Plus, X } from "lucide-react";
 import PrimaryButton from "../components/PrimaryButton";
 import FormCard, { FormRow, FormDivider } from "../components/FormCard";
 import ColorSwatchGrid from "../components/ColorSwatchGrid";
 import NumberStepper from "../components/NumberStepper";
-import CollapsibleSection from "../components/CollapsibleSection";
 
 const FILAMENT_TYPES = [
   "PLA", "PLA+", "PETG", "ABS", "ASA", "TPU", "Nylon", "PC", "HIPS", "PVA", "Wood-fill", "Carbon-fiber"
@@ -44,11 +42,10 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
   const [fullSpoolWeight, setFullSpoolWeight] = useState(editingFilament?.weightTotal.toString() || "1000");
   const [currentWeight, setCurrentWeight] = useState(editingFilament?.weightRemaining.toString() || "");
   const [rolls, setRolls] = useState(1);
-  const [note, setNote] = useState("");
   const [manufacturer, setManufacturer] = useState(editingFilament?.brand || (settings.manufacturers[0] || "Generic"));
   const [newManufacturer, setNewManufacturer] = useState("");
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
-  const [showManufacturerInput, setShowManufacturerInput] = useState(false);
+  const [showManufacturerDropdown, setShowManufacturerDropdown] = useState(false);
   const [price, setPrice] = useState(editingFilament?.price.toString() || "");
 
   const handleSave = () => {
@@ -122,6 +119,14 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
     onNavigate("inventory");
   };
 
+  const handleAddManufacturer = () => {
+    if (newManufacturer.trim() && !settings.manufacturers.includes(newManufacturer.trim())) {
+      setManufacturer(newManufacturer.trim());
+      setNewManufacturer("");
+      setShowManufacturerDropdown(false);
+    }
+  };
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -131,7 +136,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
       }
       if (e.key === "Escape") {
         setShowTypeDropdown(false);
-        setShowManufacturerInput(false);
+        setShowManufacturerDropdown(false);
         setEditingFilamentId(null);
         onNavigate("inventory");
       }
@@ -147,7 +152,7 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
         setShowTypeDropdown(false);
       }
       if (!e.target || !(e.target as HTMLElement).closest('[data-manufacturer-dropdown]')) {
-        setShowManufacturerInput(false);
+        setShowManufacturerDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -155,27 +160,45 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-bg">
+    <div className="max-w-2xl mx-auto pb-8 md:pb-12">
       {/* Header */}
-      <AppHeader
-        title={editingFilament ? "Edit Filament" : "Add Filament"}
-        onBack={() => {
-          setShowTypeDropdown(false);
-          setShowManufacturerInput(false);
-          setEditingFilamentId(null);
-          onNavigate("inventory");
-        }}
-      />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold mb-1">
+            {editingFilament ? "Edit Filament" : "Add Filament"}
+          </h1>
+          <p className="text-text-secondary">
+            {editingFilament ? "Update spool details" : "Add a new filament spool to your inventory"}
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <PrimaryButton
+            onClick={() => {
+              setShowTypeDropdown(false);
+              setShowManufacturerDropdown(false);
+              setEditingFilamentId(null);
+              onNavigate("inventory");
+            }}
+            fullWidth={false}
+            className="bg-transparent border border-surface-divider text-text-primary hover:bg-surface"
+          >
+            Cancel
+          </PrimaryButton>
+          <PrimaryButton onClick={handleSave} fullWidth={false}>
+            {editingFilament ? "Save Changes" : "Save"}
+          </PrimaryButton>
+        </div>
+      </div>
 
-      {/* Form content - single scroll area, no nested scrolling */}
-      <div className="flex-1 overflow-y-auto p-4 pb-24">
-        <div className="max-w-md mx-auto space-y-4">
-          {/* Card 1: Type and Color */}
-          <FormCard>
-            <div className="space-y-4">
-              {/* Type - clickable dropdown */}
-              <FormRow label="Type" required>
-                <div data-type-dropdown className="relative w-full max-w-xs">
+      {/* Form content */}
+      <div className="space-y-6">
+        {/* Card 1: Type and Color */}
+        <FormCard>
+          <div className="space-y-4">
+            {/* Type - clickable dropdown */}
+            <FormRow label="Type" required>
+              <div className="flex justify-end">
+                <div data-type-dropdown className="relative max-w-xs w-full">
                   <button
                     type="button"
                     onClick={() => setShowTypeDropdown(!showTypeDropdown)}
@@ -206,101 +229,108 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                     </div>
                   )}
                 </div>
-              </FormRow>
+              </div>
+            </FormRow>
 
-              <FormDivider />
+            <FormDivider />
 
-              {/* Color */}
-              <FormRow label="Color" required>
+            {/* Color */}
+            <FormRow label="Color" required>
+              <div className="flex justify-end">
                 <ColorSwatchGrid
                   value={colorHex}
                   onChange={setColorHex}
-                  className="max-h-[280px] overflow-y-auto"
+                  className="max-h-[280px] overflow-y-auto max-w-xs w-full"
                 />
-              </FormRow>
-            </div>
-          </FormCard>
+              </div>
+            </FormRow>
+          </div>
+        </FormCard>
 
-          {/* Card 2: Spool details */}
-          <FormCard>
-            <div className="space-y-4">
-              <FormRow label="Name" required>
+        {/* Card 2: Spool details */}
+        <FormCard>
+          <div className="space-y-4">
+            <FormRow label="Name" required>
+              <div className="flex justify-end">
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full max-w-xs bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green text-right"
+                  className="max-w-xs bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green text-right"
                   placeholder="Name"
                 />
-              </FormRow>
+              </div>
+            </FormRow>
 
-              <FormDivider />
+            <FormDivider />
 
-              {/* Manufacturer */}
-              <FormRow label="Manufacturer" required>
-                <div data-manufacturer-dropdown className="relative w-full max-w-xs">
-                  {showManufacturerInput ? (
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={newManufacturer}
-                        onChange={(e) => setNewManufacturer(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && newManufacturer.trim()) {
-                            setManufacturer(newManufacturer.trim());
-                            setNewManufacturer("");
-                            setShowManufacturerInput(false);
-                          }
-                          if (e.key === "Escape") {
-                            setNewManufacturer("");
-                            setShowManufacturerInput(false);
-                          }
-                        }}
-                        className="flex-1 bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green"
-                        placeholder="New manufacturer"
-                        autoFocus
-                      />
-                      <button
-                        type="button"
-                        onClick={() => { setManufacturer(newManufacturer.trim()); setNewManufacturer(""); setShowManufacturerInput(false); }}
-                        className="p-2 rounded-lg bg-primary-green text-white hover:bg-primary-green-hover transition-colors"
-                        disabled={!newManufacturer.trim()}
-                        aria-label="Add manufacturer"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <select
-                        value={manufacturer}
-                        onChange={(e) => setManufacturer(e.target.value)}
-                        className="flex-1 bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green appearance-none bg-no-repeat bg-right-[10px] bg-center pr-8"
-                        style={{
-                          backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238A8A8A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E\")",
-                        }}
-                      >
-                        {settings.manufacturers.map((m) => (
-                          <option key={m} value={m}>{m}</option>
-                        ))}
-                      </select>
-                      <button
-                        type="button"
-                        onClick={() => setShowManufacturerInput(true)}
-                        className="p-2 rounded-lg border border-surface-divider text-text-secondary hover:text-text-primary hover:bg-surface transition-colors"
-                        aria-label="Add new manufacturer"
-                      >
-                        <Plus className="w-5 h-5" />
-                      </button>
+            {/* Manufacturer - same dropdown pattern as Type */}
+            <FormRow label="Manufacturer" required>
+              <div className="flex justify-end">
+                <div data-manufacturer-dropdown className="relative max-w-xs w-full">
+                  <button
+                    type="button"
+                    onClick={() => setShowManufacturerDropdown(!showManufacturerDropdown)}
+                    className="w-full flex items-center justify-between px-3 py-2 bg-bg border border-surface-divider rounded-lg text-left hover:border-primary-green transition-colors focus:outline-none focus:border-primary-green"
+                    aria-expanded={showManufacturerDropdown}
+                    aria-haspopup="listbox"
+                  >
+                    <span className={manufacturer ? "text-text-primary" : "text-text-secondary"}>
+                      {manufacturer || "Select manufacturer"}
+                    </span>
+                    <ChevronDown className={`w-5 h-5 text-text-secondary transition-transform ${showManufacturerDropdown ? "rotate-180" : ""}`} />
+                  </button>
+
+                  {showManufacturerDropdown && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-surface border border-surface-divider rounded-lg shadow-lg z-50 overflow-hidden animate-slide-in max-h-60 overflow-y-auto">
+                      {settings.manufacturers.map((m) => (
+                        <button
+                          key={m}
+                          type="button"
+                          onClick={() => { setManufacturer(m); setShowManufacturerDropdown(false); }}
+                          className={`w-full px-3 py-2 text-sm font-medium text-left transition-colors ${manufacturer === m ? "bg-primary-green/15 text-primary-green" : "text-text-primary hover:bg-surface-divider"}`}
+                          role="option"
+                          aria-selected={manufacturer === m}
+                        >
+                          {m}
+                        </button>
+                      ))}
+                      <div className="border-t border-surface-divider p-2">
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={newManufacturer}
+                            onChange={(e) => setNewManufacturer(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") handleAddManufacturer();
+                              if (e.key === "Escape") { setNewManufacturer(""); setShowManufacturerDropdown(false); }
+                            }}
+                            className="flex-1 bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green"
+                            placeholder="New manufacturer"
+                            autoFocus
+                          />
+                          <button
+                            type="button"
+                            onClick={handleAddManufacturer}
+                            className="p-2 rounded-lg bg-primary-green text-white hover:bg-primary-green-hover transition-colors shrink-0"
+                            disabled={!newManufacturer.trim()}
+                            aria-label="Add manufacturer"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
-              </FormRow>
+              </div>
+            </FormRow>
 
-              <FormDivider />
+            <FormDivider />
 
-              <FormRow label="Full Spool Weight" required>
-                <div className="flex items-center gap-2 w-full max-w-xs justify-end">
+            <FormRow label="Full Spool Weight" required>
+              <div className="flex justify-end">
+                <div className="flex items-center gap-2 max-w-xs w-full justify-end">
                   <input
                     type="number"
                     value={fullSpoolWeight}
@@ -309,14 +339,16 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                     min="1"
                     max="10000"
                   />
-                  <span className="text-text-secondary">g</span>
+                  <span className="text-text-secondary shrink-0">g</span>
                 </div>
-              </FormRow>
+              </div>
+            </FormRow>
 
-              <FormDivider />
+            <FormDivider />
 
-              <FormRow label="Current Weight" required>
-                <div className="flex items-center gap-2 w-full max-w-xs justify-end">
+            <FormRow label="Current Weight" required>
+              <div className="flex justify-end">
+                <div className="flex items-center gap-2 max-w-xs w-full justify-end">
                   <input
                     type="number"
                     value={currentWeight}
@@ -326,40 +358,31 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                     max="10000"
                     placeholder="0-10000"
                   />
-                  <span className="text-text-secondary">g</span>
+                  <span className="text-text-secondary shrink-0">g</span>
                 </div>
-              </FormRow>
+              </div>
+            </FormRow>
 
-              <FormDivider />
+            <FormDivider />
 
-              <FormRow label="Rolls" required>
-                <NumberStepper
-                  value={rolls}
-                  onChange={setRolls}
-                  min={1}
-                  max={99}
-                />
-              </FormRow>
-            </div>
-          </FormCard>
+            <FormRow label="Rolls" required>
+              <div className="flex justify-end">
+                <div className="max-w-xs w-full">
+                  <NumberStepper
+                    value={rolls}
+                    onChange={setRolls}
+                    min={1}
+                    max={99}
+                  />
+                </div>
+              </div>
+            </FormRow>
 
-          {/* Advanced Options */}
-          <CollapsibleSection title="Advanced Options" defaultOpen={false}>
-            <FormCard className="p-4">
-              <FormRow label="Note">
-                <textarea
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  className="w-full bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green resize-none"
-                  rows={3}
-                  placeholder="Please enter your note"
-                />
-              </FormRow>
+            <FormDivider />
 
-              <FormDivider />
-
-              <FormRow label="Price (per spool)">
-                <div className="flex items-center gap-2 w-full max-w-xs justify-end">
+            <FormRow label="Price (per spool)" required>
+              <div className="flex justify-end">
+                <div className="flex items-center gap-2 max-w-xs w-full justify-end">
                   <input
                     type="number"
                     step="0.01"
@@ -369,19 +392,12 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                     className="w-24 bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green text-right"
                     placeholder="0.00"
                   />
-                  <span className="text-text-secondary">{settings.currency === "USD" ? "$" : settings.currency}</span>
+                  <span className="text-text-secondary shrink-0">{settings.currency === "USD" ? "$" : settings.currency}</span>
                 </div>
-              </FormRow>
-            </FormCard>
-          </CollapsibleSection>
-        </div>
-      </div>
-
-      {/* Bottom bar - Save button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-bg border-t border-surface-divider p-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] flex justify-center">
-        <PrimaryButton onClick={handleSave} fullWidth={false}>
-          {editingFilament ? "Save Changes" : "Save"}
-        </PrimaryButton>
+              </div>
+            </FormRow>
+          </div>
+        </FormCard>
       </div>
     </div>
   );
