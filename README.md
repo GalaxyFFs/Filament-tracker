@@ -1,14 +1,8 @@
 <div align="center">
-  <img src="public/favicon.svg" alt="Logo" width="80" height="80" />
-  <h1 align="center">🧵 Filament Tracker</h1>
-
+  <img src="public/favicon.svg" alt="Filament Tracker logo" width="96" height="96" />
+  <h1 align="center">Filament Tracker</h1>
   <p align="center">
-    <strong>A modern, local-first PWA for managing 3D printing filament inventory and tracking print jobs.</strong>
-    <br />
-    <br />
-    <a href="https://github.com/GalaxyFFs/Filament-tracker/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/GalaxyFFs/Filament-tracker/issues">Request Feature</a>
+    A local-first PWA for managing 3D printing filament inventory and tracking print jobs.
   </p>
 </div>
 
@@ -23,36 +17,36 @@
 
 <br />
 
-## 🌟 About The Project
+## Overview
 
-**Filament Tracker** is an intuitive, fast, and completely local web application designed for 3D printing enthusiasts. Keep a detailed overview of your spools, track material consumption, and automatically calculate the cost of each print based on your filament's purchase price.
+Filament Tracker is a fast, local-first Progressive Web App for 3D printing enthusiasts. Keep a detailed overview of your spools, track material consumption, and automatically calculate the cost of each print based on your filament's purchase price.
 
-With a beautiful, responsive interface powered by React 19, Tailwind CSS v4, and modern dark/light themes, managing your inventory has never been easier.
+With a responsive, mobile-first interface powered by React 19, Tailwind CSS v4, and a single dark theme, managing your inventory has never been easier.
 
-### ✨ Key Features
+## Features
 
-- 📊 **Comprehensive Dashboard:** Instant overview of your stock levels, low-stock warnings, and total net material weight.
-- 🧵 **Inventory Management:** Track brand, material, color, remaining weight, total weight, price, and empty spool weight for every spool.
-- 🖨️ **Log Prints & Cost Calculation:** Record completed prints with estimated waste/supports. The app automatically calculates exact cost and deducts material.
-- 🔄 **Automatic & Retrospective Sync:** Modifying or deleting print jobs automatically recalculates and synchronizes spool weights across your entire history.
-- 📜 **Print History:** Keep a detailed log of all historical prints with model names, dates, filaments used, weight consumed, and total cost.
-- ⚙️ **Customizable Preferences:** Configure currency (`USD`, `EUR`, `CZK`), weight units (`g` / `kg`), date format (`US`, `UK`, `DE`, `FR`, `CZ`, `JP`, `CN`), theme mode (`dark` / `light`), primary accent color, and custom manufacturer/material lists.
-- 📱 **PWA & Offline First:** Install as a Progressive Web App on desktop or mobile for offline access.
-- 💾 **Local First & Backup:** All data stays privately on your device. Easily export and restore full JSON backups anytime.
-- ⌨️ **Keyboard Shortcuts:** `Cmd/Ctrl+S` to save forms, `Escape` to cancel.
-- 🔔 **Toast Notifications:** Non-blocking success/error feedback for all actions.
-- 🛡️ **Security:** Content Security Policy (CSP), input sanitization, validated backups, and protected against XSS.
+- **Dashboard** — Instant overview of your stock levels, low-stock warnings, and total net material weight.
+- **Inventory Management** — Track brand, material, color, remaining weight, total weight, price, and empty spool weight for every spool.
+- **Log Prints & Cost Calculation** — Record completed prints with estimated waste/supports. The app automatically calculates exact cost and deducts material.
+- **Automatic & Retrospective Sync** — Modifying or deleting print jobs automatically recalculates and synchronizes spool weights across your entire history.
+- **Print History** — A detailed log of all historical prints with model names, dates, filaments used, weight consumed, and total cost.
+- **Customizable Preferences** — Configure currency (`USD`, `EUR`, `CZK`), weight units (`g` / `kg`), date format, accent color, and custom manufacturer/material lists.
+- **PWA & Offline First** — Install as a Progressive Web App on desktop or mobile for offline access.
+- **Local First & Backup** — All data stays privately on your device. Export and restore full JSON backups anytime.
+- **Keyboard Shortcuts** — `Cmd/Ctrl+S` to save forms, `Escape` to cancel.
+- **Toast Notifications** — Non-blocking success/error feedback for all actions.
+- **Security** — Content Security Policy (CSP), input sanitization, validated backups, and protection against XSS.
 
-## 🛠️ Built With
+## Tech Stack
 
-- [React 19](https://react.dev/) - UI Library
-- [TypeScript 7](https://www.typescriptlang.org/) - Type safety (strict mode)
-- [Vite 8](https://vitejs.dev/) - Build tool & dev server
-- [Tailwind CSS v4](https://tailwindcss.com/) - Modern utility-first styling
-- [Lucide React](https://lucide.dev/) - Icons
-- [Vite PWA Plugin v2](https://vite-pwa-org.netlify.app/) - Offline & PWA capabilities
+- [React 19](https://react.dev/) — UI Library
+- [TypeScript 7](https://www.typescriptlang.org/) — Type safety (strict mode)
+- [Vite 8](https://vitejs.dev/) — Build tool & dev server
+- [Tailwind CSS v4](https://tailwindcss.com/) — Utility-first styling
+- [Lucide React](https://lucide.dev/) — Icons
+- [Vite PWA Plugin v2](https://vite-pwa-org.netlify.app/) — Offline & PWA capabilities
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -60,33 +54,28 @@ Ensure you have Node.js (v18+) installed on your system.
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/GalaxyFFs/Filament-tracker.git
-   cd Filament-tracker
-   ```
+```bash
+git clone https://github.com/GalaxyFFs/Filament-tracker.git
+cd Filament-tracker
+npm install
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### Development
 
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run dev        # Dev server on port 3000
+npm run build      # Production build
+npm run preview    # Preview production build
+npm run lint       # TypeScript type-check
+npm run clean      # Remove the dist folder
+```
 
-4. **Build for production**
-   ```bash
-   npm run build
-   ```
-
-## 🗄️ Project Structure
+## Project Structure
 
 ```text
 src/
-├── components/      # Reusable UI components (Sidebar, ColorPicker)
-├── context/         # Central AppContext (State management & auto-sync logic) + Toast notifications
+├── components/      # Reusable UI components (Sidebar, FilamentCard, PrimaryButton, …)
+├── context/         # Central AppContext (state management & auto-sync) + Toast notifications
 ├── pages/           # Main page views (Dashboard, Inventory, LogPrint, History, AddFilament, Settings)
 ├── utils/           # Helper utilities (format.ts, validation.ts)
 ├── types.ts         # TypeScript interfaces (Filament, PrintJob, Settings)
@@ -94,7 +83,7 @@ src/
 └── main.tsx         # Application entrypoint & PWA registration
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Feel free to fork the repository, make improvements, and open a pull request.
 
@@ -104,9 +93,15 @@ Contributions are welcome! Feel free to fork the repository, make improvements, 
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+## Licensing
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
+- **Fonts**: Inter (SIL OFL 1.1) — see `licenses/Inter-OFL.txt`
+- **Icons**: Lucide (ISC) — see `THIRD_PARTY_LICENSES.md`
+
+Full dependency license audit: `LICENSE_AUDIT.md`
+
 ---
-*Created with ❤️ for the 3D printing community.*
+
+Created for the 3D printing community.
