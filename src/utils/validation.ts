@@ -1,7 +1,6 @@
 import { Filament, PrintJob, Settings } from "../types";
 
 const HEX_COLOR_REGEX = /^[0-9a-fA-F]{6}$/;
-const VALID_THEMES = ["light", "dark"] as const;
 const VALID_WEIGHT_UNITS = ["g", "kg"] as const;
 const VALID_CURRENCIES = ["USD", "EUR", "CZK"] as const;
 const COMMON_LOCALES = [
@@ -16,7 +15,7 @@ export function isValidHexColor(color: string): boolean {
 
 export function sanitizeHexColor(color: string): string {
   const cleaned = color.replace("#", "").toUpperCase();
-  return isValidHexColor(cleaned) ? `#${cleaned}` : "#00B800";
+  return isValidHexColor(cleaned) ? `#${cleaned}` : "#4FB536";
 }
 
 export function isValidNumber(value: unknown, min = 0, max = Number.MAX_SAFE_INTEGER): boolean {
@@ -105,7 +104,6 @@ export function validateSettings(s: unknown): s is Settings {
   const settings = s as Record<string, unknown>;
 
   return (
-    VALID_THEMES.includes(settings["theme"] as "light" | "dark") &&
     typeof settings["accentColor"] === "string" &&
     isValidHexColor(String(settings["accentColor"]).replace("#", "")) &&
     VALID_WEIGHT_UNITS.includes(settings["weightUnit"] as "g" | "kg") &&
@@ -123,7 +121,6 @@ export function sanitizeSettings(s: unknown): Settings | null {
   if (!validateSettings(s)) return null;
   const settings = s as Settings;
   return {
-    theme: settings.theme,
     accentColor: sanitizeHexColor(settings.accentColor),
     weightUnit: settings.weightUnit,
     currency: settings.currency,

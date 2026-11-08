@@ -1,47 +1,77 @@
 @import "tailwindcss";
 
+/* Inter font - variable + static fallback */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/InterVariable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/InterVariable-Italic.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Static fallbacks for older browsers */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme {
-  --color-bg-main: var(--theme-bg-main);
-  --color-bg-sidebar: var(--theme-bg-sidebar);
-  --color-bg-card: var(--theme-bg-card);
-  --color-bg-card-hover: var(--theme-bg-card-hover);
-  --color-border: var(--theme-border);
-  --color-accent: var(--theme-accent);
-  --color-accent-hover: var(--theme-accent-hover);
-  --color-accent-soft: var(--theme-accent-soft);
-  --color-text-primary: var(--theme-text-primary);
-  --color-text-secondary: var(--theme-text-secondary);
-}
+  /* Design.md palette (dark-only) */
+  --color-bg: #0B0B0B;
+  --color-surface: #1A1A1A;
+  --color-surface-divider: #2A2A2A;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #8A8A8A;
+  --color-primary-green: #4FB536;
+  --color-primary-green-hover: #45A030;
+  --color-filament-orange: #EE7739;
+  --color-danger-red: #C94642;
+  --color-action-blue: #3E7BF5;
+  --color-tag-gradient-from: #6B5A3E;
+  --color-tag-gradient-to: #2A2418;
+  --color-tag-text: #F5E6C8;
 
-:root {
-  --theme-bg-main: #000000;
-  --theme-bg-sidebar: #0a0a0a;
-  --theme-bg-card: #1a1a1a;
-  --theme-bg-card-hover: #222222;
-  --theme-border: #2a2a2a;
-  --theme-accent: #00b800;
-  --theme-accent-hover: #00a000;
-  --theme-accent-soft: rgba(0, 184, 0, 0.12);
-  --theme-text-primary: #ffffff;
-  --theme-text-secondary: #858585;
-}
-
-:root.light-theme {
-  --theme-bg-main: #f5f5f7;
-  --theme-bg-sidebar: #ffffff;
-  --theme-bg-card: #ffffff;
-  --theme-bg-card-hover: #f0f0f2;
-  --theme-border: #e0e0e5;
-  --theme-accent: #00a000;
-  --theme-accent-hover: #008000;
-  --theme-accent-soft: rgba(0, 160, 0, 0.12);
-  --theme-text-primary: #111111;
-  --theme-text-secondary: #6b6b6b;
+  /* Card / button radius */
+  --radius-card: 24px;
+  --radius-pill: 9999px;
+  --radius-chip: 12px;
 }
 
 body {
-  background-color: var(--color-bg-main);
+  background-color: var(--color-bg);
   color: var(--color-text-primary);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -77,6 +107,160 @@ input[type="number"] {
 
 /* Improved focus indicator */
 *:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-primary-green);
   outline-offset: 2px;
+}
+
+/* Utility classes for Design.md components */
+.manufacturer-tag {
+  background: linear-gradient(180deg, var(--color-tag-gradient-from) 0%, var(--color-tag-gradient-to) 100%);
+  color: var(--color-tag-text);
+  border-radius: var(--radius-card);
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.filament-color-dot {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.progress-bar-track {
+  height: 6px;
+  border-radius: 3px;
+  background-color: var(--color-surface-divider);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease-out;
+}
+
+.pill-button {
+  border-radius: var(--radius-pill);
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.pill-button-sm {
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.filter-chip {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-surface-divider);
+  border-radius: var(--radius-chip);
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-divider {
+  border-bottom: 1px solid var(--color-surface-divider);
+}
+
+.required-asterisk {
+  color: var(--color-danger-red);
+  margin-left: 2px;
+}
+
+.swipe-action-button {
+  border-radius: var(--radius-pill);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 80px;
+}
+
+.swipe-action-caption {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Swatch grid */
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.swatch-button {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.swatch-button:hover {
+  transform: scale(1.1);
+}
+
+.swatch-button.selected {
+  border-color: var(--color-primary-green);
+  box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-primary-green);
+}
+
+.swatch-expand {
+  border: 2px dashed var(--color-surface-divider);
+  background: transparent;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Collapsible section */
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.collapsible-chevron {
+  transition: transform 0.2s ease;
+}
+
+.collapsible-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-divider);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
 }

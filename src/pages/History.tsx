@@ -5,7 +5,6 @@ import { useAppContext } from "../context/AppContext";
 import { formatNumber, formatMoney } from "../utils/format";
 import { useToast } from "../context/ToastContext";
 
-
 interface HistoryProps {
   onNavigate: (page: Page) => void;
 }
@@ -39,7 +38,7 @@ export default function History({ onNavigate }: HistoryProps) {
               setEditingPrintJobId(null);
               onNavigate("log-print");
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-accent text-bg-main rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-green text-white rounded-lg text-sm font-medium hover:bg-primary-green-hover transition-colors"
           >
             <Plus className="w-4 h-4" />
             Log Print
@@ -48,16 +47,16 @@ export default function History({ onNavigate }: HistoryProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
-        <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
+        <div className="bg-surface border border-surface-divider rounded-[24px] p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
             <p className="text-text-secondary text-sm">Total Spent on Prints</p>
-            <div className="w-10 h-10 rounded-lg bg-accent-soft flex items-center justify-center">
-              <span className="text-accent font-bold">
+            <div className="w-10 h-10 rounded-lg bg-primary-green/15 flex items-center justify-center">
+              <span className="text-primary-green font-bold">
                 {settings.currency === "USD" ? "$" : settings.currency}
               </span>
             </div>
           </div>
-          <h2 className="text-4xl font-bold text-accent mb-2">
+          <h2 className="text-4xl font-bold text-primary-green mb-2">
             {settings.currency === "USD" ? "$" : ""}
             {formatMoney(totalSpent)}
             {settings.currency !== "USD" ? ` ${settings.currency}` : ""}
@@ -65,14 +64,14 @@ export default function History({ onNavigate }: HistoryProps) {
           <p className="text-text-secondary text-sm">Lifetime total</p>
         </div>
 
-        <div className="bg-bg-card border border-border rounded-2xl p-6 relative overflow-hidden">
+        <div className="bg-surface border border-surface-divider rounded-[24px] p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-4">
             <p className="text-text-secondary text-sm">Total Weight Printed</p>
-            <div className="w-10 h-10 rounded-lg bg-accent-soft flex items-center justify-center">
-              <Scale className="w-5 h-5 text-accent" />
+            <div className="w-10 h-10 rounded-lg bg-primary-green/15 flex items-center justify-center">
+              <Scale className="w-5 h-5 text-primary-green" />
             </div>
           </div>
-          <h2 className="text-4xl font-bold text-accent mb-2">
+          <h2 className="text-4xl font-bold text-primary-green mb-2">
             {settings.weightUnit === "kg"
               ? formatNumber(totalWeight / 1000)
               : formatNumber(totalWeight)}{" "}
@@ -84,8 +83,8 @@ export default function History({ onNavigate }: HistoryProps) {
         </div>
       </div>
 
-      <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
-        <div className="p-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-surface border border-surface-divider rounded-[24px] overflow-hidden">
+        <div className="p-4 border-b border-surface-divider flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="text-lg font-bold">Recent Logs</h2>
           <div className="relative w-full sm:w-72">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary w-4 h-4" />
@@ -94,7 +93,7 @@ export default function History({ onNavigate }: HistoryProps) {
               placeholder="Search logs..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-bg-main border border-border rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-accent text-text-primary"
+              className="w-full bg-bg border border-surface-divider rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-primary-green text-text-primary"
             />
           </div>
         </div>
@@ -102,7 +101,7 @@ export default function History({ onNavigate }: HistoryProps) {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
-              <tr className="border-b border-border text-xs font-bold text-text-secondary uppercase tracking-wider">
+              <tr className="border-b border-surface-divider text-xs font-bold text-text-secondary uppercase tracking-wider">
                 <th className="p-4 pl-6">Model Name</th>
                 <th className="p-4">Date</th>
                 <th className="p-4">Filament Used</th>
@@ -111,7 +110,7 @@ export default function History({ onNavigate }: HistoryProps) {
                 <th className="p-4 pr-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-surface-divider">
               {filteredJobs.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center text-text-secondary">
@@ -124,7 +123,7 @@ export default function History({ onNavigate }: HistoryProps) {
                   return (
                     <tr
                       key={job.id}
-                      className="hover:bg-bg-card-hover transition-colors group"
+                      className="hover:bg-surface/50 transition-colors group"
                     >
                       <td className="p-4 pl-6 font-medium text-text-primary">
                         {job.modelName}
@@ -161,7 +160,7 @@ export default function History({ onNavigate }: HistoryProps) {
                               setEditingPrintJobId(job.id);
                               onNavigate("log-print");
                             }}
-                            className="text-text-secondary hover:text-blue-400 transition-colors"
+                            className="text-text-secondary hover:text-primary-green transition-colors"
                             title="Edit"
                           >
                             <Edit2 className="w-4 h-4" />
@@ -173,7 +172,7 @@ export default function History({ onNavigate }: HistoryProps) {
                                 showToast("Print job deleted", "success");
                               }
                             }}
-                            className="text-text-secondary hover:text-red-400 transition-colors"
+                            className="text-text-secondary hover:text-danger-red transition-colors"
                             title="Delete"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -188,7 +187,7 @@ export default function History({ onNavigate }: HistoryProps) {
           </table>
         </div>
 
-        <div className="p-4 border-t border-border flex items-center justify-between text-sm text-text-secondary">
+        <div className="p-4 border-t border-surface-divider flex items-center justify-between text-sm text-text-secondary">
           <span>
             Showing {filteredJobs.length} of {printJobs.length} results
           </span>

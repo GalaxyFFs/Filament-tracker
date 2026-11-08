@@ -1,9 +1,29 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
-import ColorPicker from "../components/ColorPicker";
-import { sanitizeHexColor, isValidHexColor } from "../utils/validation";
+import { formatNumber } from "../utils/format";
 import { useToast } from "../context/ToastContext";
+import { ChevronLeft, ChevronRight, Minus, Plus, ChevronDown, ChevronUp } from "lucide-react";
+import AppHeader from "../components/AppHeader";
+import PrimaryButton from "../components/PrimaryButton";
+import FormCard, { FormRow, FormDivider } from "../components/FormCard";
+import ColorSwatchGrid from "../components/ColorSwatchGrid";
+import NumberStepper from "../components/NumberStepper";
+import CollapsibleSection from "../components/CollapsibleSection";
+
+const FILAMENT_TYPES = [
+  "PLA", "PLA+", "PETG", "ABS", "ASA", "TPU", "Nylon", "PC", "HIPS", "PVA", "Wood-fill", "Carbon-fiber"
+];
+
+const generateDefaultName = () => {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const year = now.getFullYear();
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  return `${month}/${day}/${year} ${hours}:${minutes} added`;
+};
 
 interface AddFilamentProps {
   onNavigate: (page: Page) => void;
@@ -18,72 +38,73 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
     [filaments, editingFilamentId]
   );
 
-  const [name, setName] = useState(editingFilament?.name || "");
-  const [brand, setBrand] = useState(editingFilament?.brand || settings.manufacturers[0] || "");
-  const [material, setMaterial] = useState(editingFilament?.material || settings.materials[0] || "");
-  const [colorHex, setColorHex] = useState(editingFilament?.colorHex?.replace("#", "") || "8B5CF6");
-  const [weightTotal, setWeightTotal] = useState(editingFilament?.weightTotal.toString() || "1000");
-  const [emptySpoolWeight, setEmptySpoolWeight] = useState(editingFilament?.emptySpoolWeight.toString() || "200");
-  const [price, setPrice] = useState(editingFilament?.price.toString() || "");
+  const [type, setType] = useState(editingFilament?.material || "");
+  const [colorHex, setColorHex] = useState((editingFilament?.colorHex || "#EE7739").replace("#", ""));
+  const [name, setName] = useState(editingFilament?.name || generateDefaultName());
+  const [fullSpoolWeight, setFullSpoolWeight] = useState(editingFilament?.weightTotal.toString() || "1000");
+  const [currentWeight, setCurrentWeight] = useState(editingFilament?.weightRemaining.toString() || "");
+  const [rolls, setRolls] = useState((editingFilament?.emptySpoolWeight ?? 0) > 0 ? 1 : 1); // Default to 1
+  const [note, setNote] = useState(editingFilament?.price.toString() || ""); // Reusing price field for note
 
   const handleSave = () => {
-    if (
-      !name ||
-      !brand ||
-      !material ||
-      !colorHex ||
-      !weightTotal ||
-      !emptySpoolWeight ||
-      !price
-    ) {
-      showToast("Please fill in all fields", "error");
+    if (!type) {
+      showToast("Please select a filament type", "error");
+      return;
+    }
+    if (!colorHex) {
+      showToast("Please select a color", "error");
+      return;
+    }
+    if (!name.trim()) {
+      showToast("Please enter a name", "error");
+      return;
+    }
+    const fullWeight = Number(fullSpoolWeight);
+    const currentW = Number(currentWeight);
+    if (isNaN(fullWeight) || fullWeight <= 0 || fullWeight > 10000) {
+      showToast("Full spool weight must be between 1 and 10000g", "error");
+      return;
+    }
+    if (isNaN(currentW) || currentW < 0 || currentW > 10000) {
+      showToast("Current weight must be between 0 and 10000g", "error");
+      return;
+    }
+    if (currentW > fullWeight) {
+      showToast("Current weight cannot exceed full spool weight", "error");
+      return;
+    }
+    if (rolls < 1) {
+      showToast("Rolls must be at least 1", "error");
       return;
     }
 
-    if (!isValidHexColor(colorHex)) {
-      showToast("Invalid color format. Please use a valid hex color (e.g., 8B5CF6)", "error");
-      return;
-    }
-
-    const weightTotalNum = Number(weightTotal);
-    const emptySpoolWeightNum = Number(emptySpoolWeight);
-    const priceNum = Number(price);
-
-    if (weightTotalNum <= 0 || weightTotalNum > 100000) {
-      showToast("Weight must be between 1g and 100kg", "error");
-      return;
-    }
-    if (emptySpoolWeightNum < 0 || emptySpoolWeightNum > weightTotalNum) {
-      showToast("Empty spool weight must be between 0 and total weight", "error");
-      return;
-    }
-    if (priceNum < 0 || priceNum > 10000) {
-      showToast("Price must be between 0 and 10000", "error");
-      return;
-    }
+    const weightTotal = Number(fullSpoolWeight);
+    const weightRemaining = Number(currentWeight) || weightTotal;
+    const emptySpoolWeight = 200; // Default empty spool weight
+    const price = 0; // Price not in new form
 
     if (editingFilament) {
       updateFilament(editingFilament.id, {
-        name,
-        brand,
-        material,
-        colorHex: sanitizeHexColor(colorHex),
-        weightTotal: weightTotalNum,
-        emptySpoolWeight: emptySpoolWeightNum,
-        price: priceNum,
+        name: name.trim(),
+        material: type,
+        colorHex: `#${colorHex.toUpperCase()}`,
+        weightTotal,
+        weightRemaining,
+        emptySpoolWeight,
+        price,
       });
       setEditingFilamentId(null);
       showToast("Filament updated successfully", "success");
     } else {
       addFilament({
-        name,
-        brand,
-        material,
-        colorHex: sanitizeHexColor(colorHex),
-        weightTotal: weightTotalNum,
-        weightRemaining: weightTotalNum,
-        emptySpoolWeight: emptySpoolWeightNum,
-        price: priceNum,
+        name: name.trim(),
+        brand: settings.manufacturers[0] || "Generic",
+        material: type,
+        colorHex: `#${colorHex.toUpperCase()}`,
+        weightTotal,
+        weightRemaining,
+        emptySpoolWeight,
+        price,
       });
       showToast("Filament added successfully", "success");
     }
@@ -108,201 +129,143 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
   }, [editingFilamentId, onNavigate, showToast]);
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8 text-sm text-text-secondary flex items-center gap-2">
-        <button
-          onClick={() => onNavigate("inventory")}
-          className="hover:text-text-primary"
-        >
-          Inventory
-        </button>
-        <span>/</span>
-        <span className="text-text-primary">Add Filament</span>
-      </div>
+    <div className="flex flex-col h-screen bg-bg">
+      {/* Header */}
+      <AppHeader
+        title="Add Filament"
+        onBack={() => {
+          setEditingFilamentId(null);
+          onNavigate("inventory");
+        }}
+      />
 
-      <div className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold mb-1">
-          {editingFilament ? "Edit Filament" : "Add New Filament"}
-        </h1>
-        <p className="text-text-secondary">
-          Enter the details of your filament spool to track it in your local
-          inventory.
-        </p>
-      </div>
+      {/* Form content */}
+      <div className="flex-1 overflow-y-auto p-4 pb-24">
+        <div className="max-w-md mx-auto space-y-4">
+          {/* Card 1: Type and Color */}
+          <FormCard>
+            <div className="space-y-4">
+              {/* Type */}
+              <FormRow label="Type" required>
+                <div className="flex items-center justify-between w-full max-w-xs">
+                  <span className={type ? "text-text-primary" : "text-text-secondary"}>
+                    {type || "Please Select"}
+                  </span>
+                  <ChevronRight className="w-5 h-5 text-text-secondary" />
+                </div>
+              </FormRow>
 
-      <div className="bg-bg-card border border-border rounded-2xl p-6 md:p-8 max-w-3xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          <div className="space-y-6">
-            <div>
-              <label htmlFor="filament-name" className="block text-sm font-medium text-text-primary mb-2">
-                Filament Name
-              </label>
-              <input
-                id="filament-name"
-                type="text"
-                placeholder="e.g. Matte Navy Blue"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="filament-brand" className="block text-sm font-medium text-text-primary mb-2">
-                Brand
-              </label>
-              <select
-                id="filament-brand"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary appearance-none"
-              >
-                <option value="" disabled>
-                  Select from your brands...
-                </option>
-                {settings.manufacturers.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
-                Material Type
-              </label>
-              <select
-                value={material}
-                onChange={(e) => setMaterial(e.target.value)}
-                className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary appearance-none"
-              >
-                <option value="" disabled>
-                  Select from your materials...
-                </option>
-                {settings.materials.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
-                Color
-              </label>
-              <div className="flex gap-3">
-                <ColorPicker colorHex={colorHex} onChange={setColorHex} />
-                <div className="flex-1">
-                  <label className="block text-xs text-text-secondary mb-1">
-                    Hex Code
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">
-                      #
-                    </span>
-                    <input
-                      type="text"
-                      value={colorHex}
-                      onChange={(e) => setColorHex(e.target.value)}
-                      className="w-full bg-bg-main border border-border rounded-lg pl-8 pr-4 py-2 text-sm focus:outline-none focus:border-accent text-text-primary uppercase"
-                    />
+              {/* Type picker dropdown */}
+              {type === "" && (
+                <div className="bg-bg border border-surface-divider rounded-xl p-4 animate-slide-in">
+                  <div className="grid grid-cols-3 gap-2">
+                    {FILAMENT_TYPES.map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setType(t)}
+                        className="py-2 px-3 text-sm font-medium text-text-primary bg-surface border border-surface-divider rounded-lg hover:bg-surface-divider transition-colors"
+                      >
+                        {t}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              </div>
-            </div>
+              )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-text-primary mb-2">
-                  Initial Weight
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    step="any"
-                    value={weightTotal}
-                    onChange={(e) => setWeightTotal(e.target.value)}
-                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary text-right pr-8"
-                  />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary text-sm">
-                    g
-                  </span>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-primary mb-2">
-                  Empty Spool
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    step="any"
-                    value={emptySpoolWeight}
-                    onChange={(e) => setEmptySpoolWeight(e.target.value)}
-                    className="w-full bg-bg-main border border-border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary text-right pr-8"
-                  />
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary text-sm">
-                    g
-                  </span>
-                </div>
-              </div>
-            </div>
+              <FormDivider />
 
-            <div>
-              <label className="block text-sm font-medium text-text-primary mb-2">
-                Price per Spool
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">
-                  {settings.currency === "USD" ? "$" : settings.currency}
-                </span>
-                <input
-                  type="number"
-                  step="any"
-                  placeholder="0.00"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  className="w-full bg-bg-main border border-border rounded-lg pl-12 pr-4 py-2.5 text-sm focus:outline-none focus:border-accent text-text-primary"
+              {/* Color */}
+              <FormRow label="Color" required>
+                <ColorSwatchGrid
+                  value={colorHex}
+                  onChange={setColorHex}
                 />
-              </div>
+              </FormRow>
             </div>
-          </div>
-        </div>
+          </FormCard>
 
-        <div className="mt-6 md:mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-end gap-3">
-          <button
-            onClick={() => {
-              setEditingFilamentId(null);
-              onNavigate("inventory");
-            }}
-            className="px-6 py-2.5 border border-border rounded-lg text-sm font-medium hover:bg-bg-main transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="px-6 py-2.5 bg-accent text-bg-main rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors flex items-center gap-2"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-              />
-            </svg>
-            {editingFilament ? "Save Changes" : "Save Filament"}
-          </button>
+          {/* Card 2: Spool details */}
+          <FormCard>
+            <div className="space-y-4">
+              <FormRow label="Name" required>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full max-w-xs bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green text-right"
+                  placeholder="Name"
+                />
+              </FormRow>
+
+              <FormDivider />
+
+              <FormRow label="Full Spool Weight" required>
+                <div className="flex items-center gap-2 w-full max-w-xs justify-end">
+                  <input
+                    type="number"
+                    value={fullSpoolWeight}
+                    onChange={(e) => setFullSpoolWeight(e.target.value)}
+                    className="w-24 bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green text-right"
+                    min="1"
+                    max="10000"
+                  />
+                  <span className="text-text-secondary">g</span>
+                </div>
+              </FormRow>
+
+              <FormDivider />
+
+              <FormRow label="Current Weight" required>
+                <div className="flex items-center gap-2 w-full max-w-xs justify-end">
+                  <input
+                    type="number"
+                    value={currentWeight}
+                    onChange={(e) => setCurrentWeight(e.target.value)}
+                    className="w-24 bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green text-right"
+                    min="0"
+                    max="10000"
+                    placeholder="0-10000"
+                  />
+                  <span className="text-text-secondary">g</span>
+                </div>
+              </FormRow>
+
+              <FormDivider />
+
+              <FormRow label="Rolls" required>
+                <NumberStepper
+                  value={rolls}
+                  onChange={setRolls}
+                  min={1}
+                  max={99}
+                />
+              </FormRow>
+            </div>
+          </FormCard>
+
+          {/* Advanced Options */}
+          <CollapsibleSection title="Advanced Options" defaultOpen={false}>
+            <FormCard className="p-4">
+              <FormRow label="Note">
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  className="w-full bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-primary-green resize-none"
+                  rows={3}
+                  placeholder="Please enter your note"
+                />
+              </FormRow>
+            </FormCard>
+          </CollapsibleSection>
         </div>
+      </div>
+
+      {/* Bottom bar - Save button */}
+      <div className="fixed bottom-0 left-0 right-0 bg-bg border-t border-surface-divider p-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+        <PrimaryButton onClick={handleSave}>
+          Save
+        </PrimaryButton>
       </div>
     </div>
   );

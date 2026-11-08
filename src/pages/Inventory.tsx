@@ -1,225 +1,151 @@
-import React, { useState } from "react";
-import { Search, Plus, Trash2, Edit2 } from "lucide-react";
+import React, { useState, useMemo } from "react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
-import { formatNumber, formatMoney } from "../utils/format";
+import { Plus } from "lucide-react";
 import { useToast } from "../context/ToastContext";
-
+import AppHeader from "../components/AppHeader";
+import FilterChip from "../components/FilterChip";
+import TextButton from "../components/TextButton";
+import SectionHeader from "../components/SectionHeader";
+import FilamentCard from "../components/FilamentCard";
+import PrimaryButton from "../components/PrimaryButton";
 
 interface InventoryProps {
   onNavigate: (page: Page) => void;
 }
 
 export default function Inventory({ onNavigate }: InventoryProps) {
-  const { filaments, deleteFilament, settings, setEditingFilamentId } = useAppContext();
+  const { filaments, deleteFilament, updateFilament, settings, setEditingFilamentId } = useAppContext();
   const { showToast } = useToast();
-  const [filter, setFilter] = useState("All");
-  const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<"Active" | "Used">("Active");
 
-  const displayFilaments = filaments.filter((f) => {
-    if (activeTab === "Active") return f.weightRemaining > 0;
-    return f.weightRemaining === 0;
-  });
+  const [inPrinterFilter, setInPrinterFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [showEditMode, setShowEditMode] = useState(false);
 
-  const filteredFilaments = displayFilaments.filter((f) => {
-    const matchesFilter = filter === "All" || f.material === filter;
-    const matchesSearch =
-      f.name.toLowerCase().includes(search.toLowerCase()) ||
-      f.brand.toLowerCase().includes(search.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
+  // Materials for filter
+  const materials = useMemo(() => Array.from(new Set(filaments.map((f) => f.material))).sort(), [filaments]);
 
-  const materials = [
-    "All",
-    ...Array.from(new Set(displayFilaments.map((f) => f.material))),
-  ];
+  // Filter filaments
+  const filteredFilaments = useMemo(() => {
+    return filaments.filter((f) => {
+      if (inPrinterFilter && f.material !== inPrinterFilter) return false;
+      if (typeFilter && f.material !== typeFilter) return false;
+      if (statusFilter === "active" && f.weightRemaining <= 0) return false;
+      if (statusFilter === "depleted" && f.weightRemaining > 0) return false;
+      return true;
+    });
+  }, [filaments, inPrinterFilter, typeFilter, statusFilter]);
+
+  // Group by material
+  const groupedFilaments = useMemo(() => {
+    const groups: Record<string, typeof filaments> = {};
+    filteredFilaments.forEach((f) => {
+      const material = f.material;
+      if (!groups[material]) groups[material] = [];
+      groups[material].push(f);
+    });
+    return groups;
+  }, [filteredFilaments]);
+
+  const handleDelete = (id: string) => {
+    if (window.confirm("Delete this filament? This cannot be undone.")) {
+      deleteFilament(id);
+      showToast("Filament deleted", "success");
+    }
+  };
+
+  const handleEdit = (id: string) => {
+    setEditingFilamentId(id);
+    onNavigate("add-filament");
+  };
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 md:mb-8">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold mb-1">Inventory</h1>
-          <p className="text-text-secondary text-sm md:text-base">Manage your filament collection</p>
+    <div className="flex flex-col h-screen bg-bg">
+      {/* Header bar */}
+      <AppHeader title="Filament Library" onBack={() => onNavigate("dashboard")} />
+
+      {/* Filter row */}
+      <div className="bg-surface border-b border-surface-divider px-4 py-3">
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          <FilterChip
+            label="In Printer"
+            options={materials}
+            value={inPrinterFilter}
+            onChange={setInPrinterFilter}
+            placeholder="All"
+          />
+          <FilterChip
+            label="Type"
+            options={materials}
+            value={typeFilter}
+            onChange={setTypeFilter}
+            placeholder="All"
+          />
+          <FilterChip
+            label="Status"
+            options={["active", "depleted"]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+            placeholder="All"
+          />
         </div>
-        <button
+        <div className="flex justify-end">
+          <TextButton
+            onClick={() => setShowEditMode(!showEditMode)}
+            variant={showEditMode ? "destructive" : "default"}
+          >
+            {showEditMode ? "Done" : "Edit"}
+          </TextButton>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-4 pb-24">
+        {Object.keys(groupedFilaments).length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-text-secondary">
+            <span className="text-lg mb-2">No filaments found</span>
+            <p className="text-sm">Add your first spool to get started</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {Object.entries(groupedFilaments)
+              .sort(([a], [b]) => a.localeCompare(b))
+              .map(([material, items]) => (
+                <div key={material} className="space-y-3">
+                  <SectionHeader>{material}</SectionHeader>
+                  {items.map((filament) => (
+                    <FilamentCard
+                      key={filament.id}
+                      filament={filament}
+                      onDelete={handleDelete}
+                      onDeplete={(id) => {
+                        if (window.confirm("Mark this spool as depleted (0g remaining)?")) {
+                          updateFilament(id, { weightRemaining: 0 });
+                          showToast("Marked as depleted", "success");
+                        }
+                      }}
+                      onEdit={handleEdit}
+                      settings={{ weightUnit: settings.weightUnit }}
+                    />
+                  ))}
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
+
+      {/* Bottom bar - Add Filament button */}
+      <div className="fixed bottom-0 left-0 right-0 bg-bg border-t border-surface-divider p-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+        <PrimaryButton
           onClick={() => {
             setEditingFilamentId(null);
             onNavigate("add-filament");
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-accent text-bg-main rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-5 h-5 mr-2" />
           Add Filament
-        </button>
-      </div>
-
-      <div className="flex gap-6 mb-6 border-b border-border">
-        {(["Active", "Used"] as const).map((tab) => (
-          <button
-            key={tab}
-            onClick={() => {
-              setActiveTab(tab);
-              setFilter("All");
-            }}
-            className={`pb-3 px-2 text-sm font-medium transition-colors border-b-2 ${activeTab === tab
-              ? "border-accent text-accent"
-              : "border-transparent text-text-secondary hover:text-text-primary"
-              }`}
-          >
-            {tab} Filaments
-            <span
-              className={`ml-2 px-2 py-0.5 rounded-full text-xs ${activeTab === tab
-                ? "bg-accent text-bg-main"
-                : "bg-bg-card-hover text-text-secondary"
-                }`}
-            >
-              {
-                filaments.filter((f) =>
-                  tab === "Active"
-                    ? f.weightRemaining > 0
-                    : f.weightRemaining === 0,
-                ).length
-              }
-            </span>
-          </button>
-        ))}
-      </div>
-
-      <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
-        <div className="p-4 border-b border-border flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-          <div className="relative w-full lg:w-96">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Search filaments..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-bg-main border border-border rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-accent text-text-primary"
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="text-text-secondary mr-2">FILTER:</span>
-            {materials.map((mat) => (
-              <button
-                key={mat}
-                onClick={() => setFilter(mat)}
-                className={`px-3 py-1.5 rounded-md font-medium ${filter === mat ? "bg-accent text-bg-main" : "bg-transparent border border-border text-text-primary hover:bg-bg-main"}`}
-              >
-                {mat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[700px]">
-            <thead>
-              <tr className="border-b border-border text-xs font-bold text-text-secondary uppercase tracking-wider">
-                <th className="p-4 pl-6 w-16">Color</th>
-                <th className="p-4">Name</th>
-                <th className="p-4">Brand</th>
-                <th className="p-4">Material</th>
-                <th className="p-4">Weight ({settings.weightUnit})</th>
-                <th className="p-4">Empty Spool ({settings.weightUnit})</th>
-                <th className="p-4">Price ({settings.currency})</th>
-                <th className="p-4 pr-6 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filteredFilaments.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="p-8 text-center text-text-secondary">
-                    No filaments found.
-                  </td>
-                </tr>
-              ) : (
-                filteredFilaments.map((filament) => (
-                  <tr
-                    key={filament.id}
-                    className="hover:bg-bg-card-hover transition-colors group"
-                  >
-                    <td className="p-4 pl-6">
-                      <div
-                        className="w-6 h-6 rounded-full shadow-sm ring-1 ring-white/20"
-                        style={{ backgroundColor: filament.colorHex }}
-                      ></div>
-                    </td>
-                    <td className="p-4 font-medium text-text-primary flex items-center gap-2">
-                      {filament.name}
-                      {filament.weightRemaining / filament.weightTotal < 0.15 && (
-                        <span className="text-amber-500 text-xs bg-amber-500/10 px-1.5 py-0.5 rounded">
-                          ⚠️
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-4 text-text-secondary">{filament.brand}</td>
-                    <td className="p-4">
-                      <span className="bg-accent/15 text-accent text-xs font-bold px-2.5 py-1 rounded-md">
-                        {filament.material}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={
-                          filament.weightRemaining / filament.weightTotal < 0.15
-                            ? "text-amber-500 font-medium"
-                            : "text-text-primary font-medium"
-                        }
-                      >
-                        {formatNumber(settings.weightUnit === "kg" ? filament.weightRemaining / 1000 : filament.weightRemaining)}
-                      </span>
-                      <span className="text-text-secondary text-sm">
-                        {" "}
-                        / {formatNumber(settings.weightUnit === "kg" ? filament.weightTotal / 1000 : filament.weightTotal)}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span className="text-text-secondary">
-                        {formatNumber(settings.weightUnit === "kg" ? filament.emptySpoolWeight / 1000 : filament.emptySpoolWeight)}
-                      </span>
-                    </td>
-                    <td className="p-4 text-text-secondary">
-                      {formatMoney(filament.price)}
-                    </td>
-                    <td className="p-4 pr-6 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => {
-                            setEditingFilamentId(filament.id);
-                            onNavigate("add-filament");
-                          }}
-                          className="text-text-secondary hover:text-blue-400 transition-colors"
-                          title="Edit"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (window.confirm(`Delete "${filament.name}"? This cannot be undone.`)) {
-                              deleteFilament(filament.id);
-                              showToast("Filament deleted", "success");
-                            }
-                          }}
-                          className="text-text-secondary hover:text-red-400 transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="p-4 border-t border-border flex items-center justify-between text-sm text-text-secondary">
-          <span>
-            Showing {filteredFilaments.length} of {displayFilaments.length} {activeTab.toLowerCase()} filaments
-          </span>
-        </div>
+        </PrimaryButton>
       </div>
     </div>
   );

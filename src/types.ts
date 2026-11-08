@@ -20,7 +20,6 @@ export interface PrintJob {
 }
 
 export interface Settings {
-  theme: "light" | "dark";
   accentColor: string;
   weightUnit: "g" | "kg";
   currency: string;

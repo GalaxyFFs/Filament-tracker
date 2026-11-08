@@ -38,12 +38,12 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col-reverse md:flex-row h-screen bg-bg-main text-text-primary font-sans">
+    <div className="flex flex-col-reverse md:flex-row h-screen bg-bg text-text-primary font-sans">
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       <main className="flex-1 overflow-y-auto flex flex-col">
-        <div className="hidden md:flex h-10 shrink-0 items-center justify-between px-6 border-b border-border bg-bg-sidebar">
+        <div className="hidden md:flex h-10 shrink-0 items-center justify-between px-6 border-b border-surface-divider bg-surface">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-accent" />
+            <span className="w-2 h-2 rounded-full bg-primary-green" />
             <span className="text-xs font-medium text-text-secondary">
               Filament Tracker
             </span>
@@ -58,9 +58,9 @@ export default function App() {
           {renderPage()}
         </div>
 
-        <div className="hidden md:flex h-10 shrink-0 items-center justify-between px-6 border-t border-border bg-bg-sidebar">
+        <div className="hidden md:flex h-10 shrink-0 items-center justify-between px-6 border-t border-surface-divider bg-surface">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-accent" />
+            <span className="w-2 h-2 rounded-full bg-primary-green" />
             <span className="text-xs font-medium text-text-secondary">
               Filament Tracker
             </span>

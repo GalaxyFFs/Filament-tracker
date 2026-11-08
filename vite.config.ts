@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => {
           name: 'Filament Tracker',
           short_name: 'Filament Tracker',
           description: 'Aplikace pro správu filamentů pro 3D tisk',
-          theme_color: '#8b5cf6',
-          background_color: '#121212',
+          theme_color: '#4FB536',
+          background_color: '#0B0B0B',
           display: 'standalone',
           icons: [
             {

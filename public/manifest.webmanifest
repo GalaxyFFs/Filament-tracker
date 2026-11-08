@@ -5,8 +5,8 @@
   "description": "Track your 3D printing filaments and print jobs",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#8b5cf6",
+  "background_color": "#0B0B0B",
+  "theme_color": "#4FB536",
   "icons": [
     {
       "src": "/icon-192.png",

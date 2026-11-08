@@ -108,7 +108,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
       }
     };
     reader.readAsText(file);
-    event.target.value = ''; // Reset input so the same file can be selected again
+    event.target.value = '';
   };
 
   const handleClearData = () => {
@@ -134,65 +134,16 @@ export default function Settings({ onNavigate }: SettingsProps) {
 
       <div className="space-y-8 sm:space-y-6">
         {/* Appearance */}
-        <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
-              <Palette className="w-4 h-4 text-accent" />
+        <div className="bg-surface border border-surface-divider rounded-[24px] overflow-hidden">
+          <div className="p-5 border-b border-surface-divider flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-primary-green/15 flex items-center justify-center">
+              <Palette className="w-4 h-4 text-primary-green" />
             </div>
             <h2 className="font-bold text-lg">Appearance</h2>
           </div>
 
           <div className="p-6 space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h3 className="font-medium text-text-primary mb-1">Theme</h3>
-                <p className="text-sm text-text-secondary">
-                  Select your preferred interface theme.
-                </p>
-              </div>
-              <div className="flex flex-wrap bg-bg-main border border-border rounded-lg p-1">
-                <button
-                  onClick={() => updateSettings({ theme: "light" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 ${settings.theme === "light" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
-                  Light
-                </button>
-                <button
-                  onClick={() => updateSettings({ theme: "dark" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md flex items-center gap-2 ${settings.theme === "dark" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                    />
-                  </svg>
-                  Dark
-                </button>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-border">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-surface-divider">
               <div>
                 <h3 className="font-medium text-text-primary mb-1">Accent Color</h3>
                 <p className="text-sm text-text-secondary">
@@ -201,20 +152,20 @@ export default function Settings({ onNavigate }: SettingsProps) {
               </div>
               <div className="flex gap-3">
                 <button
-                  onClick={() => updateSettings({ accentColor: "#3b82f6" })}
-                  className={`w-8 h-8 rounded-full bg-blue-500 ${settings.accentColor === "#3b82f6" ? "ring-2 ring-offset-2 ring-offset-bg-card ring-blue-500" : ""}`}
+                  onClick={() => updateSettings({ accentColor: "#4FB536" })}
+                  className={`w-8 h-8 rounded-full bg-primary-green ${settings.accentColor === "#4FB536" ? "ring-2 ring-offset-2 ring-offset-surface ring-primary-green" : ""}`}
                 ></button>
                 <button
-                  onClick={() => updateSettings({ accentColor: "#00b800" })}
-                  className={`w-8 h-8 rounded-full bg-green-500 ${settings.accentColor === "#00b800" ? "ring-2 ring-offset-2 ring-offset-bg-card ring-green-500" : ""}`}
+                  onClick={() => updateSettings({ accentColor: "#3E7BF5" })}
+                  className={`w-8 h-8 rounded-full bg-action-blue ${settings.accentColor === "#3E7BF5" ? "ring-2 ring-offset-2 ring-offset-surface ring-action-blue" : ""}`}
                 ></button>
                 <button
-                  onClick={() => updateSettings({ accentColor: "#10b981" })}
-                  className={`w-8 h-8 rounded-full bg-emerald-500 ${settings.accentColor === "#10b981" ? "ring-2 ring-offset-2 ring-offset-bg-card ring-emerald-500" : ""}`}
+                  onClick={() => updateSettings({ accentColor: "#EE7739" })}
+                  className={`w-8 h-8 rounded-full bg-filament-orange ${settings.accentColor === "#EE7739" ? "ring-2 ring-offset-2 ring-offset-surface ring-filament-orange" : ""}`}
                 ></button>
                 <button
-                  onClick={() => updateSettings({ accentColor: "#f97316" })}
-                  className={`w-8 h-8 rounded-full bg-orange-500 ${settings.accentColor === "#f97316" ? "ring-2 ring-offset-2 ring-offset-bg-card ring-orange-500" : ""}`}
+                  onClick={() => updateSettings({ accentColor: "#C94642" })}
+                  className={`w-8 h-8 rounded-full bg-danger-red ${settings.accentColor === "#C94642" ? "ring-2 ring-offset-2 ring-offset-surface ring-danger-red" : ""}`}
                 ></button>
               </div>
             </div>
@@ -222,10 +173,10 @@ export default function Settings({ onNavigate }: SettingsProps) {
         </div>
 
         {/* Unit Preferences */}
-        <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
-              <Sliders className="w-4 h-4 text-accent" />
+        <div className="bg-surface border border-surface-divider rounded-[24px] overflow-hidden">
+          <div className="p-5 border-b border-surface-divider flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-primary-green/15 flex items-center justify-center">
+              <Sliders className="w-4 h-4 text-primary-green" />
             </div>
             <h2 className="font-bold text-lg">Unit Preferences</h2>
           </div>
@@ -240,52 +191,52 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   Choose how filament weight is displayed across the app.
                 </p>
               </div>
-              <div className="flex flex-wrap bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex flex-wrap bg-bg border border-surface-divider rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ weightUnit: "g" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "g" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "g" ? "bg-surface text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   Grams (g)
                 </button>
                 <button
                   onClick={() => updateSettings({ weightUnit: "kg" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "kg" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.weightUnit === "kg" ? "bg-surface text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   Kilograms (kg)
                 </button>
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-border">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-surface-divider">
               <div>
                 <h3 className="font-medium text-text-primary mb-1">Currency</h3>
                 <p className="text-sm text-text-secondary">
                   Define your preferred currency symbol or code.
                 </p>
               </div>
-              <div className="flex flex-wrap bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex flex-wrap bg-bg border border-surface-divider rounded-lg p-1">
                 <button
                   onClick={() => updateSettings({ currency: "USD" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "USD" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "USD" ? "bg-surface text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   USD
                 </button>
                 <button
                   onClick={() => updateSettings({ currency: "EUR" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "EUR" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "EUR" ? "bg-surface text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   EUR
                 </button>
                 <button
                   onClick={() => updateSettings({ currency: "CZK" })}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "CZK" ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md ${settings.currency === "CZK" ? "bg-surface text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                 >
                   CZK
                 </button>
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-border">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-6 border-t border-surface-divider">
               <div>
                 <h3 className="font-medium text-text-primary mb-1 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
@@ -295,7 +246,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   Choose your preferred date display format.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-1 bg-bg-main border border-border rounded-lg p-1">
+              <div className="flex flex-wrap gap-1 bg-bg border border-surface-divider rounded-lg p-1">
                 {([
                   ["en-US", "US (MM/DD/YYYY)"],
                   ["en-GB", "UK (DD/MM/YYYY)"],
@@ -308,7 +259,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   <button
                     key={locale}
                     onClick={() => updateSettings({ dateLocale: locale })}
-                    className={`shrink-0 px-4 py-1.5 text-sm font-medium rounded-md ${settings.dateLocale === locale ? "bg-bg-card text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
+                    className={`shrink-0 px-4 py-1.5 text-sm font-medium rounded-md ${settings.dateLocale === locale ? "bg-surface text-text-primary shadow" : "text-text-secondary hover:text-text-primary"}`}
                   >
                     {label}
                   </button>
@@ -319,17 +270,17 @@ export default function Settings({ onNavigate }: SettingsProps) {
         </div>
 
         {/* Manufacturer Management */}
-        <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="p-5 border-b border-border flex items-center justify-between">
+        <div className="bg-surface border border-surface-divider rounded-[24px] overflow-hidden">
+          <div className="p-5 border-b border-surface-divider flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
-                <Factory className="w-4 h-4 text-accent" />
+              <div className="w-8 h-8 rounded-lg bg-primary-green/15 flex items-center justify-center">
+                <Factory className="w-4 h-4 text-primary-green" />
               </div>
               <h2 className="font-bold text-lg">Manufacturer Management</h2>
             </div>
             <button
               onClick={() => setIsAddingBrand(true)}
-              className="text-sm font-medium text-accent hover:text-accent-hover flex items-center gap-1"
+              className="text-sm font-medium text-primary-green hover:text-primary-green/80 flex items-center gap-1"
             >
               <Plus className="w-4 h-4" /> Add Brand
             </button>
@@ -347,19 +298,19 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   value={newBrand}
                   onChange={(e) => setNewBrand(e.target.value)}
                   placeholder="Brand name..."
-                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-text-primary"
+                  className="bg-bg border border-surface-divider rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary-green text-text-primary"
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && handleAddBrand()}
                 />
                 <button
                   onClick={handleAddBrand}
-                  className="p-1.5 bg-accent text-bg-main rounded-lg hover:bg-accent-hover"
+                  className="p-1.5 bg-primary-green text-bg rounded-lg hover:bg-primary-green-hover"
                 >
                   <Check className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setIsAddingBrand(false)}
-                  className="p-1.5 bg-bg-main border border-border text-text-secondary rounded-lg hover:text-text-primary"
+                  className="p-1.5 bg-bg border border-surface-divider text-text-secondary rounded-lg hover:text-text-primary"
                 >
                   Cancel
                 </button>
@@ -370,13 +321,13 @@ export default function Settings({ onNavigate }: SettingsProps) {
               {settings.manufacturers.map((brand) => (
                 <div
                   key={brand}
-                  className="flex items-center justify-between p-4 bg-bg-main border border-border rounded-xl"
+                  className="flex items-center justify-between p-4 bg-bg border border-surface-divider rounded-xl"
                 >
                   <span className="font-medium">{brand}</span>
                   <div className="flex gap-2 text-text-secondary">
                     <button
                       onClick={() => handleDeleteBrand(brand)}
-                      className="hover:text-red-400"
+                      className="hover:text-danger-red"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -388,17 +339,17 @@ export default function Settings({ onNavigate }: SettingsProps) {
         </div>
 
         {/* Material Management */}
-        <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="p-5 border-b border-border flex items-center justify-between">
+        <div className="bg-surface border border-surface-divider rounded-[24px] overflow-hidden">
+          <div className="p-5 border-b border-surface-divider flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
-                <Layers className="w-4 h-4 text-accent" />
+              <div className="w-8 h-8 rounded-lg bg-primary-green/15 flex items-center justify-center">
+                <Layers className="w-4 h-4 text-primary-green" />
               </div>
               <h2 className="font-bold text-lg">Material Management</h2>
             </div>
             <button
               onClick={() => setIsAddingMaterial(true)}
-              className="text-sm font-medium text-accent hover:text-accent-hover flex items-center gap-1"
+              className="text-sm font-medium text-primary-green hover:text-primary-green/80 flex items-center gap-1"
             >
               <Plus className="w-4 h-4" /> Add Material
             </button>
@@ -416,19 +367,19 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   value={newMaterial}
                   onChange={(e) => setNewMaterial(e.target.value)}
                   placeholder="Material type e.g. PETG"
-                  className="bg-bg-main border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-accent text-text-primary"
+                  className="bg-bg border border-surface-divider rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary-green text-text-primary"
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && handleAddMaterial()}
                 />
                 <button
                   onClick={handleAddMaterial}
-                  className="p-1.5 bg-accent text-bg-main rounded-lg hover:bg-accent-hover"
+                  className="p-1.5 bg-primary-green text-bg rounded-lg hover:bg-primary-green-hover"
                 >
                   <Check className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setIsAddingMaterial(false)}
-                  className="p-1.5 bg-bg-main border border-border text-text-secondary rounded-lg hover:text-text-primary"
+                  className="p-1.5 bg-bg border border-surface-divider text-text-secondary rounded-lg hover:text-text-primary"
                 >
                   Cancel
                 </button>
@@ -439,13 +390,13 @@ export default function Settings({ onNavigate }: SettingsProps) {
               {settings.materials.map((material) => (
                 <div
                   key={material}
-                  className="flex items-center justify-between p-4 bg-bg-main border border-border rounded-xl"
+                  className="flex items-center justify-between p-4 bg-bg border border-surface-divider rounded-xl"
                 >
                   <span className="font-medium">{material}</span>
                   <div className="flex gap-2 text-text-secondary">
                     <button
                       onClick={() => handleDeleteMaterial(material)}
-                      className="hover:text-red-400"
+                      className="hover:text-danger-red"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -457,10 +408,10 @@ export default function Settings({ onNavigate }: SettingsProps) {
         </div>
 
         {/* Data Management */}
-        <div className="bg-bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="p-5 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center">
-              <Database className="w-4 h-4 text-accent" />
+        <div className="bg-surface border border-surface-divider rounded-[24px] overflow-hidden">
+          <div className="p-5 border-b border-surface-divider flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-primary-green/15 flex items-center justify-center">
+              <Database className="w-4 h-4 text-primary-green" />
             </div>
             <h2 className="font-bold text-lg">Data Management</h2>
           </div>
@@ -473,13 +424,13 @@ export default function Settings({ onNavigate }: SettingsProps) {
             <div className="flex flex-wrap items-center gap-4">
               <button
                 onClick={handleBackup}
-                className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-text-primary transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-bg border border-surface-divider rounded-lg text-sm font-medium hover:text-text-primary transition-colors"
               >
                 <Download className="w-4 h-4" />
                 Backup Data
               </button>
 
-              <label className="flex items-center gap-2 px-4 py-2 bg-bg-main border border-border rounded-lg text-sm font-medium hover:text-text-primary transition-colors cursor-pointer">
+              <label className="flex items-center gap-2 px-4 py-2 bg-bg border border-surface-divider rounded-lg text-sm font-medium hover:text-text-primary transition-colors cursor-pointer">
                 <Upload className="w-4 h-4" />
                 Restore Data
                 <input
@@ -494,7 +445,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
 
               <button
                 onClick={handleClearData}
-                className="flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg text-sm font-medium hover:bg-red-500 hover:text-white transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-danger-red/10 text-danger-red border border-danger-red/20 rounded-lg text-sm font-medium hover:bg-danger-red hover:text-white transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
                 Clear All Data

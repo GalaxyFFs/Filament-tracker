@@ -14,6 +14,18 @@ const generateId = () => {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 };
 
+export const recalculateFilamentWeights = (
+  filamentsList: Filament[],
+  jobsList: PrintJob[]
+): Filament[] => {
+  return filamentsList.map((f) => {
+    const used = jobsList
+      .filter((j) => j.filamentId === f.id)
+      .reduce((sum, j) => sum + (Number(j.weightUsed) || 0), 0);
+    const weightRemaining = Math.max(0, roundTo2(f.weightTotal - used));
+    return { ...f, weightRemaining };
+  });
+};
 
 interface AppState {
   filaments: Filament[];
@@ -34,8 +46,7 @@ interface AppState {
 }
 
 const defaultSettings: Settings = {
-  theme: "dark",
-  accentColor: "#00b800",
+  accentColor: "#4FB536",
   weightUnit: "g",
   currency: "USD",
   manufacturers: [
@@ -67,19 +78,6 @@ const defaultSettings: Settings = {
     "Carbon-fiber",
   ],
   dateLocale: "en-US",
-};
-
-export const recalculateFilamentWeights = (
-  filamentsList: Filament[],
-  jobsList: PrintJob[]
-): Filament[] => {
-  return filamentsList.map((f) => {
-    const used = jobsList
-      .filter((j) => j.filamentId === f.id)
-      .reduce((sum, j) => sum + (Number(j.weightUsed) || 0), 0);
-    const weightRemaining = Math.max(0, roundTo2(f.weightTotal - used));
-    return { ...f, weightRemaining };
-  });
 };
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -128,43 +126,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem("settings", JSON.stringify(settings));
 
-    document.documentElement.style.setProperty(
-      "--theme-accent",
-      settings.accentColor,
-    );
+    document.documentElement.style.setProperty("--theme-accent", settings.accentColor);
 
-    // Calculate a slightly darker hover color
     const hex = settings.accentColor.replace("#", "");
     const r = Math.max(0, parseInt(hex.substring(0, 2), 16) - 20);
     const g = Math.max(0, parseInt(hex.substring(2, 4), 16) - 20);
     const b = Math.max(0, parseInt(hex.substring(4, 6), 16) - 20);
     const hoverColor = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
-    document.documentElement.style.setProperty(
-      "--theme-accent-hover",
-      hoverColor,
-    );
-
-    if (settings.theme === "light") {
-      document.documentElement.classList.add("light-theme");
-    } else {
-      document.documentElement.classList.remove("light-theme");
-    }
-
-    // Update Favicon dynamically - sanitize accentColor to prevent injection
-    const safeAccentColor = settings.accentColor.replace("#", "").toUpperCase();
-    if (!/^[0-9A-F]{6}$/.test(safeAccentColor)) {
-      console.warn("Invalid accent color for favicon, using default");
-    }
-    const svgIcon = encodeURIComponent(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#${safeAccentColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="M3.27 6.96L12 12.01l8.73-5.05"></path><path d="M12 22.08V12"></path></svg>`
-    );
-    let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
-    if (!link) {
-      link = document.createElement("link");
-      link.rel = "icon";
-      document.head.appendChild(link);
-    }
-    link.href = `data:image/svg+xml,${svgIcon}`;
+    document.documentElement.style.setProperty("--theme-accent-hover", hoverColor);
   }, [settings]);
 
   const addFilament = (filament: Omit<Filament, "id">) => {
