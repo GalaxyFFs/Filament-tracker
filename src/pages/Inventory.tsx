@@ -67,7 +67,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
 
       {/* Filter row */}
       <div className="bg-surface border-b border-surface-divider px-4 py-3">
-        <div className="flex flex-wrap items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-2 overflow-x-auto whitespace-nowrap pb-1">
           <FilterChip
             label="In Printer"
             options={materials}
@@ -136,14 +136,15 @@ export default function Inventory({ onNavigate }: InventoryProps) {
       </div>
 
       {/* Bottom bar - Add Filament button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-bg border-t border-surface-divider p-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div className="fixed bottom-0 left-0 right-0 bg-bg border-t border-surface-divider px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <PrimaryButton
           onClick={() => {
             setEditingFilamentId(null);
             onNavigate("add-filament");
           }}
+          className="max-w-md mx-auto block"
         >
-          <Plus className="w-5 h-5 mr-2" />
+          <Plus className="w-5 h-5 mr-2 inline" />
           Add Filament
         </PrimaryButton>
       </div>

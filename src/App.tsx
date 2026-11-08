@@ -42,14 +42,7 @@ export default function App() {
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       <main className="flex-1 overflow-y-auto flex flex-col">
         <div className="hidden md:flex h-10 shrink-0 items-center justify-between px-6 border-b border-surface-divider bg-surface">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-primary-green" />
-            <span className="text-xs font-medium text-text-secondary">
-              Filament Tracker
-            </span>
-          </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-text-secondary">Local Inventory</span>
             <span className="text-xs text-text-secondary">v2.0</span>
           </div>
         </div>
@@ -66,7 +59,7 @@ export default function App() {
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-text-secondary">Made for makers</span>
+            <span className="text-xs text-text-secondary">GalaxyFFs</span>
             <span className="text-xs text-text-secondary">© 2026</span>
           </div>
         </div>

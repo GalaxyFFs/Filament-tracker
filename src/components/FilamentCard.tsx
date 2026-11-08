@@ -88,7 +88,7 @@ export default function FilamentCard({ filament, onDelete, onDeplete, onEdit, se
   return (
     <div
       ref={cardRef}
-      className="relative bg-surface rounded-[24px] overflow-hidden"
+      className="relative bg-surface rounded-[24px] overflow-visible mt-3"
       style={cardStyle}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
