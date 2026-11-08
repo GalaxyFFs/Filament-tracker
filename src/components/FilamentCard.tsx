@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Trash2, AlertTriangle } from "lucide-react";
+import React from "react";
+import { Trash2, AlertTriangle, Edit2, Calculator } from "lucide-react";
 import { Filament } from "../types";
-import { formatNumber } from "../utils/format";
-import SwipeActions from "./SwipeActions";
+import { formatNumber, formatMoney } from "../utils/format";
 
 interface FilamentCardProps {
   filament: Filament;
@@ -11,15 +10,11 @@ interface FilamentCardProps {
   onEdit?: (id: string) => void;
   settings?: {
     weightUnit: "g" | "kg";
+    currency: string;
   };
 }
 
 export default function FilamentCard({ filament, onDelete, onDeplete, onEdit, settings }: FilamentCardProps) {
-  const [swipeOffset, setSwipeOffset] = useState(0);
-  const [isSwiping, setIsSwiping] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const actionsWidth = 160; // approximate width of action buttons
-
   const percentage = Math.max(0, (filament.weightRemaining / filament.weightTotal) * 100);
   const isLow = percentage > 0 && percentage < 15;
 
@@ -30,124 +25,87 @@ export default function FilamentCard({ filament, onDelete, onDeplete, onEdit, se
     ? formatNumber(filament.weightTotal / 1000) + "kg"
     : formatNumber(filament.weightTotal) + "g";
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsSwiping(true);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isSwiping) return;
-    const touch = e.touches[0];
-    if (!touch) return;
-    const target = e.target as HTMLElement;
-    const rect = target.getBoundingClientRect();
-    const deltaX = touch.clientX - rect.left;
-    const offset = Math.max(-actionsWidth, Math.min(0, deltaX - (cardRef.current?.offsetWidth || 0)));
-    setSwipeOffset(offset);
-  };
-
-  const handleTouchEnd = () => {
-    setIsSwiping(false);
-    if (swipeOffset < -actionsWidth / 2) {
-      setSwipeOffset(-actionsWidth);
-    } else {
-      setSwipeOffset(0);
-    }
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button !== 0) return; // only left click
-    setIsSwiping(true);
-    const startX = e.clientX;
-    const handleMouseMove = (moveEvent: MouseEvent) => {
-      if (!isSwiping) return;
-      const deltaX = moveEvent.clientX - startX;
-      const offset = Math.max(-actionsWidth, Math.min(0, deltaX));
-      setSwipeOffset(offset);
-    };
-    const handleMouseUp = () => {
-      setIsSwiping(false);
-      if (swipeOffset < -actionsWidth / 2) {
-        setSwipeOffset(-actionsWidth);
-      } else {
-        setSwipeOffset(0);
-      }
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  };
-
-  const closeSwipe = () => setSwipeOffset(0);
-
-  const cardStyle: React.CSSProperties = {
-    transform: `translateX(${swipeOffset}px)`,
-    transition: isSwiping ? "none" : "transform 0.2s ease-out",
-  };
+  const spoolCost = formatMoney(filament.price);
+  const currency = settings?.currency || "USD";
+  const currencySymbol = currency === "USD" ? "$" : currency === "EUR" ? "€" : "Kč";
 
   return (
-    <div
-      ref={cardRef}
-      className="relative bg-surface rounded-[24px] overflow-visible mt-4 mb-2"
-      style={cardStyle}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
-    >
-      {/* Main card content */}
-      <div className="p-4">
-        
-        <div className="flex gap-4">
-          {/* Color dot */}
-          <div
-            className="filament-color-dot"
-            style={{ backgroundColor: filament.colorHex }}
-          />
-
+    <div className="relative bg-surface rounded-[24px] overflow-visible mt-4 mb-2 w-full">
+      <div className="p-4 sm:p-6">
+        {/* Header row: name + low stock + actions */}
+        <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-bold text-lg truncate pr-2">{filament.name}</h3>
+            <h3 className="font-bold text-lg sm:text-xl truncate pr-2">{filament.name}</h3>
+          </div>
+          {isLow && (
+            <div className="flex items-center gap-1 text-amber-500 text-sm font-medium shrink-0">
+              <AlertTriangle className="w-4 h-4" />
+              Low stock
             </div>
-
-            <p className="text-text-secondary text-sm mb-3">{filament.brand}</p>
-
-            {/* Progress bar */}
-            <div className="progress-bar-track mb-3">
-              <div
-                className="progress-bar-fill"
-                style={{
-                  width: `${percentage}%`,
-                  backgroundColor: filament.colorHex,
-                }}
-              />
-            </div>
-
-            <div className="flex justify-between items-center">
-              <span className="text-text-secondary text-sm">{filament.material}</span>
-              <span className="text-text-primary font-medium">
-                {weightDisplay} / {totalDisplay}
-              </span>
-            </div>
-
-            {isLow && (
-              <div className="mt-2 flex items-center gap-1 text-amber-500 text-xs">
-                <AlertTriangle className="w-3 h-3" />
-                Low stock
-              </div>
+          )}
+          <div className="flex items-center gap-2 shrink-0">
+            {onEdit && (
+              <button
+                onClick={onEdit}
+                className="w-10 h-10 rounded-lg border border-surface-divider text-text-secondary hover:text-primary-green hover:bg-primary-green/10 hover:border-primary-green transition-colors flex items-center justify-center"
+                aria-label="Edit filament"
+              >
+                <Edit2 className="w-5 h-5" />
+              </button>
             )}
+            <button
+              onClick={() => {
+                if (window.confirm("Mark this spool as depleted (0g remaining)?")) {
+                  onDeplete(filament.id);
+                }
+              }}
+              className="w-10 h-10 rounded-lg border border-surface-divider text-text-secondary hover:text-action-blue hover:bg-action-blue/10 hover:border-action-blue transition-colors flex items-center justify-center"
+              aria-label="Mark as depleted"
+            >
+              <span className="font-bold text-sm">0g</span>
+            </button>
+            <button
+              onClick={() => {
+                if (window.confirm("Delete this filament? This cannot be undone.")) {
+                  onDelete(filament.id);
+                }
+              }}
+              className="w-10 h-10 rounded-lg border border-surface-divider text-text-secondary hover:text-danger-red hover:bg-danger-red/10 hover:border-danger-red transition-colors flex items-center justify-center"
+              aria-label="Delete filament"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Swipe actions */}
-      <SwipeActions
-        offset={swipeOffset}
-        actionsWidth={actionsWidth}
-        onDelete={() => { onDelete(filament.id); closeSwipe(); }}
-        onDeplete={() => { onDeplete(filament.id); closeSwipe(); }}
-        onEdit={onEdit ? () => { onEdit(filament.id); closeSwipe(); } : undefined}
-      />
+        {/* Color dot + meta info row */}
+        <div className="flex items-center gap-4 mb-4">
+          <div
+            className="filament-color-dot flex-shrink-0"
+            style={{ backgroundColor: filament.colorHex }}
+          />
+          <div className="flex-1 flex flex-wrap items-center gap-3 text-sm">
+            <span className="font-medium text-text-primary">{filament.brand}</span>
+            <span className="px-2 py-0.5 bg-bg rounded-lg">{filament.material}</span>
+            <span className="text-text-secondary">{weightDisplay} / {totalDisplay}</span>
+            <span className="flex items-center gap-1.5 text-text-secondary">
+              <Calculator className="w-4 h-4" />
+              Spool: {currencySymbol}{spoolCost}
+            </span>
+          </div>
+        </div>
+
+        {/* Full-width progress bar */}
+        <div className="progress-bar-track">
+          <div
+            className="progress-bar-fill"
+            style={{
+              width: `${percentage}%`,
+              backgroundColor: filament.colorHex,
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

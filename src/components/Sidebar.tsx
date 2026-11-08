@@ -36,7 +36,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
       {/* Desktop sidebar */}
       <div className="hidden md:flex md:w-64 md:flex-col md:shrink-0 md:bg-surface md:border-r md:border-surface-divider">
         <div className="p-6 items-center gap-3 flex">
-          <div className="w-8 h-8 rounded-lg bg-[#4FB536] flex items-center justify-center shadow-[0_0_12px_rgba(79,181,54,0.3)]">
+          <div className="w-8 h-8 rounded-lg bg-primary-green flex items-center justify-center shadow-[0_0_12px_rgba(79,181,54,0.3)]">
             <Box className="w-5 h-5 text-white" />
           </div>
           <div>

@@ -42,7 +42,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
 function ToastContainer({ toasts, onHide }: { toasts: Toast[]; onHide: (id: string) => void }) {
   const typeStyles = {
-    success: "bg-[#00b800]/90",
+    success: "bg-primary-green/90",
     error: "bg-red-500/90",
     warning: "bg-amber-500/90",
     info: "bg-blue-500/90",

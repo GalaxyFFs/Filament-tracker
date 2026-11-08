@@ -36,17 +36,17 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
     [filaments, editingFilamentId]
   );
 
-  const [type, setType] = useState(editingFilament?.material || "");
-  const [colorHex, setColorHex] = useState((editingFilament?.colorHex || "#EE7739").replace("#", ""));
-  const [name, setName] = useState(editingFilament?.name || generateDefaultName());
-  const [fullSpoolWeight, setFullSpoolWeight] = useState(editingFilament?.weightTotal.toString() || "1000");
-  const [currentWeight, setCurrentWeight] = useState(editingFilament?.weightRemaining.toString() || "");
+  const [type, setType] = useState("");
+  const [colorHex, setColorHex] = useState("");
+  const [name, setName] = useState("");
+  const [fullSpoolWeight, setFullSpoolWeight] = useState("");
+  const [currentWeight, setCurrentWeight] = useState("");
   const [rolls, setRolls] = useState(1);
-  const [manufacturer, setManufacturer] = useState(editingFilament?.brand || (settings.manufacturers[0] || "Generic"));
+  const [manufacturer, setManufacturer] = useState("");
   const [newManufacturer, setNewManufacturer] = useState("");
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   const [showManufacturerDropdown, setShowManufacturerDropdown] = useState(false);
-  const [price, setPrice] = useState(editingFilament?.price.toString() || "");
+  const [price, setPrice] = useState("");
 
   const handleSave = () => {
     if (!type) {
@@ -159,6 +159,35 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Sync form state when editingFilamentId changes
+  useEffect(() => {
+    if (editingFilamentId) {
+      const filament = filaments.find((f) => f.id === editingFilamentId);
+      if (filament) {
+        setType(filament.material);
+        setColorHex(filament.colorHex.replace("#", ""));
+        setName(filament.name);
+        setFullSpoolWeight(filament.weightTotal.toString());
+        setCurrentWeight(filament.weightRemaining.toString());
+        setManufacturer(filament.brand);
+        setPrice(filament.price.toString());
+        setShowTypeDropdown(false);
+        setShowManufacturerDropdown(false);
+      }
+    } else {
+      // Reset to defaults when not editing
+      setType("");
+      setColorHex("#EE7739".replace("#", ""));
+      setName(generateDefaultName());
+      setFullSpoolWeight("1000");
+      setCurrentWeight("");
+      setManufacturer(settings.manufacturers[0] || "Generic");
+      setPrice("");
+      setShowTypeDropdown(false);
+      setShowManufacturerDropdown(false);
+    }
+  }, [editingFilamentId, filaments]);
+
   return (
     <div className="max-w-2xl mx-auto pb-8 md:pb-12">
       {/* Header */}
@@ -202,14 +231,14 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                   <button
                     type="button"
                     onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-                    className="w-full flex items-center justify-between px-3 py-2 bg-bg border border-surface-divider rounded-lg text-left hover:border-primary-green transition-colors focus:outline-none focus:border-primary-green"
+                    className="w-full bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-right hover:border-primary-green transition-colors focus:outline-none focus:border-primary-green pr-10"
                     aria-expanded={showTypeDropdown}
                     aria-haspopup="listbox"
                   >
                     <span className={type ? "text-text-primary" : "text-text-secondary"}>
                       {type || "Select filament type"}
                     </span>
-                    <ChevronDown className={`w-5 h-5 text-text-secondary transition-transform ${showTypeDropdown ? "rotate-180" : ""}`} />
+                    <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary transition-transform ${showTypeDropdown ? "rotate-180" : ""}`} />
                   </button>
 
                   {showTypeDropdown && (
@@ -271,14 +300,14 @@ export default function AddFilament({ onNavigate }: AddFilamentProps) {
                   <button
                     type="button"
                     onClick={() => setShowManufacturerDropdown(!showManufacturerDropdown)}
-                    className="w-full flex items-center justify-between px-3 py-2 bg-bg border border-surface-divider rounded-lg text-left hover:border-primary-green transition-colors focus:outline-none focus:border-primary-green"
+                    className="w-full bg-bg border border-surface-divider rounded-lg px-3 py-2 text-sm text-right hover:border-primary-green transition-colors focus:outline-none focus:border-primary-green pr-10"
                     aria-expanded={showManufacturerDropdown}
                     aria-haspopup="listbox"
                   >
                     <span className={manufacturer ? "text-text-primary" : "text-text-secondary"}>
                       {manufacturer || "Select manufacturer"}
                     </span>
-                    <ChevronDown className={`w-5 h-5 text-text-secondary transition-transform ${showManufacturerDropdown ? "rotate-180" : ""}`} />
+                    <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary transition-transform ${showManufacturerDropdown ? "rotate-180" : ""}`} />
                   </button>
 
                   {showManufacturerDropdown && (

@@ -19,6 +19,7 @@ export default function PrimaryButton({ children, onClick, disabled = false, cla
         hover:bg-primary-green-hover
         disabled:opacity-50 disabled:cursor-not-allowed
         transition-colors
+        flex items-center gap-2
         ${fullWidth ? "w-full" : ""}
         ${className}
       `}
