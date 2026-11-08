@@ -61,13 +61,13 @@ export default function Inventory({ onNavigate }: InventoryProps) {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-bg">
+    <div className="flex flex-col h-full bg-bg max-w-full overflow-x-hidden relative">
       {/* Header bar */}
       <AppHeader title="Filament Library" onBack={() => onNavigate("dashboard")} />
 
       {/* Filter row */}
-      <div className="bg-surface border-b border-surface-divider px-4 py-3">
-        <div className="flex items-center gap-2 mb-2 overflow-x-auto whitespace-nowrap pb-1">
+      <div className="bg-surface border-b border-surface-divider px-4 py-3 shrink-0">
+        <div className="flex items-center gap-2 mb-2 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar">
           <FilterChip
             label="In Printer"
             options={materials}
@@ -101,18 +101,18 @@ export default function Inventory({ onNavigate }: InventoryProps) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4 pb-24">
+      <div className="flex-1 overflow-y-auto p-4 pb-32">
         {Object.keys(groupedFilaments).length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-text-secondary">
             <span className="text-lg mb-2">No filaments found</span>
             <p className="text-sm">Add your first spool to get started</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-4 max-w-full">
             {Object.entries(groupedFilaments)
               .sort(([a], [b]) => a.localeCompare(b))
               .map(([material, items]) => (
-                <div key={material} className="space-y-3">
+                <div key={material} className="space-y-3 max-w-full">
                   <SectionHeader>{material}</SectionHeader>
                   {items.map((filament) => (
                     <FilamentCard
@@ -136,13 +136,13 @@ export default function Inventory({ onNavigate }: InventoryProps) {
       </div>
 
       {/* Bottom bar - Add Filament button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-bg border-t border-surface-divider px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div className="fixed bottom-0 left-0 right-0 md:left-64 bg-bg border-t border-surface-divider px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] z-20">
         <PrimaryButton
           onClick={() => {
             setEditingFilamentId(null);
             onNavigate("add-filament");
           }}
-          className="max-w-md mx-auto block"
+          className="max-w-md mx-auto block shadow-lg"
         >
           <Plus className="w-5 h-5 mr-2 inline" />
           Add Filament

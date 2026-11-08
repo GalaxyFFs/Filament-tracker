@@ -38,15 +38,9 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col-reverse md:flex-row h-screen bg-bg text-text-primary font-sans">
+    <div className="flex flex-col-reverse md:flex-row h-screen bg-bg text-text-primary font-sans overflow-hidden">
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
-      <main className="flex-1 overflow-y-auto flex flex-col">
-        <div className="hidden md:flex h-10 shrink-0 items-center justify-between px-6 border-b border-surface-divider bg-surface">
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-text-secondary">v2.0</span>
-          </div>
-        </div>
-
+      <main className="flex-1 overflow-y-auto flex flex-col relative">
         <div className="flex-1 p-4 pt-[calc(0.75rem+env(safe-area-inset-top))] md:p-8 md:pt-8 md:pb-8">
           {renderPage()}
         </div>

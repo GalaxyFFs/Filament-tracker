@@ -111,15 +111,9 @@ export default function FilamentCard({ filament, onDelete, onDeplete, onEdit, se
             style={{ backgroundColor: filament.colorHex }}
           />
 
-          {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-bold text-lg truncate pr-2">{filament.name}</h3>
-              <div className="w-10 h-10 rounded-full ring-2 ring-white/20 shrink-0 flex items-center justify-center">
-                <span className="text-sm font-bold" style={{ color: filament.colorHex }}>
-                  {Math.round(percentage)}%
-                </span>
-              </div>
             </div>
 
             <p className="text-text-secondary text-sm mb-3">{filament.brand}</p>
