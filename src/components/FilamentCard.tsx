@@ -88,7 +88,7 @@ export default function FilamentCard({ filament, onDelete, onDeplete, onEdit, se
   return (
     <div
       ref={cardRef}
-      className="relative bg-surface rounded-[24px] overflow-visible mt-3"
+      className="relative bg-surface rounded-[24px] overflow-visible mt-4 mb-2"
       style={cardStyle}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
@@ -99,7 +99,7 @@ export default function FilamentCard({ filament, onDelete, onDeplete, onEdit, se
       <div className="p-4">
         {/* Manufacturer tag (optional) */}
         {filament.brand && filament.brand !== "Generic" && (
-          <div className="absolute -top-3 left-4 manufacturer-tag z-10">
+          <div className="absolute -top-3 left-4 manufacturer-tag z-10 shadow-md">
             {filament.brand}
           </div>
         )}

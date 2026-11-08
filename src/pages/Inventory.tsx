@@ -61,13 +61,13 @@ export default function Inventory({ onNavigate }: InventoryProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-bg max-w-full overflow-x-hidden relative">
+    <div className="flex flex-col h-full bg-bg max-w-full relative">
       {/* Header bar */}
       <AppHeader title="Filament Library" onBack={() => onNavigate("dashboard")} />
 
       {/* Filter row */}
       <div className="bg-surface border-b border-surface-divider px-4 py-3 shrink-0">
-        <div className="flex items-center gap-2 mb-2 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar">
+        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar">
           <FilterChip
             label="In Printer"
             options={materials}
@@ -90,45 +90,39 @@ export default function Inventory({ onNavigate }: InventoryProps) {
             placeholder="All"
           />
         </div>
-        <div className="flex justify-end">
-          <TextButton
-            onClick={() => setShowEditMode(!showEditMode)}
-            variant={showEditMode ? "destructive" : "default"}
-          >
-            {showEditMode ? "Done" : "Edit"}
-          </TextButton>
-        </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4 pb-32">
+      <div className="flex-1 overflow-y-auto p-4 pb-36">
         {Object.keys(groupedFilaments).length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-text-secondary">
             <span className="text-lg mb-2">No filaments found</span>
             <p className="text-sm">Add your first spool to get started</p>
           </div>
         ) : (
-          <div className="space-y-4 max-w-full">
+          <div className="space-y-6 max-w-full">
             {Object.entries(groupedFilaments)
               .sort(([a], [b]) => a.localeCompare(b))
               .map(([material, items]) => (
-                <div key={material} className="space-y-3 max-w-full">
+                <div key={material} className="space-y-4 max-w-full">
                   <SectionHeader>{material}</SectionHeader>
-                  {items.map((filament) => (
-                    <FilamentCard
-                      key={filament.id}
-                      filament={filament}
-                      onDelete={handleDelete}
-                      onDeplete={(id) => {
-                        if (window.confirm("Mark this spool as depleted (0g remaining)?")) {
-                          updateFilament(id, { weightRemaining: 0 });
-                          showToast("Marked as depleted", "success");
-                        }
-                      }}
-                      onEdit={handleEdit}
-                      settings={{ weightUnit: settings.weightUnit }}
-                    />
-                  ))}
+                  <div className="grid grid-cols-1 gap-6">
+                    {items.map((filament) => (
+                      <FilamentCard
+                        key={filament.id}
+                        filament={filament}
+                        onDelete={handleDelete}
+                        onDeplete={(id) => {
+                          if (window.confirm("Mark this spool as depleted (0g remaining)?")) {
+                            updateFilament(id, { weightRemaining: 0 });
+                            showToast("Marked as depleted", "success");
+                          }
+                        }}
+                        onEdit={handleEdit}
+                        settings={{ weightUnit: settings.weightUnit }}
+                      />
+                    ))}
+                  </div>
                 </div>
               ))}
           </div>
@@ -136,7 +130,7 @@ export default function Inventory({ onNavigate }: InventoryProps) {
       </div>
 
       {/* Bottom bar - Add Filament button */}
-      <div className="fixed bottom-0 left-0 right-0 md:left-64 bg-bg border-t border-surface-divider px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] z-20">
+      <div className="fixed bottom-[calc(72px+env(safe-area-inset-bottom))] md:bottom-0 left-0 right-0 md:left-64 bg-bg/80 backdrop-blur-md border-t border-surface-divider px-4 py-4 z-20">
         <PrimaryButton
           onClick={() => {
             setEditingFilamentId(null);
