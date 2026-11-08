@@ -38,7 +38,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col-reverse md:flex-row h-screen bg-bg text-text-primary font-sans overflow-hidden">
+    <div className="flex flex-col md:flex-row h-screen bg-bg text-text-primary font-sans overflow-hidden">
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       <main className="flex-1 flex flex-col relative overflow-hidden">
         <div className="flex-1 overflow-y-auto p-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-[calc(4rem+env(safe-area-inset-bottom))] md:p-8 md:pt-8 md:pb-8">

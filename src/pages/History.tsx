@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Download, Plus, Search, Box, Edit2, Trash2, Scale } from "lucide-react";
+import { Download, Search, Box, Edit2, Trash2, Scale } from "lucide-react";
 import { Page } from "../App";
 import { useAppContext } from "../context/AppContext";
 import { formatNumber, formatMoney } from "../utils/format";
@@ -31,18 +31,6 @@ export default function History({ onNavigate }: HistoryProps) {
           <p className="text-text-secondary">
             Review your past prints and calculate costs
           </p>
-        </div>
-        <div className="flex gap-3">
-          <button
-            onClick={() => {
-              setEditingPrintJobId(null);
-              onNavigate("log-print");
-            }}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-green text-white rounded-lg text-sm font-medium hover:bg-primary-green-hover transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Log Print
-          </button>
         </div>
       </div>
 

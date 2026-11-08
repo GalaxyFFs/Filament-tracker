@@ -25,57 +25,57 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
+  const handleNavigate = (item: Page) => {
+    setEditingFilamentId(null);
+    setEditingPrintJobId(null);
+    onNavigate(item);
+  };
+
   return (
-    <div
-      className="w-full md:w-64 bg-surface border-t md:border-t-0 md:border-r border-surface-divider flex flex-col shrink-0"
-    >
-      <div className="hidden md:flex p-6 items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-[#4FB536] flex items-center justify-center shadow-[0_0_12px_rgba(79,181,54,0.3)]">
-          <Box className="w-5 h-5 text-white" />
+    <>
+      {/* Desktop sidebar */}
+      <div className="hidden md:flex md:w-64 md:flex-col md:shrink-0 md:bg-surface md:border-r md:border-surface-divider">
+        <div className="p-6 items-center gap-3 flex">
+          <div className="w-8 h-8 rounded-lg bg-[#4FB536] flex items-center justify-center shadow-[0_0_12px_rgba(79,181,54,0.3)]">
+            <Box className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h1 className="font-bold text-lg leading-tight">Filament Tracker</h1>
+            <p className="text-xs text-text-secondary">Local Inventory</p>
+          </div>
         </div>
-        <div>
-          <h1 className="font-bold text-lg leading-tight">Filament Tracker</h1>
-          <p className="text-xs text-text-secondary">Local Inventory</p>
+
+        <nav className="flex-1 px-4 py-4 space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              currentPage === item.id ||
+              (currentPage === "add-filament" && item.id === "inventory");
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleNavigate(item.id as Page)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
+                  ? "bg-primary-green text-white"
+                  : "text-text-secondary hover:text-text-primary hover:bg-surface-divider"
+                  }`}
+              >
+                <Icon className="w-5 h-5" />
+                <span className="text-sm font-medium">{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+
+        <div className="p-4">
+          <button
+            onClick={() => handleNavigate("log-print")}
+            className="w-full flex items-center justify-center gap-2 bg-primary-green hover:bg-primary-green-hover text-white px-4 py-3 rounded-xl text-sm font-medium transition-colors shadow-[0_0_14px_rgba(79,181,54,0.3)]"
+          >
+            <PlusSquare className="w-5 h-5" />
+            Log Print Job
+          </button>
         </div>
-      </div>
-
-      <nav className="hidden md:flex md:flex-1 md:px-4 md:py-4 md:space-y-1">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            currentPage === item.id ||
-            (currentPage === "add-filament" && item.id === "inventory");
-          return (
-            <button
-              key={item.id}
-              onClick={() => {
-                setEditingFilamentId(null);
-                setEditingPrintJobId(null);
-                onNavigate(item.id as Page);
-              }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
-                ? "bg-primary-green text-white"
-                : "text-text-secondary hover:text-text-primary hover:bg-surface-divider"
-                }`}
-            >
-              <Icon className="w-5 h-5" />
-              <span className="text-sm font-medium">{item.label}</span>
-            </button>
-          );
-        })}
-      </nav>
-
-      <div className="hidden md:block p-4">
-        <button
-          onClick={() => {
-            setEditingPrintJobId(null);
-            onNavigate("log-print");
-          }}
-          className="w-full flex items-center justify-center gap-2 bg-primary-green hover:bg-primary-green-hover text-white px-4 py-3 rounded-xl text-sm font-medium transition-colors shadow-[0_0_14px_rgba(79,181,54,0.3)]"
-        >
-          <PlusSquare className="w-5 h-5" />
-          Log Print Job
-        </button>
       </div>
 
       {/* Mobile bottom navbar — stationary at the bottom of the screen */}
@@ -88,11 +88,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
           return (
             <button
               key={item.id}
-              onClick={() => {
-                setEditingFilamentId(null);
-                setEditingPrintJobId(null);
-                onNavigate(item.id as Page);
-              }}
+              onClick={() => handleNavigate(item.id as Page)}
               className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-xl transition-colors ${isActive
                 ? "text-primary-green"
                 : "text-text-secondary hover:text-text-primary"
@@ -104,16 +100,13 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
           );
         })}
         <button
-          onClick={() => {
-            setEditingPrintJobId(null);
-            onNavigate("log-print");
-          }}
+          onClick={() => handleNavigate("log-print")}
           className="flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-xl transition-colors text-white bg-primary-green"
         >
           <PlusSquare className="w-6 h-6" />
           <span className="text-[10px] font-medium">Log Print</span>
         </button>
       </div>
-    </div>
+    </>
   );
 }
